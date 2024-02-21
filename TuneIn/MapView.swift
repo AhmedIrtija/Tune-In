@@ -91,6 +91,15 @@ struct MapView: View {
         }
     }
     
+    var selectedMapStyleDescription: String {
+        return switch(mapStyle) {
+            case 0: "Standard"
+            case 1: "Hybrid"
+            case 2: "Imagery"
+            default: "Standard"
+        }
+    }
+    
     @Namespace var mapScope
     
     var body: some View {
@@ -136,10 +145,41 @@ struct MapView: View {
             }
             .mapStyle(selectedMapStyle)
             .mapControlVisibility(.hidden)
-            .overlay(alignment: .topTrailing) {
+            .overlay(alignment: .bottomLeading) {
                 VStack {
                     Menu {
-                        ForEach(distances, id: \.self) { distance in
+                        ForEach((0..<3).reversed(), id:\.self) { styleIndex in
+                            Button(action: {
+                                mapStyle = styleIndex
+                            }) {
+                                switch styleIndex {
+                                    case 0: Text("Standard")
+                                    case 1: Text("Hybrid")
+                                    case 2: Text("Imagery")
+                                    default: EmptyView()
+                                }
+                            }
+                        }
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .foregroundStyle(Color.blue)
+                                .frame(width: 48, height: 48)
+                            VStack {
+                                Image(systemName: "map.fill")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 20.0, height: 20.0)
+                                    .foregroundStyle(Color.white)
+                                Text("\(selectedMapStyleDescription)")
+                                    .font(.system(size: 8.0))
+                                    .foregroundStyle(Color.white)
+                            }
+                        }
+                    }
+                    
+                    Menu {
+                        ForEach(distances.reversed(), id: \.self) { distance in
                             Button(action: {
                                 selectedRadius = distance
                             }) {
@@ -149,23 +189,23 @@ struct MapView: View {
                     } label: {
                         ZStack {
                             Circle()
-                                .foregroundStyle(Color.white)
+                                .foregroundStyle(Color.blue)
                                 .frame(width: 48, height: 48)
                             VStack {
                                 Image(systemName: "mappin.and.ellipse")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 22.0, height: 22.0)
-                                    .foregroundStyle(Color.blue)
+                                    .foregroundStyle(Color.white)
                                 Text("\(Int(selectedRadius)) mi")
                                     .font(.system(size: 10.0))
-                                    .foregroundStyle(Color.blue)
+                                    .foregroundStyle(Color.white)
                             }
                         }
                     }
                 }
                 .padding(12.0)
-        }
+            }
             .overlay(alignment: .bottomTrailing) {
                 VStack {
                     MapUserLocationButton(scope: mapScope)
@@ -180,12 +220,10 @@ struct MapView: View {
         }
         .mapScope(mapScope)
         
-        Picker("", selection: $mapStyle) {
-            Text("Standard").tag(0)
-            Text("Hybrid").tag(1)
-            Text("Imagery").tag(2)
-        }
-        .pickerStyle(SegmentedPickerStyle())
+        
+
+        
+        
     }
 }
 #Preview {
