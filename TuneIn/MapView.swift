@@ -45,6 +45,8 @@ struct MapView: View {
     @StateObject private var locationManager = LocationManager()
     @State private var selectedRadius: Double = 1.0
     
+    let distances: [Double] = [1.0, 2.0, 3.0, 4.0, 5.0]     // in miles
+    
     let customMapAnnotations: [CustomMapAnnotation] = [
         // within 1 mile
         CustomMapAnnotation(
@@ -136,16 +138,31 @@ struct MapView: View {
             .mapControlVisibility(.hidden)
             .overlay(alignment: .topTrailing) {
                 VStack {
-                    Picker(selection: $selectedRadius, label: Text("Phone Type")) {
-                        Text("1 mile").tag(1.0)
-                        Text("2 miles").tag(2.0)
-                        Text("3 miles").tag(3.0)
-                        Text("4 miles").tag(4.0)
-                        Text("5 miles").tag(5.0)
+                    Menu {
+                        ForEach(distances, id: \.self) { distance in
+                            Button(action: {
+                                selectedRadius = distance
+                            }) {
+                                Text("\(Int(distance)) mi")
+                            }
+                        }
+                    } label: {
+                        ZStack {
+                            Circle()
+                                .foregroundStyle(Color.white)
+                                .frame(width: 48, height: 48)
+                            VStack {
+                                Image(systemName: "mappin.and.ellipse")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 22.0, height: 22.0)
+                                    .foregroundStyle(Color.blue)
+                                Text("\(Int(selectedRadius)) mi")
+                                    .font(.system(size: 10.0))
+                                    .foregroundStyle(Color.blue)
+                            }
+                        }
                     }
-                    .pickerStyle(.menu)
-                    .background(Color.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 8.0))
                 }
                 .padding(12.0)
         }
