@@ -40,10 +40,15 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
 
 struct MapView: View {
+    @Binding var rootViewType: RootViewType
+    @StateObject private var locationManager = LocationManager()
     @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
     @State private var mapStyle: Int = 0
-    @StateObject private var locationManager = LocationManager()
     @State private var selectedRadius: Double = 1.0
+    @State private var showProfileView: Bool = false
+    @State private var showListView: Bool = false
+    
+    let distances: [Double] = [1.0, 2.0, 3.0, 4.0, 5.0]     // in miles
     
     let customMapAnnotations: [CustomMapAnnotation] = [
         // within 1 mile
@@ -89,88 +94,178 @@ struct MapView: View {
         }
     }
     
+    var selectedMapStyleDescription: String {
+        return switch(mapStyle) {
+            case 0: "Standard"
+            case 1: "Hybrid"
+            case 2: "Imagery"
+            default: "Standard"
+        }
+    }
+    
     @Namespace var mapScope
     
     var body: some View {
-        ZStack {
-            Map(position: $position, scope: mapScope) {
-                if let location = locationManager.userLocation {
-                    MapCircle(
-                        center: location.coordinate,
-                        radius: selectedRadius * 1609.34    // in meters, = 1 mile
-                    )
-                    .stroke(Color.green, lineWidth: 4.0)
-                    .foregroundStyle(Color.green.opacity(0.4))
-                }
-                    
-                ForEach(customMapAnnotations.indices, id:\.self) { index in
-                    let annotation = customMapAnnotations[index]
-                    if let userLocation = locationManager.userLocation {
-                        let annotationLocation = CLLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude)
-                        let distance = userLocation.distance(from: annotationLocation)
-                        let miles = distance / 1609.34 // Convert meters to miles
-                        if miles <= selectedRadius {
-                            Annotation(annotation.title, coordinate: annotation.coordinate) {
-                                ZStack {
-                                    Circle()
-                                        .fill(Color.black)
-//                                        .stroke(Color.black, lineWidth: 4.0)
-                                        .frame(width: 36.0, height: 36.0)
-                                    Circle()
-                                        .fill(Color.green)
-//                                        .stroke(Color.black, lineWidth: 4.0)
-                                        .frame(width: 33.0, height: 33.0)
-                                    Image(customMapAnnotations[index].imageName)
-                                        .resizable()
-                                        .frame(width: 30.0, height: 30.0)
-                                        .foregroundStyle(Color.white)
-                                        .background(Color.black)
-                                        .clipShape(.circle)
+        VStack {
+            ZStack {
+                Map(position: $position, scope: mapScope) {
+                    if let location = locationManager.userLocation {
+                        MapCircle(
+                            center: location.coordinate,
+                            radius: selectedRadius * 1609.34    // in meters, = 1 mile
+                        )
+                        .stroke(Color.green, lineWidth: 4.0)
+                        .foregroundStyle(Color.green.opacity(0.4))
+                    }
+                        
+                    ForEach(customMapAnnotations.indices, id:\.self) { index in
+                        let annotation = customMapAnnotations[index]
+                        if let userLocation = locationManager.userLocation {
+                            let annotationLocation = CLLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude)
+                            let distance = userLocation.distance(from: annotationLocation)
+                            let miles = distance / 1609.34 // Convert meters to miles
+                            if miles <= selectedRadius {
+                                Annotation(annotation.title, coordinate: annotation.coordinate) {
+                                    ZStack {
+                                        Circle()
+                                            .fill(Color.black)
+                                            .frame(width: 36.0, height: 36.0)
+                                        Circle()
+                                            .fill(Color.green)
+                                            .frame(width: 33.0, height: 33.0)
+                                        Image(customMapAnnotations[index].imageName)
+                                            .resizable()
+                                            .frame(width: 30.0, height: 30.0)
+                                            .foregroundStyle(Color.white)
+                                            .background(Color.black)
+                                            .clipShape(.circle)
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-            .mapStyle(selectedMapStyle)
-            .mapControlVisibility(.hidden)
-            .overlay(alignment: .topTrailing) {
-                VStack {
-                    Picker(selection: $selectedRadius, label: Text("Phone Type")) {
-                        Text("1 mile").tag(1.0)
-                        Text("2 miles").tag(2.0)
-                        Text("3 miles").tag(3.0)
-                        Text("4 miles").tag(4.0)
-                        Text("5 miles").tag(5.0)
+                .mapStyle(selectedMapStyle)
+                .mapControlVisibility(.hidden)
+                .overlay(alignment: .topTrailing) {
+                    Button(action: {
+                        showProfileView = true
+                    }) {
+                        Image(systemName: "person.crop.circle.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundStyle(Color.blue)
+                            .frame(width: 40.0, height: 40.0)
+                            .padding(12.0)
                     }
-                    .pickerStyle(.menu)
-                    .background(Color.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 8.0))
+                    .navigationDestination(isPresented: $showProfileView) {
+                        ProfileView(rootViewType: $rootViewType)
+                    }
                 }
-                .padding(12.0)
-        }
-            .overlay(alignment: .bottomTrailing) {
-                VStack {
-                    MapUserLocationButton(scope: mapScope)
-                    MapPitchToggle(scope: mapScope)
-                        .mapControlVisibility(.visible)
-                    MapCompass(scope: mapScope)
-                        .mapControlVisibility(.visible)
+                .overlay(alignment: .bottomLeading) {
+                    VStack {
+                        Menu {
+                            ForEach((0..<3).reversed(), id:\.self) { styleIndex in
+                                Button(action: {
+                                    mapStyle = styleIndex
+                                }) {
+                                    switch styleIndex {
+                                        case 0: Text("Standard")
+                                        case 1: Text("Hybrid")
+                                        case 2: Text("Imagery")
+                                        default: EmptyView()
+                                    }
+                                }
+                            }
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .foregroundStyle(Color.blue)
+                                    .frame(width: 48.0, height: 48.0)
+                                VStack {
+                                    Image(systemName: "map.fill")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 20.0, height: 20.0)
+                                        .foregroundStyle(Color.white)
+                                    Text("\(selectedMapStyleDescription)")
+                                        .font(.system(size: 8.0))
+                                        .foregroundStyle(Color.white)
+                                }
+                            }
+                        }
+                        
+                        Menu {
+                            ForEach(distances.reversed(), id: \.self) { distance in
+                                Button(action: {
+                                    selectedRadius = distance
+                                }) {
+                                    Text("\(Int(distance)) mi")
+                                }
+                            }
+                        } label: {
+                            ZStack {
+                                Circle()
+                                    .foregroundStyle(Color.blue)
+                                    .frame(width: 48.0, height: 48.0)
+                                VStack {
+                                    Image(systemName: "mappin.and.ellipse")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 22.0, height: 22.0)
+                                        .foregroundStyle(Color.white)
+                                    Text("\(Int(selectedRadius)) mi")
+                                        .font(.system(size: 10.0))
+                                        .foregroundStyle(Color.white)
+                                }
+                            }
+                        }
+                    }
+                    .padding(12.0)
+                    .padding(.bottom, 24.0)
                 }
-                .padding(12.0)
-                .buttonBorderShape(.circle)
+                .overlay(alignment: .bottomTrailing) {
+                    VStack {
+                        MapUserLocationButton(scope: mapScope)
+                        MapPitchToggle(scope: mapScope)
+                            .mapControlVisibility(.visible)
+                        MapCompass(scope: mapScope)
+                            .mapControlVisibility(.visible)
+                    }
+                    .padding(12.0)
+                    .buttonBorderShape(.circle)
+                }
             }
+            .mapScope(mapScope)
+            
+            VStack {
+                Button(action: {
+                    showListView = true
+                }) {
+                    Text("EXPLORE MUSIC")
+                        .font(.custom("Avenir", size: 16.0).uppercaseSmallCaps())
+                        .foregroundColor(.white)
+                        .padding(10.0)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .background(Color.blue)
+                        .cornerRadius(10.0)
+                }
+            }
+            .padding([.top, .horizontal], 12.0)
         }
-        .mapScope(mapScope)
+        .sheet(isPresented: $showListView) {
+            ListView()
+        }
         
-        Picker("", selection: $mapStyle) {
-            Text("Standard").tag(0)
-            Text("Hybrid").tag(1)
-            Text("Imagery").tag(2)
-        }
-        .pickerStyle(SegmentedPickerStyle())
+        
+        
+
+        
+        
     }
 }
 #Preview {
-    MapView()
+    NavigationStack {
+        MapView(rootViewType: .constant(.mapView))
+    }
 }
