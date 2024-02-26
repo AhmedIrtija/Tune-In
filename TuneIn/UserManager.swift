@@ -122,10 +122,14 @@ final class UserManager {
     }
     
     func updateTrack(userId: String, newTrack: Track) async throws {
-        let data: [String: Any] = [
-            DBUser.CodingKeys.currentTrack.rawValue: newTrack
+        let encoder = Firestore.Encoder()
+        guard let data = try? encoder.encode(newTrack) else {
+            throw URLError(.badURL)
+        }
+        let dict: [String: Any] = [
+            DBUser.CodingKeys.currentTrack.rawValue: data
         ]
-        try await userDocument(userId: userId).updateData(data)
+        try await userDocument(userId: userId).updateData(dict)
     }
     
     func updateLocation(userId: String, newLocation: GeoPoint) async throws {
