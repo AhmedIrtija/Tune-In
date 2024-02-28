@@ -9,7 +9,6 @@ typedef NSString * const SPTAppRemoteContentType;
 extern NSString * const SPTAppRemoteContentTypeDefault;
 extern NSString * const SPTAppRemoteContentTypeNavigation;
 extern NSString * const SPTAppRemoteContentTypeFitness;
-extern NSString * const SPTAppRemoteContentTypeGaming;
 
 @protocol SPTAppRemoteContentItem;
 

@@ -8,12 +8,10 @@
 @protocol SPTAppRemotePlayerAPI;
 @protocol SPTAppRemoteUserAPI;
 @protocol SPTAppRemoteContentAPI;
-@protocol SPTAppRemoteConnectivityAPI;
 
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString * const SPTAppRemoteAccessTokenKey;
-extern NSString * const SPTAppRemoteErrorKey;
 extern NSString * const SPTAppRemoteErrorDescriptionKey;
 
 /// The severity of log messages that the App Remote should log to console.
@@ -145,25 +143,12 @@ typedef NS_ENUM(NSUInteger, SPTAppRemoteLogLevel) {
 - (void)connect;
 
 /**
- * Attempts to connect to the Spotify application with a given session identifier.
- *
- * @discussion If the Spotify app is not running you will need to use authorizeAndPlayURI: to wake it up.
- *
- * @discussion If `authorizeAndPlayURI` was used without a given session identifier, `connect` should be used instead of this method.
- *
- * @param sessionIdentifier The unique session identifier which was used when calling
- * `authorizeAndPlayURI:asRadio:additionalScopes:sessionIdentifier:`
- */
-- (void)connectWithSessionIdentifier:(NSUUID *)sessionIdentifier;
-
-/**
  * Disconnect from the Spotify application
  */
 - (void)disconnect;
 
 /**
  * Open Spotify app to obtain access token and start playback.
- * The passed URI will start playing unless Spotify is already playing.
  *
  * @param URI The URI to play. Use a blank string to attempt to play the user's last song
  *
@@ -200,24 +185,6 @@ typedef NS_ENUM(NSUInteger, SPTAppRemoteLogLevel) {
                     asRadio:(BOOL)asRadio
            additionalScopes:(nullable NSArray<NSString *> *)additionalScopes;
 
-/**
- * Open Spotify app to obtain access token and start playback.
- *
- * @param playURI The URI to play. Use a blank string to attempt to play the user's last song
- * @param asRadio `YES` to start radio for the given URI.
- * @param additionalScopes An array of scopes in addition to `app-remote-control`. Can be nil if you only need `app-remote-control`
- * @param sessionIdentifier An optional unique identifier for this specific session, which is used for analytics purposes. Every new attempt to
- * connect to the Spotify app should have a new identifier, but the identifier used here should then be reused for the accompanied call to
- * `connectWithSessionIdentifier:`.
- *
- * @return `YES` if the Spotify app is installed and an authorization attempt can be made, otherwise `NO`.
- * Note: The return `BOOL` here is not a measure of whether or not authentication succeeded, only a check if
- * the Spotify app is installed and can attempt to handle the authorization request.
-*/
-- (BOOL)authorizeAndPlayURI:(NSString *)playURI
-                    asRadio:(BOOL)asRadio
-           additionalScopes:(nullable NSArray<NSString *> *)additionalScopes
-          sessionIdentifier:(nullable NSUUID *)sessionIdentifier;
 /**
  * Parse out an access token or error description from a url passed to application:openURL:options:
  *
@@ -262,14 +229,6 @@ typedef NS_ENUM(NSUInteger, SPTAppRemoteLogLevel) {
  *        disconnect.
  */
 @property (nullable, nonatomic, strong, readonly) id<SPTAppRemoteContentAPI> contentAPI;
-
-/**
- *  The API used to get connectivity data from the Spotify app.
- *
- *  @note Will only be populated when the App Remote is connected. If you retain this object you must release it on
- *        disconnect.
- */
-@property (nullable, nonatomic, strong, readonly) id<SPTAppRemoteConnectivityAPI> connectivityAPI;
 
 #pragma mark Unavailable initializers
 

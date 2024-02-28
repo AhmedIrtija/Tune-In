@@ -18,8 +18,7 @@ SPT_SCOPE(SPTAppRemoteControlScope, appRemoteControl, "app-remote-control", (1 <
 SPT_SCOPE(SPTUserReadPlaybackStateScope, userReadPlaybackState, "user-read-playback-state", (1 << 15)) \
 SPT_SCOPE(SPTUserModifyPlaybackStateScope, userModifyPlaybackState, "user-modify-playback-state", (1 << 16)) \
 SPT_SCOPE(SPTUserReadCurrentlyPlayingScope, userReadCurrentlyPlaying, "user-read-currently-playing", (1 << 17)) \
-SPT_SCOPE(SPTUserReadRecentlyPlayedScope, userReadRecentlyPlayed, "user-read-recently-played", (1 << 18)) \
-SPT_SCOPE(SPTOpenIdScope, openid, "openid", (1 << 19))
+SPT_SCOPE(SPTUserReadRecentlyPlayedScope, userReadRecentlyPlayed, "user-read-recently-played", (1 << 18))
 
 /**
  `SPTScope` represents the OAuth scopes that declare how your app wants to access a user's account.
@@ -65,7 +64,5 @@ typedef NS_OPTIONS(NSUInteger, SPTScope)
     SPTUserReadCurrentlyPlayingScope NS_SWIFT_NAME(userReadCurrentlyPlaying) = (1 << 17),
     /// Read access to a user’s currently playing track
     SPTUserReadRecentlyPlayedScope NS_SWIFT_NAME(userReadRecentlyPlayed) = (1 << 18),
-    /// Indicate that the application intends to use OIDC to verify the user's identity
-    SPTOpenIdScope NS_SWIFT_NAME(openid) = (1 << 19),
 };
 

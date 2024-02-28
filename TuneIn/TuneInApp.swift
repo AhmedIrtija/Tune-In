@@ -19,10 +19,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct TuneInApp: App {
     // register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    @StateObject var spotifyController = SpotifyController()
     
     var body: some Scene {
         WindowGroup {
-            RootView()
+            LoginView(spotifyController: spotifyController)
         }
     }
 }

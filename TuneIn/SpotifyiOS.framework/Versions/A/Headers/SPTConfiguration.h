@@ -14,9 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// Your redirect URL. This is how the Spotify app will open your application after user authorization.
 @property (nonatomic, readonly, copy) NSURL *redirectURL;
 
-/// Name of the company
-@property (nonatomic, nullable, copy) NSString *companyName;
-
 /**
  The URL to use for attempting to swap an authorization code for an access token. You should only set this if your
  clientID has a clientSecret and you have a backend service that holds the secret and can exchange the code and secret
@@ -34,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  If requesting the `SPTAppRemoteControlScope` you can provide an optional uri to begin playing after a successful
  authentication. To continue the user's last session set this to a blank string @"". If this value is `nil` or `SPTAppRemoteControlScope`
- is not requested no audio will play. If Spotify is already playing it will continue playing even though a URI is provided.
+ is not requested no audio will play.
  */
 @property (nonatomic, nullable, copy) NSString *playURI;
 

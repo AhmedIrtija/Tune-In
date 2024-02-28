@@ -80,10 +80,10 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param URI      The URI of the item to save
  *  @param callback A callback block that will be invoked when the fetch request has completed.
- *                  On success `result` will be an instance of `id<SPTAppRemoteLibraryState>` that indicates the resulting state of the entity.
+ *                  On success `result` will be @YES.
  *                  On error `result` will be `nil` and `error` will be set.
  */
-- (void)addItemToLibraryWithURI:(NSString *)URI callback:(nullable SPTAppRemoteCallback)callback;
+- (void)addItemToLibraryWithURI:(NSString *)URI callback:(SPTAppRemoteCallback)callback;
 
 /**
  *  Remove item from users library.
@@ -93,10 +93,10 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param URI      The URI of the item to remove
  *  @param callback A callback block that will be invoked when the fetch request has completed.
- *                  On success `result` will be an instance of `id<SPTAppRemoteLibraryState>` that indicates the resulting state of the entity.
+ *                  On success `result` will be @YES.
  *                  On error `result` will be `nil` and `error` will be set.
  */
-- (void)removeItemFromLibraryWithURI:(NSString *)URI callback:(nullable SPTAppRemoteCallback)callback;
+- (void)removeItemFromLibraryWithURI:(NSString *)URI callback:(SPTAppRemoteCallback)callback;
 
 @end
 

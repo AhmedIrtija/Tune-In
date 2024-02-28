@@ -42,11 +42,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign, readonly, getter=isPodcast) BOOL podcast;
 
-/**
- * `YES` if the track is an ad, otherwise `NO`.
- */
-@property (nonatomic, assign, readonly, getter=isAdvertisement) BOOL advertisement;
-
 @end
 
 NS_ASSUME_NONNULL_END
