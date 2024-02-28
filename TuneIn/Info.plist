@@ -6,7 +6,7 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>edu.ucdavis.ecs189e.TuneIn.ahmed</string>
+			<string>edu.ucdavis.ecs189e.TuneIn</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>TuneIn</string>
