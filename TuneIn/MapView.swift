@@ -8,6 +8,9 @@
 import SwiftUI
 import MapKit
 
+
+
+
 struct CustomMapAnnotation {
     var title: String
     var coordinate: CLLocationCoordinate2D
@@ -47,6 +50,7 @@ struct MapView: View {
     @State private var selectedRadius: Double = 1.0
     @State private var showProfileView: Bool = false
     @State private var showListView: Bool = false
+    @State private var showMusicPopUp: Bool = false
     
     let distances: [Double] = [1.0, 2.0, 3.0, 4.0, 5.0]     // in miles
     
@@ -54,7 +58,8 @@ struct MapView: View {
         // within 1 mile
         CustomMapAnnotation(
             title: "Bookhead",
-            coordinate: CLLocationCoordinate2D(latitude: 38.53973870960561, longitude: -121.74989133055733),
+//            coordinate: CLLocationCoordinate2D(latitude: 38.53973870960561, longitude: -121.74989133055733),
+            coordinate: CLLocationCoordinate2D(latitude: 37.7857831, longitude: -122.4093486),
             imageName: "BookheadImage"
         ),
         CustomMapAnnotation(
@@ -133,12 +138,17 @@ struct MapView: View {
                                         Circle()
                                             .fill(Color.green)
                                             .frame(width: 33.0, height: 33.0)
-                                        Image(customMapAnnotations[index].imageName)
-                                            .resizable()
-                                            .frame(width: 30.0, height: 30.0)
-                                            .foregroundStyle(Color.white)
-                                            .background(Color.black)
-                                            .clipShape(.circle)
+                                        Button {
+                                            showMusicPopUp = true
+                                            print("button press")
+                                        }
+                                        label : { Image(customMapAnnotations[index].imageName)
+                                                .resizable()
+                                                .frame(width: 30.0, height: 30.0)
+                                                .foregroundStyle(Color.white)
+                                                .background(Color.black)
+                                                .clipShape(.circle)
+                                        }
                                     }
                                 }
                             }
@@ -258,7 +268,9 @@ struct MapView: View {
         }
         
         
-        
+        .popover(isPresented: $showMusicPopUp) {
+            MusicView(rootViewType: $rootViewType)
+        }
 
         
         

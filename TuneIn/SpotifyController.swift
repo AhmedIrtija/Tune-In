@@ -16,7 +16,8 @@ class SpotifyController: NSObject, ObservableObject {
     var hasAttemptedToAuthorize = false
     
     let spotifyClientID = Config.value(forKey: "SPOTIFY_CLIENT") ?? ""
-    let spotifyRedirectURL = URL(string: Config.value(forKey: "REDIRECT_URL") ?? "")!
+    let spotifyRedirectURL = URL(string: Config.value(forKey: "REDIRECT_URL") ?? "")! //FORCE UNWRAP. CANNOT USE.
+    
     
     var accessToken: String? = nil
     var playURI = ""
