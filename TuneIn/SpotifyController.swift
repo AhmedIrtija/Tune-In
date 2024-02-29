@@ -21,6 +21,7 @@ class SpotifyController: NSObject, ObservableObject {
     
     var accessToken: String? = nil
     var playURI = ""
+    var image: UIImage
     
     private var connectCancellable: AnyCancellable?
     private var disconnectCancellable: AnyCancellable?
@@ -75,6 +76,26 @@ class SpotifyController: NSObject, ObservableObject {
     }
     
     
+    func fetchArtwork(for track: SPTAppRemoteTrack) {
+        appRemote.imageAPI?.fetchImage(forItem: track, with: CGSize.zero, callback: { [weak self] (image, error) in
+            if let error = error {
+                print("Error fetching track image: " + error.localizedDescription)
+            } else if let image = image as? UIImage {
+                self?.image = image
+            }
+        })
+    }
+    
+    func fetchPlayerState() {
+        appRemote.playerAPI?.getPlayerState({ [weak self] (playerState, error) in
+            if let error = error {
+                print("Error getting player state:" + error.localizedDescription)
+            } else if let playerState = playerState as? SPTAppRemotePlayerState {
+              //  self?.update(playerState: playerState)
+            }
+        })
+    }
+    
     private func connect() {
         // This check ensures that we only proceed with authorization if we haven't successfully obtained an access token.
         if self.accessToken == nil && !hasAttemptedToAuthorize {
@@ -121,4 +142,6 @@ extension SpotifyController: SPTAppRemotePlayerStateDelegate {
     func playerStateDidChange(_ playerState: SPTAppRemotePlayerState) {
         // This function is a no-op and can be removed or implemented if needed for app functionality beyond login.
     }
+
 }
+
