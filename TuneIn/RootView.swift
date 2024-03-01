@@ -19,6 +19,7 @@ struct RootView: View {
             NavigationStack {
                 MapView(rootViewType: $rootViewType)
             }
+            .navigationBarBackButtonHidden(true)
         }
     }
 }

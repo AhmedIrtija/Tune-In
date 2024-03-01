@@ -12,6 +12,7 @@ import Combine
 
 class SpotifyController: NSObject, ObservableObject {
     
+    
     @Published var isAuthenticationFailed = false
     var hasAttemptedToAuthorize = false
     
@@ -26,8 +27,10 @@ class SpotifyController: NSObject, ObservableObject {
     
     
     override init() {
-        super.init()
         
+    }
+    
+    func initialize() {
         connectCancellable = NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
             .receive(on: DispatchQueue.main)
             .sink { _ in
