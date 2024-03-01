@@ -14,9 +14,12 @@ struct ProfileView: View {
             Color.black
                 .ignoresSafeArea()
             VStack() {
+                //Settings Icon
+                //Profile Photo
+                
                 //Display Name
                 Text("TuneIn")
-                    .font(Font.custom("Damion", size: 40))
+                    .font(Font.custom("Damion", size: 50))
                     .padding([.bottom], 10)
                     .foregroundColor(.white)
                 //Pronouns
