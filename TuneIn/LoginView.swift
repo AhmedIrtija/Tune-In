@@ -9,20 +9,65 @@ import SwiftUI
 
 struct LoginView: View {
     @ObservedObject var spotifyController: SpotifyController
+    @State private var isAuthenticated: Bool = false
 
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-            if !spotifyController.isAuthenticationFailed {
-                Button("Authenticate Again") {
-                    spotifyController.authenticate()
+        NavigationStack {
+            VStack{
+                Spacer()
+                Image("SpotifyIcon")
+                    .resizable()
+                    .frame(width: 195, height: 195)
+                    .padding(.bottom)
+                
+                
+                Button(action: {
+                    spotifyController.initialize()
+                       }) {
+                    Text("Log In")
+                               .fontWeight(.bold)
+                               .foregroundColor(.white)
+                               .frame(minWidth: 0, maxWidth: .infinity)
+                               .padding()
+                               .background(Color.green)
+                               .cornerRadius(40)
+                               .padding(.horizontal, 20)
+                }
+                .shadow(radius: 10)
+                
+                
+                if !spotifyController.isAuthenticationFailed {
+                    Button(action: {
+                        spotifyController.authenticate()
+                        if(!spotifyController.isAuthenticationFailed){
+                            isAuthenticated = true
+                        }
+                    }) {
+                        Text("Authenticate Again")
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .padding()
+                            .background(Color.green)
+                            .cornerRadius(40)
+                            .padding(.horizontal, 20)
+                    }
+                    .shadow(radius: 10)
+                }
+                Spacer()
+            }
+            .onAppear(){
+                if(!spotifyController.isAuthenticationFailed){
+                    isAuthenticated = true
                 }
             }
+            .background(Color.black.edgesIgnoringSafeArea(.all))
+            .navigationBarHidden(true)
+            .navigationDestination(isPresented: $isAuthenticated){
+                RootView()
+            }
+            .navigationBarBackButtonHidden(true)
         }
-        .padding()
     }
 }
 

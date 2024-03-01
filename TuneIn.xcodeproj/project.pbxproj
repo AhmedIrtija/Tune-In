@@ -75,7 +75,6 @@
 		F67903EE2B8BEFB4008EC6DC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				07835A2B2B8F1491007D077F /* .gitignore */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -104,6 +103,8 @@
 				F679036B2B8BD1ED008EC6DC /* GoogleService-Info.plist */,
 				B7D897E12B8680FC000CACB2 /* Info.plist */,
 				07835A292B8F1426007D077F /* Config.plist */,
+				07835A2B2B8F1491007D077F /* .gitignore */,
+				07835A322B8F1615007D077F /* SpotifyiOS.framework */,
 				F69A3D7B2B86749D008E6EC1 /* TuneInApp.swift */,
 				07835A112B8CF595007D077F /* LoginView.swift */,
 				F69A3D7D2B86749D008E6EC1 /* RootView.swift */,
@@ -382,7 +383,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.ucdavis.ecs189e.TuneIn.ahmed;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.ucdavis.ecs189e.TuneIn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "TuneIn-Bridging-Header.h";
@@ -422,7 +423,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.ucdavis.ecs189e.TuneIn.ahmed;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.ucdavis.ecs189e.TuneIn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "TuneIn-Bridging-Header.h";
