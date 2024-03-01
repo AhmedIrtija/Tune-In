@@ -5,6 +5,7 @@
 //  Created by Ashani Sinha on 2/21/24.
 //
 import Foundation
+import SwiftUI
 
 let accessTokenKey = "access-token-key"
 let redirectUri = URL(string:"spotify-ios-quick-start://spotify-login-callback")
@@ -35,3 +36,12 @@ let stringScopes = [
                         "user-top-read", "user-read-playback-position", "user-read-recently-played",
                         "user-follow-read", "user-follow-modify",
                     ]
+
+struct Colors {
+    static let black = Color(red: 0, green: 0, blue: 0)
+    static let dark_gray = Color(red: 0.129, green: 0.129, blue: 0.129)
+    static let gray = Color(red: 0.702, green: 0.702, blue: 0.702)
+    static let white = Color(red: 1, green: 1, blue: 1)
+    
+    static let spotify_green = Color(red: 0.106, green: 0.725, blue: 0.329)
+}

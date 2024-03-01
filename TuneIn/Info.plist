@@ -2,23 +2,24 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleURLTypes</key>
-        <array>
-            <dict>
-                <key>CFBundleURLSchemes</key>
-                <array>
-                    <string>spotify-ios-quick-start</string>
-                </array>
-                <key>CFBundleURLName</key>
-                <string>edu.ucdavis.ecs189e.TuneIn</string>
-            </dict>
-        </array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>spotify-ios-quick-start</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>edu.ucdavis.ecs189e.TuneIn</string>
+		</dict>
+	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>spotify</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Damion.ttf</string>
+	</array>
 </dict>
 </plist>
-
-
-
