@@ -10,6 +10,10 @@ import SwiftUI
 import SpotifyiOS
 import Combine
 
+struct Response: Codable {
+    let tracks: Track
+}
+
 class SpotifyController: NSObject, ObservableObject {
     
     
@@ -17,20 +21,36 @@ class SpotifyController: NSObject, ObservableObject {
     var hasAttemptedToAuthorize = false
     
     let spotifyClientID = Config.value(forKey: "SPOTIFY_CLIENT") ?? ""
-    let spotifyRedirectURL = URL(string: Config.value(forKey: "REDIRECT_URL") ?? "")! //FORCE UNWRAP. CANNOT USE.
+    
+    private var _configuration: SPTConfiguration?
+       
+    lazy var configuration: SPTConfiguration = {
+           guard let redirectURI = URL(string: Config.value(forKey: "REDIRECT_URL") ?? "") else {
+               fatalError("Error initializing RedirectURL")
+           }
+           
+           let config = SPTConfiguration(
+               clientID: spotifyClientID,
+               redirectURL: redirectURI
+           )
+           
+           _configuration = config
+           return config
+       }()
+    
+    override init() {
+    }
     
     
     var accessToken: String? = nil
     var playURI = ""
-    var image: UIImage
+    var image: UIImage? = nil
     
     private var connectCancellable: AnyCancellable?
     private var disconnectCancellable: AnyCancellable?
     
     
-    override init() {
-        
-    }
+
     
     func initialize() {
         connectCancellable = NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
@@ -45,12 +65,8 @@ class SpotifyController: NSObject, ObservableObject {
                 self.disconnect()
             }
     }
-    
-    
-    lazy var configuration = SPTConfiguration(
-        clientID: spotifyClientID ,
-        redirectURL: spotifyRedirectURL
-    )
+        
+
 
     
     lazy var appRemote: SPTAppRemote = {
@@ -98,6 +114,54 @@ class SpotifyController: NSObject, ObservableObject {
             }
         })
     }
+    
+    func getAccessTokenURL() -> URLRequest? {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = APIConstants.authHost
+        components.path = "/authorize"
+        
+        components.queryItems = APIConstants.authParams.map({URLQueryItem(name: $0, value: $1)})
+        
+        guard let url = components.url else { return nil }
+        
+        return URLRequest(url: url)
+    }
+    
+    func createURLRequest() -> URLRequest? {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = APIConstants.apiHost
+        components.path = "/me/player/currently-playing"
+        
+        guard let url = components.url else { return nil }
+        
+        var urlRequest = URLRequest(url: url)
+        
+        // Safely unwrap the Authorization token
+        if let token = UserDefaults.standard.value(forKey: "Authorization") as? String {
+            urlRequest.addValue("Bearer " + token, forHTTPHeaderField: "Authorization")
+            urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.httpMethod = "GET"
+            return urlRequest
+        } else {
+            // Handle the case where the token is nil or not a String
+            print("Error: Authorization token not found or not a String")
+            return nil
+        }
+    }
+    
+    func getCurrentlyPlayingTrack() async throws -> Track? {
+        if let urlRequest = createURLRequest(){
+            let (data, _) = try await URLSession.shared.data(for: urlRequest)
+            let decoder = JSONDecoder()
+            let results = try decoder.decode(Response.self, from: data)
+            let currentSong = results.tracks
+            return currentSong
+        }
+        return nil
+    }
+
     
     private func connect() {
         // This check ensures that we only proceed with authorization if we haven't successfully obtained an access token.
