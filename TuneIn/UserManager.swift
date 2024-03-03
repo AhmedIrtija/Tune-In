@@ -167,6 +167,7 @@ final class UserManager {
             let coordinates = CLLocation(latitude: latitude, longitude: longitude)
             let centerPoint = CLLocation(latitude: center.latitude, longitude: center.longitude)
             let distance = GFUtils.distance(from: centerPoint, to: coordinates)
+            
             return distance <= radius
         }
     }
@@ -200,7 +201,6 @@ final class UserManager {
             var usersInsideRadius = [User]()
             for currentDoc in matchingDocs {
                 if let userId = currentDoc.data()["user_id"] as? String {
-                    print(userId)
                     let currentDBUser = try await getUser(userId: userId)
                     let currentUser = User(dbUser: currentDBUser)
                     usersInsideRadius.append(currentUser)

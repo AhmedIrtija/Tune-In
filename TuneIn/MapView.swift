@@ -204,31 +204,6 @@ struct MapView: View {
             .mapScope(mapScope)
             
             VStack {
-//                Button("Update geohashes") {
-//                    Task {
-//                        var myDBUser = try await UserManager.shared.getUser(userId: "bookhead_id")
-//                        let newLatitude = 38.53973870960561
-//                        let newLongitude = -121.74989133055733
-//                        myDBUser.updateLocationAndGeohash(newLatitude: newLatitude, newLongitude: newLongitude)
-//                        try await UserManager.shared.updateLocation(userId: myDBUser.userId, newLatitude: newLatitude, newLongitude: newLongitude)
-//                        try await UserManager.shared.updateGeohash(userId: myDBUser.userId, newGeohash: myDBUser.geohash ?? "")
-//                    }
-//                }
-//                Button("FIND MATCHING DOCS") {
-//                    if let location = locationManager.userLocation {
-//                        let myLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-//                        Task {
-//                            do {
-//                                try await UserManager.shared.getPeopleAroundUser(center: myLocation, radius: selectedRadius * 1609.34)
-//                            } catch {
-//                                print("Unable to fetch snapshot data. \(error)")
-//                            }
-//                            
-//                        }
-//                        
-//                    }
-//                    
-//                }
                 Button(action: {
                     showListView = true
                 }) {
@@ -248,9 +223,17 @@ struct MapView: View {
                 let myLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
                 Task {
                     do {
-                        print(myLocation)
                         usersAroundLocation = try await UserManager.shared.getPeopleAroundUser(center: myLocation, radius: selectedRadius * 1609.34)    // radius in meters
-                        print(usersAroundLocation)
+                    }
+                }
+            }
+        }
+        .onChange(of: selectedRadius) {
+            if let location = locationManager.userLocation {
+                let myLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+                Task {
+                    do {
+                        usersAroundLocation = try await UserManager.shared.getPeopleAroundUser(center: myLocation, radius: selectedRadius * 1609.34)    // radius in meters
                     }
                 }
             }
