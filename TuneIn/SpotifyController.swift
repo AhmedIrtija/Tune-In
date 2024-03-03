@@ -15,7 +15,7 @@ struct Response: Codable {
 }
 
 class SpotifyController: NSObject, ObservableObject {
-    
+    static let shared = SpotifyController()
     
     @Published var isAuthenticationFailed = false
     var hasAttemptedToAuthorize = false
@@ -39,7 +39,29 @@ class SpotifyController: NSObject, ObservableObject {
        }()
     
     override init() {
+        super.init()
+        
+        
+        connectCancellable = setupConnectPublisher()
+        disconnectCancellable = setupDisconnectPublisher()
     }
+    
+    private func setupConnectPublisher() -> AnyCancellable {
+        return NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.connect()
+            }
+    }
+    
+    private func setupDisconnectPublisher() -> AnyCancellable {
+        return NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                self.disconnect()
+            }
+    }
+
     
     
     var accessToken: String? = nil
@@ -50,28 +72,12 @@ class SpotifyController: NSObject, ObservableObject {
     private var disconnectCancellable: AnyCancellable?
     
     
-
     
-    func initialize() {
-        connectCancellable = NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.connect()
-            }
-        
-        disconnectCancellable = NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.disconnect()
-            }
-    }
-        
-
-
     
     lazy var appRemote: SPTAppRemote = {
         let appRemote = SPTAppRemote(configuration: configuration, logLevel: .debug)
         appRemote.connectionParameters.accessToken = self.accessToken
+        UserDefaults.standard.setValue(accessToken, forKey: "Authorization")
         appRemote.delegate = self
         return appRemote
     }()
@@ -115,6 +121,7 @@ class SpotifyController: NSObject, ObservableObject {
         })
     }
     
+        
     func getAccessTokenURL() -> URLRequest? {
         var components = URLComponents()
         components.scheme = "https"

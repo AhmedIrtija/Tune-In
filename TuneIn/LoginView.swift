@@ -1,11 +1,12 @@
 //
-//  ContentView.swift
+//  LoginView.swift
 //  Test
 //
 //  Created by Ahmed Irtija on 2/26/24.
 //
 
 import SwiftUI
+import WebKit
 
 struct LoginView: View {
     @ObservedObject var spotifyController: SpotifyController
@@ -13,63 +14,74 @@ struct LoginView: View {
 
     var body: some View {
         NavigationStack {
-            VStack{
-                Spacer()
-                Image("SpotifyIcon")
-                    .resizable()
-                    .frame(width: 195, height: 195)
-                    .padding(.bottom)
+            ZStack{
+                Color.black.edgesIgnoringSafeArea(.all)
                 
-                
-                Button(action: {
-                    spotifyController.initialize()
-                       }) {
-                    Text("Log In")
-                               .fontWeight(.bold)
-                               .foregroundColor(.white)
-                               .frame(minWidth: 0, maxWidth: .infinity)
-                               .padding()
-                               .background(Color.green)
-                               .cornerRadius(40)
-                               .padding(.horizontal, 20)
-                }
-                .shadow(radius: 10)
-                
-                
-                if !spotifyController.isAuthenticationFailed {
-                    Button(action: {
-                        spotifyController.authenticate()
-                        if(!spotifyController.isAuthenticationFailed){
-                            isAuthenticated = true
+                VStack{
+                    Spacer()
+                    
+                    Image("SpotifyIcon")
+                        .resizable()
+                        .frame(width: 195, height: 195)
+                        .padding(.bottom)
+                                        
+                    Text("it's time to")
+                        .font(.title3)
+                        .foregroundColor(.gray)
+                        .padding()
+                        .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.green.opacity(0.6)]), startPoint: .leading, endPoint: .trailing))
+                        .cornerRadius(10)
+                        .shadow(color: .green, radius: 10, x: 0, y: 0)
+                                                            
+                    // Apply the gradient to the text
+                    Text("Tune In")
+                        .font(.largeTitle.bold())
+                        .foregroundColor(.black)
+                        .padding()
+                        .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.green.opacity(0.6)]), startPoint: .leading, endPoint: .trailing))
+                        .cornerRadius(10)
+                        .shadow(color: .green, radius: 10, x: 0, y: 0)
+                        
+                    
+                    
+                    if spotifyController.isAuthenticationFailed {
+                        Button(action: {
+                            spotifyController.authenticate()
+                            if(!spotifyController.isAuthenticationFailed){
+                                isAuthenticated = true
+                            }
+                        }) {
+                            Text("Authenticate Again")
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .frame(minWidth: 0, maxWidth: .infinity)
+                                .padding()
+                                .background(Color.green)
+                                .cornerRadius(40)
+                                .padding(.horizontal, 20)
                         }
-                    }) {
-                        Text("Authenticate Again")
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .padding()
-                            .background(Color.green)
-                            .cornerRadius(40)
-                            .padding(.horizontal, 20)
+                        .shadow(radius: 10)
                     }
-                    .shadow(radius: 10)
+                    Spacer()
                 }
-                Spacer()
-            }
-            .onAppear(){
-                if(!spotifyController.isAuthenticationFailed){
-                    isAuthenticated = true
+                .onAppear(){
+                    if(!spotifyController.isAuthenticationFailed){
+                        isAuthenticated = true
+                    }
                 }
+                .navigationBarHidden(true)
+                .navigationDestination(isPresented: $isAuthenticated){
+                    RootView()
+                }
+                .navigationBarBackButtonHidden(true)
             }
-            .background(Color.black.edgesIgnoringSafeArea(.all))
-            .navigationBarHidden(true)
-            .navigationDestination(isPresented: $isAuthenticated){
-                RootView()
-            }
-            .navigationBarBackButtonHidden(true)
         }
     }
+    
 }
+
+
+
 
 struct Config {
     private static var configDict: [String: Any]? {

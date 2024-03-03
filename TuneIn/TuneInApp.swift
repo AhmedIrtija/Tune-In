@@ -23,8 +23,8 @@ struct TuneInApp: App {
     
     var body: some Scene {
         WindowGroup {
-            RootView()
-            //LoginView(spotifyController: spotifyController)
+//            RootView()
+            LoginView(spotifyController: spotifyController)
         }
     }
 }
