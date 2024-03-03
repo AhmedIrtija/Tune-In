@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import GeoFire
 
 struct DBUser: Codable {
     let userId: String
