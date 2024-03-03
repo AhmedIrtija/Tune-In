@@ -9,6 +9,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 import GeoFire
+import MapKit
 
 struct DBUser: Codable {
     let userId: String
@@ -16,7 +17,8 @@ struct DBUser: Codable {
     var imageUrl: String?
     var currentTrack: Track?
     var location: GeoPoint?
-    let date_created: Date?
+    var geohash: String?        // database only
+    let date_created: Date?     // database only
     
     init(user: User) {
         self.userId = user.userId
@@ -33,6 +35,7 @@ struct DBUser: Codable {
         imageUrl: String? = nil,
         currentTrack: Track? = nil,
         location: GeoPoint? = nil,
+        geohash: String? = nil,
         date_created: Date? = nil
     ) {
         self.userId = userId
@@ -40,6 +43,7 @@ struct DBUser: Codable {
         self.imageUrl = imageUrl
         self.currentTrack = currentTrack
         self.location = location
+        self.geohash = geohash
         self.date_created = date_created
     }
     
@@ -55,8 +59,9 @@ struct DBUser: Codable {
         currentTrack = newTrack
     }
     
-    mutating func updateLocation(newLocation: GeoPoint) {
-        location = newLocation
+    mutating func updateLocationAndGeohash(newLatitude: Double, newLongitude: Double) {
+        location = GeoPoint(latitude: newLatitude, longitude: newLongitude)
+        geohash = GFUtils.geoHash(forLocation: CLLocationCoordinate2D(latitude: newLatitude, longitude: newLongitude))
     }
     
     enum CodingKeys: String, CodingKey {
@@ -65,6 +70,7 @@ struct DBUser: Codable {
         case imageUrl = "image_url"
         case currentTrack = "current_track"
         case location = "location"
+        case geohash = "geohash"
         case date_created = "date_created"
     }
     
@@ -75,6 +81,7 @@ struct DBUser: Codable {
         self.imageUrl = try container.decodeIfPresent(String.self, forKey: .imageUrl)
         self.currentTrack = try container.decodeIfPresent(Track.self, forKey: .currentTrack)
         self.location = try container.decodeIfPresent(GeoPoint.self, forKey: .location)
+        self.geohash = try container.decodeIfPresent(String.self, forKey: .geohash)
         self.date_created = try container.decodeIfPresent(Date.self, forKey: .date_created)
     }
     
@@ -85,6 +92,7 @@ struct DBUser: Codable {
         try container.encodeIfPresent(self.imageUrl, forKey: .imageUrl)
         try container.encodeIfPresent(self.currentTrack, forKey: .currentTrack)
         try container.encodeIfPresent(self.location, forKey: .location)
+        try container.encodeIfPresent(self.geohash, forKey: .geohash)
         try container.encodeIfPresent(self.date_created, forKey: .date_created)
     }
 }
@@ -133,10 +141,18 @@ final class UserManager {
         try await userDocument(userId: userId).updateData(dict)
     }
     
-    func updateLocation(userId: String, newLocation: GeoPoint) async throws {
+    func updateLocation(userId: String, newLatitude: Double, newLongitude: Double) async throws {
         let data: [String: Any] = [
-            DBUser.CodingKeys.location.rawValue: newLocation
+            DBUser.CodingKeys.location.rawValue: GeoPoint(latitude: newLatitude, longitude: newLongitude)
         ]
         try await userDocument(userId: userId).updateData(data)
     }
+    
+    func updateGeohash(userId: String, newGeohash: String) async throws {
+        let data: [String: Any] = [
+            DBUser.CodingKeys.geohash.rawValue: newGeohash
+        ]
+        try await userDocument(userId: userId).updateData(data)
+    }
+    
 }
