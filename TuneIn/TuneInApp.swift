@@ -24,7 +24,9 @@ struct TuneInApp: App {
     var body: some Scene {
         WindowGroup {
 //            RootView()
-            LoginView(spotifyController: spotifyController)
+//            LoginView(spotifyController: spotifyController)
+            WebView(url: URL(string: "https://www.google.com")!)
+                        .edgesIgnoringSafeArea(.all)
         }
     }
 }

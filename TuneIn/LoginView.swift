@@ -67,6 +67,9 @@ struct LoginView: View {
                 .onAppear(){
                     if(!spotifyController.isAuthenticationFailed){
                         isAuthenticated = true
+//                        print(spotifyController.getAccessTokenURL() ?? "")
+//                        print(spotifyController.createURLRequest() ?? "")
+//                        print(getAccessTokenFromWebView())
                     }
                 }
                 .navigationBarHidden(true)
@@ -78,6 +81,15 @@ struct LoginView: View {
         }
     }
     
+    
+//    func getAccessTokenFromWebView() {
+//        guard let urlRequest = SpotifyController.shared.getAccessTokenURL() else { return }
+//        let webview = WKWebView()
+//        
+//        webview.load(urlRequest)
+//        webview.navigationDelegate = self
+//        view = webview
+//    }
 }
 
 

@@ -11,6 +11,7 @@
 		07835A2A2B8F1426007D077F /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 07835A292B8F1426007D077F /* Config.plist */; };
 		07835A2C2B8F1491007D077F /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 07835A2B2B8F1491007D077F /* .gitignore */; };
 		07835A2E2B8F14AF007D077F /* SpotifyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07835A2D2B8F14AF007D077F /* SpotifyController.swift */; };
+		07D5A2DF2B9403A0002FAA6E /* WebModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D5A2DE2B9403A0002FAA6E /* WebModel.swift */; };
 		B7867EF62B8FDF7800B06691 /* SpotifyiOS in Frameworks */ = {isa = PBXBuildFile; productRef = B7867EF52B8FDF7800B06691 /* SpotifyiOS */; };
 		B7867EFE2B906D9500B06691 /* MusicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7867EFD2B906D9500B06691 /* MusicView.swift */; };
 		B7D897E32B868488000CACB2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D897E22B868488000CACB2 /* Constants.swift */; };
@@ -37,6 +38,7 @@
 		07835A292B8F1426007D077F /* Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
 		07835A2B2B8F1491007D077F /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		07835A2D2B8F14AF007D077F /* SpotifyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyController.swift; sourceTree = "<group>"; };
+		07D5A2DE2B9403A0002FAA6E /* WebModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebModel.swift; sourceTree = "<group>"; };
 		B7867EFD2B906D9500B06691 /* MusicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicView.swift; sourceTree = "<group>"; };
 		B7D897DE2B868008000CACB2 /* TuneIn-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TuneIn-Bridging-Header.h"; sourceTree = "<group>"; };
 		B7D897E12B8680FC000CACB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -104,9 +106,9 @@
 				B7D897E12B8680FC000CACB2 /* Info.plist */,
 				07835A292B8F1426007D077F /* Config.plist */,
 				07835A2B2B8F1491007D077F /* .gitignore */,
-				07835A322B8F1615007D077F /* SpotifyiOS.framework */,
 				F69A3D7B2B86749D008E6EC1 /* TuneInApp.swift */,
 				07835A112B8CF595007D077F /* LoginView.swift */,
+				07D5A2DE2B9403A0002FAA6E /* WebModel.swift */,
 				F69A3D7D2B86749D008E6EC1 /* RootView.swift */,
 				F69A3D892B8674F7008E6EC1 /* MapView.swift */,
 				B7867EFD2B906D9500B06691 /* MusicView.swift */,
@@ -225,6 +227,7 @@
 				07835A2E2B8F14AF007D077F /* SpotifyController.swift in Sources */,
 				F67903F42B8BF4BB008EC6DC /* UserManager.swift in Sources */,
 				F69A3D8E2B8693AD008E6EC1 /* ListView.swift in Sources */,
+				07D5A2DF2B9403A0002FAA6E /* WebModel.swift in Sources */,
 				F69A3D8A2B8674F7008E6EC1 /* MapView.swift in Sources */,
 				F69A3D7C2B86749D008E6EC1 /* TuneInApp.swift in Sources */,
 				B7D897E32B868488000CACB2 /* Constants.swift in Sources */,
