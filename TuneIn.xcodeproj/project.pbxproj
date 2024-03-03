@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5812695745F4FDF739CF6AF5 /* Pods_TuneIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E917913DF728B9857490A3DF /* Pods_TuneIn.framework */; };
 		B7D897DC2B867F70000CACB2 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D897DA2B867F6F000CACB2 /* SpotifyiOS.framework */; };
 		B7D897DD2B867F70000CACB2 /* SpotifyiOS.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D897DB2B867F70000CACB2 /* SpotifyiOS.xcframework */; };
 		B7D897E32B868488000CACB2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D897E22B868488000CACB2 /* Constants.swift */; };
@@ -30,11 +31,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		215EB38AE8E921EF4B9CFB0C /* Pods-TuneIn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TuneIn.release.xcconfig"; path = "Target Support Files/Pods-TuneIn/Pods-TuneIn.release.xcconfig"; sourceTree = "<group>"; };
 		B7D897DA2B867F6F000CACB2 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
 		B7D897DB2B867F70000CACB2 /* SpotifyiOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = SpotifyiOS.xcframework; sourceTree = "<group>"; };
 		B7D897DE2B868008000CACB2 /* TuneIn-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TuneIn-Bridging-Header.h"; sourceTree = "<group>"; };
 		B7D897E12B8680FC000CACB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B7D897E22B868488000CACB2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		E917913DF728B9857490A3DF /* Pods_TuneIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TuneIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F45211992B91557F00E5EF77 /* Damion.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Damion.ttf; sourceTree = "<group>"; };
 		F679036B2B8BD1ED008EC6DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F67903F32B8BF4BA008EC6DC /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
@@ -47,6 +50,7 @@
 		F69A3D892B8674F7008E6EC1 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		F69A3D8B2B869127008E6EC1 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		F69A3D8D2B8693AD008E6EC1 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
+		FFFA4D0EDA3B70D3DAB20A0F /* Pods-TuneIn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TuneIn.debug.xcconfig"; path = "Target Support Files/Pods-TuneIn/Pods-TuneIn.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,12 +66,22 @@
 				F67903E12B8BD4B8008EC6DC /* FirebaseAnalyticsSwift in Frameworks */,
 				F67903F02B8BEFB4008EC6DC /* FirebaseFirestore in Frameworks */,
 				F67903F22B8BEFB4008EC6DC /* FirebaseFirestoreSwift in Frameworks */,
+				5812695745F4FDF739CF6AF5 /* Pods_TuneIn.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D064CF81C5823E1F8BD529A0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FFFA4D0EDA3B70D3DAB20A0F /* Pods-TuneIn.debug.xcconfig */,
+				215EB38AE8E921EF4B9CFB0C /* Pods-TuneIn.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		F45211972B91549D00E5EF77 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -79,6 +93,7 @@
 		F67903EE2B8BEFB4008EC6DC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E917913DF728B9857490A3DF /* Pods_TuneIn.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -90,6 +105,7 @@
 				F69A3D792B86749D008E6EC1 /* Products */,
 				B7D897DE2B868008000CACB2 /* TuneIn-Bridging-Header.h */,
 				F67903EE2B8BEFB4008EC6DC /* Frameworks */,
+				D064CF81C5823E1F8BD529A0 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -138,9 +154,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F69A3D862B86749E008E6EC1 /* Build configuration list for PBXNativeTarget "TuneIn" */;
 			buildPhases = (
+				55B70159CDE71B1C23DD9D35 /* [CP] Check Pods Manifest.lock */,
 				F69A3D742B86749D008E6EC1 /* Sources */,
 				F69A3D752B86749D008E6EC1 /* Frameworks */,
 				F69A3D762B86749D008E6EC1 /* Resources */,
+				2BD1E3F4D8D8551E22B49C29 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -209,6 +227,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		2BD1E3F4D8D8551E22B49C29 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TuneIn/Pods-TuneIn-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TuneIn/Pods-TuneIn-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TuneIn/Pods-TuneIn-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		55B70159CDE71B1C23DD9D35 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TuneIn-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F69A3D742B86749D008E6EC1 /* Sources */ = {
@@ -350,6 +410,7 @@
 		};
 		F69A3D872B86749E008E6EC1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FFFA4D0EDA3B70D3DAB20A0F /* Pods-TuneIn.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -359,6 +420,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"TuneIn/Preview Content\"";
 				DEVELOPMENT_TEAM = UKY8C2YK58;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TuneIn/Preview\\ Content",
@@ -389,6 +451,7 @@
 		};
 		F69A3D882B86749E008E6EC1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 215EB38AE8E921EF4B9CFB0C /* Pods-TuneIn.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -398,6 +461,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"TuneIn/Preview Content\"";
 				DEVELOPMENT_TEAM = UKY8C2YK58;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/TuneIn/Preview\\ Content",

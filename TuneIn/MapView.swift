@@ -8,12 +8,6 @@
 import SwiftUI
 import MapKit
 
-struct CustomMapAnnotation {
-    var title: String
-    var coordinate: CLLocationCoordinate2D
-    var imageName: String
-}
-
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var locationManager = CLLocationManager()
     @Published var userLocation: CLLocation?
@@ -47,43 +41,9 @@ struct MapView: View {
     @State private var selectedRadius: Double = 1.0
     @State private var showProfileView: Bool = false
     @State private var showListView: Bool = false
+    @State private var usersAroundLocation: [User] = []
     
     let distances: [Double] = [1.0, 2.0, 3.0, 4.0, 5.0]     // in miles
-    
-    let customMapAnnotations: [CustomMapAnnotation] = [
-        // within 1 mile
-        CustomMapAnnotation(
-            title: "Bookhead",
-            coordinate: CLLocationCoordinate2D(latitude: 38.53973870960561, longitude: -121.74989133055733),
-            imageName: "BookheadImage"
-        ),
-        CustomMapAnnotation(
-            title: "Eye on Mrak",
-            coordinate: CLLocationCoordinate2D(latitude: 38.537927163335574, longitude: -121.74943975806444),
-            imageName: "EyeOnMrakImage"
-        ),
-        CustomMapAnnotation(
-            title: "Stargazer",
-            coordinate: CLLocationCoordinate2D(latitude: 38.542050297019934, longitude: -121.74802530395576),
-            imageName: "StargazerImage"
-        ),
-        CustomMapAnnotation(
-            title: "Yin & Yang",
-            coordinate: CLLocationCoordinate2D(latitude: 38.53936629323357, longitude: -121.74793264407816),
-            imageName: "YinYangImage"
-        ),
-        // outside 1 mile
-        CustomMapAnnotation(
-            title: "Crunchy Cat",
-            coordinate: CLLocationCoordinate2D(latitude: 38.526750890398525, longitude: -121.74134733532429),
-            imageName: "CrunchyCatImage"
-        ),
-        CustomMapAnnotation(
-            title: "Happy Cat",
-            coordinate: CLLocationCoordinate2D(latitude: 38.55956891371994, longitude: -121.74857138735918),
-            imageName: "HappyCatImage"
-        )
-    ]
     
     var selectedMapStyle: MapStyle {
         return switch(mapStyle) {
@@ -118,22 +78,27 @@ struct MapView: View {
                         .foregroundStyle(Color.green.opacity(0.4))
                     }
                         
-                    ForEach(customMapAnnotations.indices, id:\.self) { index in
-                        let annotation = customMapAnnotations[index]
-                        if let userLocation = locationManager.userLocation {
-                            let annotationLocation = CLLocation(latitude: annotation.coordinate.latitude, longitude: annotation.coordinate.longitude)
-                            let distance = userLocation.distance(from: annotationLocation)
-                            let miles = distance / 1609.34 // Convert meters to miles
-                            if miles <= selectedRadius {
-                                Annotation(annotation.title, coordinate: annotation.coordinate) {
-                                    ZStack {
-                                        Circle()
-                                            .fill(Color.black)
-                                            .frame(width: 36.0, height: 36.0)
-                                        Circle()
-                                            .fill(Color.green)
-                                            .frame(width: 33.0, height: 33.0)
-                                        Image(customMapAnnotations[index].imageName)
+                    ForEach(usersAroundLocation.indices, id:\.self) { index in
+                        let otherUser = usersAroundLocation[index]
+                        if let otherUserLocation = otherUser.location {
+                            let otherUserCoordinates = CLLocationCoordinate2D(latitude: otherUserLocation.latitude, longitude: otherUserLocation.longitude)
+                            Annotation(otherUser.name, coordinate: otherUserCoordinates) {
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.black)
+                                        .frame(width: 36.0, height: 36.0)
+                                    Circle()
+                                        .fill(Color.green)
+                                        .frame(width: 33.0, height: 33.0)
+                                    AsyncImage(url: URL(string: otherUser.imageUrl ?? "")) { image in
+                                        image
+                                            .resizable()
+                                            .frame(width: 30.0, height: 30.0)
+                                            .foregroundStyle(Color.white)
+                                            .background(Color.black)
+                                            .clipShape(.circle)
+                                    } placeholder: {
+                                        Image(systemName: "person.circle")
                                             .resizable()
                                             .frame(width: 30.0, height: 30.0)
                                             .foregroundStyle(Color.white)
@@ -253,15 +218,29 @@ struct MapView: View {
             }
             .padding([.top, .horizontal], 12.0)
         }
+        .onReceive(locationManager.$userLocation) { userLocation in
+            if let location = userLocation {
+                let myLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+                Task {
+                    do {
+                        usersAroundLocation = try await UserManager.shared.getPeopleAroundUser(center: myLocation, radius: selectedRadius * 1609.34)    // radius in meters
+                    }
+                }
+            }
+        }
+        .onChange(of: selectedRadius) {
+            if let location = locationManager.userLocation {
+                let myLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+                Task {
+                    do {
+                        usersAroundLocation = try await UserManager.shared.getPeopleAroundUser(center: myLocation, radius: selectedRadius * 1609.34)    // radius in meters
+                    }
+                }
+            }
+        }
         .sheet(isPresented: $showListView) {
             ListView()
         }
-        
-        
-        
-
-        
-        
     }
 }
 #Preview {

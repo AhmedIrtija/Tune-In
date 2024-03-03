@@ -15,6 +15,14 @@ struct User: Codable {
     let imageUrl: String?
     let currentTrack: Track?
     let location: GeoPoint?
+    
+    init(dbUser: DBUser) {
+        self.userId = dbUser.userId
+        self.name = dbUser.name
+        self.imageUrl = dbUser.imageUrl
+        self.currentTrack = dbUser.currentTrack
+        self.location = dbUser.location
+    }
 }
 
 struct Track: Codable, Identifiable, Hashable {
