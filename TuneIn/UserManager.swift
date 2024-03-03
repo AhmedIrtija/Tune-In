@@ -155,4 +155,62 @@ final class UserManager {
         try await userDocument(userId: userId).updateData(data)
     }
     
+    private func fetchMatchingDocs(from query: Query, center: CLLocationCoordinate2D, radius: Double) async throws -> [QueryDocumentSnapshot] {     // radius in meters
+        let snapshot = try await query.getDocuments()
+        
+        // filter false positives
+        return snapshot.documents.filter { document in
+            let location = document.data()["location"] as? GeoPoint
+            guard let latitude = location?.latitude, let longitude = location?.longitude else {
+                return false
+            }
+            let coordinates = CLLocation(latitude: latitude, longitude: longitude)
+            let centerPoint = CLLocation(latitude: center.latitude, longitude: center.longitude)
+            let distance = GFUtils.distance(from: centerPoint, to: coordinates)
+            return distance <= radius
+        }
+    }
+    
+    func getPeopleAroundUser(center: CLLocationCoordinate2D, radius: Double) async throws -> [User] {     // radius in meters
+        // set query bounds
+        let queryBounds = GFUtils.queryBounds(forLocation: center, withRadius: radius)
+        let queries = queryBounds.map { bound -> Query in
+            return userCollection
+                    .order(by: "geohash")
+                    .start(at: [bound.startValue])
+                    .end(at: [bound.endValue])
+        }
+        
+        do {
+            // get documents within specified radius
+            let matchingDocs = try await withThrowingTaskGroup(of: [QueryDocumentSnapshot].self) { group -> [QueryDocumentSnapshot] in
+                for query in queries {
+                    group.addTask {
+                        try await self.fetchMatchingDocs(from: query, center: center, radius: radius)
+                    }
+                }
+                var matchingDocs = [QueryDocumentSnapshot]()
+                for try await documents in group {
+                      matchingDocs.append(contentsOf: documents)
+                }
+                return matchingDocs
+            }
+            
+            // get list of User objects within specified radius
+            var usersInsideRadius = [User]()
+            for currentDoc in matchingDocs {
+                if let userId = currentDoc.data()["user_id"] as? String {
+                    print(userId)
+                    let currentDBUser = try await getUser(userId: userId)
+                    let currentUser = User(dbUser: currentDBUser)
+                    usersInsideRadius.append(currentUser)
+                }
+            }
+            
+            return usersInsideRadius
+        } catch {
+            print("Unable to fetch snapshot data. \(error)")
+            throw error
+        }
+    }
 }
