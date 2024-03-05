@@ -9,14 +9,27 @@ import SwiftUI
 
 struct ProfileView: View {
     @Binding var rootViewType: RootViewType
+    @State private var showSettingsView: Bool = false
     var body: some View {
         ZStack() {
             Color.black
                 .ignoresSafeArea()
             VStack() {
-                //Settings Icon
+                HStack {
+                    Spacer()
+                    //Settings Icon
+                    Button(action: {
+                        showSettingsView = true
+                    }) {
+                        Image("SettingsIcon")
+                            .padding(12.0)
+                    }
+                    .navigationDestination(isPresented: $showSettingsView) {
+                        SettingsView(rootViewType: $rootViewType)
+                    }
+                }
                 //Profile Photo
-                
+                Image("DefaultImage")
                 //Display Name
                 Text("TuneIn")
                     .font(Font.custom("Damion", size: 50))
@@ -34,7 +47,7 @@ struct ProfileView: View {
                     .padding([.bottom], 10)
             }
             .font(.custom("Helvetica", size: 18))
-            .padding([.horizontal], 30)
+            .padding([.horizontal], 20)
             .foregroundColor(Colors.gray)
         }
     }

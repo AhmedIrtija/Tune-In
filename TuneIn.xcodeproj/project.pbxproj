@@ -11,6 +11,7 @@
 		B7D897DD2B867F70000CACB2 /* SpotifyiOS.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D897DB2B867F70000CACB2 /* SpotifyiOS.xcframework */; };
 		B7D897E32B868488000CACB2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D897E22B868488000CACB2 /* Constants.swift */; };
 		F452119A2B91557F00E5EF77 /* Damion.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F45211992B91557F00E5EF77 /* Damion.ttf */; };
+		F486ACC52B970A3B00D1182E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486ACC42B970A3B00D1182E /* SettingsView.swift */; };
 		F679036C2B8BD1EE008EC6DC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F679036B2B8BD1ED008EC6DC /* GoogleService-Info.plist */; };
 		F67903DD2B8BD4B8008EC6DC /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F67903DC2B8BD4B8008EC6DC /* FirebaseAnalytics */; };
 		F67903E12B8BD4B8008EC6DC /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F67903E02B8BD4B8008EC6DC /* FirebaseAnalyticsSwift */; };
@@ -36,6 +37,7 @@
 		B7D897E12B8680FC000CACB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B7D897E22B868488000CACB2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		F45211992B91557F00E5EF77 /* Damion.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Damion.ttf; sourceTree = "<group>"; };
+		F486ACC42B970A3B00D1182E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		F679036B2B8BD1ED008EC6DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F67903F32B8BF4BA008EC6DC /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		F67903F52B8BF6EB008EC6DC /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				F69A3D892B8674F7008E6EC1 /* MapView.swift */,
 				F69A3D8D2B8693AD008E6EC1 /* ListView.swift */,
 				F69A3D8B2B869127008E6EC1 /* ProfileView.swift */,
+				F486ACC42B970A3B00D1182E /* SettingsView.swift */,
 				F45211972B91549D00E5EF77 /* Fonts */,
 				B7D897E22B868488000CACB2 /* Constants.swift */,
 				F67903F32B8BF4BA008EC6DC /* UserManager.swift */,
@@ -218,6 +221,7 @@
 				F69A3D8C2B869127008E6EC1 /* ProfileView.swift in Sources */,
 				F69A3D7E2B86749D008E6EC1 /* RootView.swift in Sources */,
 				F67903F62B8BF6EB008EC6DC /* UserModel.swift in Sources */,
+				F486ACC52B970A3B00D1182E /* SettingsView.swift in Sources */,
 				F67903F42B8BF4BB008EC6DC /* UserManager.swift in Sources */,
 				F69A3D8E2B8693AD008E6EC1 /* ListView.swift in Sources */,
 				F69A3D8A2B8674F7008E6EC1 /* MapView.swift in Sources */,
