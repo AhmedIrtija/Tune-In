@@ -116,7 +116,7 @@ struct MapView: View {
                     Button(action: {
                         showProfileView = true
                     }) {
-                        Image(systemName: "person.crop.circle.fill")
+                        Image("DefaultImage")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .foregroundStyle(Color.blue)
