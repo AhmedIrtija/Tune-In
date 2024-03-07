@@ -28,12 +28,14 @@ struct ProfileView: View {
                         SettingsView(rootViewType: $rootViewType)
                     }
                 }
+                .padding([.bottom], 50)
                 //Profile Photo
                 Image("DefaultImage")
+                    .resizable()
+                    .frame(width: 135.0, height: 135.0)
                 //Display Name
                 Text("TuneIn")
-                    .font(Font.custom("Damion", size: 50))
-                    .padding([.bottom], 10)
+                    .font(Font.custom("Damion", size: 40))
                     .foregroundColor(.white)
                 //Pronouns
                 Text("(she/her)")
@@ -41,10 +43,11 @@ struct ProfileView: View {
                     .padding([.bottom], 5)
                 //Location
                 Text("Davis, CA, USA")
-                    .padding([.bottom], 40)
+                    .padding([.bottom], 20)
                 //Bio
                 Text("Hey there! I am using TuneIn.")
-                    .padding([.bottom], 10)
+                    .padding([.bottom], 20)
+                Spacer()
             }
             .font(.custom("Helvetica", size: 18))
             .padding([.horizontal], 20)
