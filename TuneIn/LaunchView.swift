@@ -8,11 +8,33 @@
 import SwiftUI
 
 struct LaunchView: View {
+    @Binding var rootViewType: RootViewType
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Color.black
+                .ignoresSafeArea()
+            
+            VStack {
+                Text("Tune In")
+                    .font(Font.custom("Damion", size: 80))
+                    .foregroundColor(.white)
+            }
+            
+        }
+        .onAppear {
+            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                withAnimation {
+                    rootViewType = authUser == nil ? .authenticationView : .mapView
+                }
+            }
+            
+//
+        }
     }
 }
 
 #Preview {
-    LaunchView()
+    LaunchView(rootViewType: .constant(.launchView))
 }

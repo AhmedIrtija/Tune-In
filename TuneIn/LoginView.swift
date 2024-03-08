@@ -8,11 +8,28 @@
 import SwiftUI
 
 struct LoginView: View {
+    @Binding var rootViewType: RootViewType
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text("Spotify Login View")
+            Button(action: {
+                rootViewType = .mapView
+            }) {
+                Text("Proceed to Map View")
+                    .font(.custom("Avenir", size: 16.0).uppercaseSmallCaps())
+                    .foregroundColor(.white)
+                    .padding(10.0)
+                    .frame(height: 55.0)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .background(Color.blue)
+                    .cornerRadius(10.0)
+            }
+        }
+        .padding()
     }
 }
 
 #Preview {
-    LoginView()
+    LoginView(rootViewType: .constant(.authenticationView))
 }
