@@ -41,7 +41,7 @@ struct MapView: View {
     @State private var selectedRadius: Double = 1.0
     @State private var showProfileView: Bool = false
     @State private var showListView: Bool = false
-    @State private var usersAroundLocation: [User] = []
+    @State private var usersAroundLocation: [AppUser] = []
     
     let distances: [Double] = [1.0, 2.0, 3.0, 4.0, 5.0]     // in miles
     
@@ -211,6 +211,7 @@ struct MapView: View {
                         .font(.custom("Avenir", size: 16.0).uppercaseSmallCaps())
                         .foregroundColor(.white)
                         .padding(10.0)
+                        .frame(height: 55.0)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .background(Color.blue)
                         .cornerRadius(10.0)

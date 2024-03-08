@@ -20,7 +20,7 @@ struct DBUser: Codable {
     var geohash: String?        // database only
     let date_created: Date?     // database only
     
-    init(user: User) {
+    init(user: AppUser) {
         self.userId = user.userId
         self.name = user.name
         self.imageUrl = user.imageUrl
@@ -172,7 +172,7 @@ final class UserManager {
         }
     }
     
-    func getPeopleAroundUser(center: CLLocationCoordinate2D, radius: Double) async throws -> [User] {     // radius in meters
+    func getPeopleAroundUser(center: CLLocationCoordinate2D, radius: Double) async throws -> [AppUser] {     // radius in meters
         // set query bounds
         let queryBounds = GFUtils.queryBounds(forLocation: center, withRadius: radius)
         let queries = queryBounds.map { bound -> Query in
@@ -198,11 +198,11 @@ final class UserManager {
             }
             
             // get list of User objects within specified radius
-            var usersInsideRadius = [User]()
+            var usersInsideRadius = [AppUser]()
             for currentDoc in matchingDocs {
                 if let userId = currentDoc.data()["user_id"] as? String {
                     let currentDBUser = try await getUser(userId: userId)
-                    let currentUser = User(dbUser: currentDBUser)
+                    let currentUser = AppUser(dbUser: currentDBUser)
                     usersInsideRadius.append(currentUser)
                 }
             }
