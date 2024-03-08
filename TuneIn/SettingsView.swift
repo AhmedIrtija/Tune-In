@@ -7,12 +7,20 @@
 
 import SwiftUI
 
+@MainActor
+final class SettingsViewModel: ObservableObject {
+    func signOut() throws {
+        try AuthenticationManager.shared.signOut()
+    }
+}
+
 struct SettingsView: View {
     @Binding var rootViewType: RootViewType
     @ObservedObject var userModel = UserModel()
     @FocusState var isFocused
     @State private var temp: String = ""
     @State private var temp2: String = ""
+    @StateObject private var viewModel = SettingsViewModel()
     
     var body: some View {
         ZStack() {
@@ -91,6 +99,26 @@ struct SettingsView: View {
                 }
                 .padding([.top],30)
                 .preferredColorScheme(.dark)
+                
+                Button(action: {
+                    Task {
+                        do {
+                            try viewModel.signOut()
+                            rootViewType = .authenticationView
+                        } catch {
+                            print(error)
+                        }
+                    }
+                }) {
+                    Text("Log out")
+                        .font(.custom("Avenir", size: 16.0).uppercaseSmallCaps())
+                        .foregroundColor(.white)
+                        .padding(10.0)
+                        .frame(height: 55.0)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .background(Color.red)
+                        .cornerRadius(10.0)
+                }
             }
             .font(.custom("Helvetica", size: 16))
             .padding([.horizontal], 24)
