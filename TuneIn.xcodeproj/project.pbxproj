@@ -13,6 +13,11 @@
 		B7D897E32B868488000CACB2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D897E22B868488000CACB2 /* Constants.swift */; };
 		F452119A2B91557F00E5EF77 /* Damion.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F45211992B91557F00E5EF77 /* Damion.ttf */; };
 		F486ACC52B970A3B00D1182E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486ACC42B970A3B00D1182E /* SettingsView.swift */; };
+		F62214A02B9C180D00EFDABC /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F622149B2B9C180C00EFDABC /* AuthenticationManager.swift */; };
+		F62214A22B9C180D00EFDABC /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F622149D2B9C180C00EFDABC /* SignInView.swift */; };
+		F62214A32B9C180D00EFDABC /* SpotifyLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F622149E2B9C180C00EFDABC /* SpotifyLoginView.swift */; };
+		F62214A42B9C180D00EFDABC /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F622149F2B9C180C00EFDABC /* LaunchView.swift */; };
+		F62214A62B9C185000EFDABC /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F62214A52B9C185000EFDABC /* FirebaseAuth */; };
 		F679036C2B8BD1EE008EC6DC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F679036B2B8BD1ED008EC6DC /* GoogleService-Info.plist */; };
 		F67903DD2B8BD4B8008EC6DC /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = F67903DC2B8BD4B8008EC6DC /* FirebaseAnalytics */; };
 		F67903E12B8BD4B8008EC6DC /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F67903E02B8BD4B8008EC6DC /* FirebaseAnalyticsSwift */; };
@@ -41,6 +46,10 @@
 		E917913DF728B9857490A3DF /* Pods_TuneIn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TuneIn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F45211992B91557F00E5EF77 /* Damion.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Damion.ttf; sourceTree = "<group>"; };
 		F486ACC42B970A3B00D1182E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		F622149B2B9C180C00EFDABC /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
+		F622149D2B9C180C00EFDABC /* SignInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		F622149E2B9C180C00EFDABC /* SpotifyLoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyLoginView.swift; sourceTree = "<group>"; };
+		F622149F2B9C180C00EFDABC /* LaunchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		F679036B2B8BD1ED008EC6DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F67903F32B8BF4BA008EC6DC /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		F67903F52B8BF6EB008EC6DC /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
@@ -61,6 +70,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F67903E92B8BD690008EC6DC /* FirebaseAnalyticsSwift in Frameworks */,
+				F62214A62B9C185000EFDABC /* FirebaseAuth in Frameworks */,
 				B7D897DD2B867F70000CACB2 /* SpotifyiOS.xcframework in Frameworks */,
 				F67903E72B8BD690008EC6DC /* FirebaseAnalytics in Frameworks */,
 				B7D897DC2B867F70000CACB2 /* SpotifyiOS.framework in Frameworks */,
@@ -127,12 +137,16 @@
 				B7D897DB2B867F70000CACB2 /* SpotifyiOS.xcframework */,
 				F69A3D7B2B86749D008E6EC1 /* TuneInApp.swift */,
 				F69A3D7D2B86749D008E6EC1 /* RootView.swift */,
+				F622149F2B9C180C00EFDABC /* LaunchView.swift */,
+				F622149D2B9C180C00EFDABC /* SignInView.swift */,
+				F622149E2B9C180C00EFDABC /* SpotifyLoginView.swift */,
 				F69A3D892B8674F7008E6EC1 /* MapView.swift */,
 				F69A3D8D2B8693AD008E6EC1 /* ListView.swift */,
 				F69A3D8B2B869127008E6EC1 /* ProfileView.swift */,
 				F486ACC42B970A3B00D1182E /* SettingsView.swift */,
 				F45211972B91549D00E5EF77 /* Fonts */,
 				B7D897E22B868488000CACB2 /* Constants.swift */,
+				F622149B2B9C180C00EFDABC /* AuthenticationManager.swift */,
 				F67903F32B8BF4BA008EC6DC /* UserManager.swift */,
 				F67903F52B8BF6EB008EC6DC /* UserModel.swift */,
 				F679036B2B8BD1ED008EC6DC /* GoogleService-Info.plist */,
@@ -175,6 +189,7 @@
 				F67903E82B8BD690008EC6DC /* FirebaseAnalyticsSwift */,
 				F67903EF2B8BEFB4008EC6DC /* FirebaseFirestore */,
 				F67903F12B8BEFB4008EC6DC /* FirebaseFirestoreSwift */,
+				F62214A52B9C185000EFDABC /* FirebaseAuth */,
 			);
 			productName = TuneIn;
 			productReference = F69A3D782B86749D008E6EC1 /* TuneIn.app */;
@@ -281,9 +296,13 @@
 				F69A3D8C2B869127008E6EC1 /* ProfileView.swift in Sources */,
 				F69A3D7E2B86749D008E6EC1 /* RootView.swift in Sources */,
 				F67903F62B8BF6EB008EC6DC /* UserModel.swift in Sources */,
+				F62214A42B9C180D00EFDABC /* LaunchView.swift in Sources */,
+				F62214A02B9C180D00EFDABC /* AuthenticationManager.swift in Sources */,
 				F486ACC52B970A3B00D1182E /* SettingsView.swift in Sources */,
 				F67903F42B8BF4BB008EC6DC /* UserManager.swift in Sources */,
 				F69A3D8E2B8693AD008E6EC1 /* ListView.swift in Sources */,
+				F62214A32B9C180D00EFDABC /* SpotifyLoginView.swift in Sources */,
+				F62214A22B9C180D00EFDABC /* SignInView.swift in Sources */,
 				F69A3D8A2B8674F7008E6EC1 /* MapView.swift in Sources */,
 				F69A3D7C2B86749D008E6EC1 /* TuneInApp.swift in Sources */,
 				B7D897E32B868488000CACB2 /* Constants.swift in Sources */,
@@ -528,6 +547,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		F62214A52B9C185000EFDABC /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F67903DB2B8BD4B8008EC6DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
 		F67903DC2B8BD4B8008EC6DC /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F67903DB2B8BD4B8008EC6DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-struct User: Codable {
+struct AppUser: Codable {
     let userId: String
     let name: String
     let imageUrl: String?
@@ -35,5 +35,5 @@ struct Track: Codable, Identifiable, Hashable {
 
 class UserModel: ObservableObject {
     @Published var authToken: String?
-    @Published var currentUser: User?
+    @Published var currentUser: AppUser?
 }

@@ -8,16 +8,26 @@
 import SwiftUI
 
 enum RootViewType {
+    case launchView
+    case signInView
     case mapView
 }
 
 struct RootView: View {
-    @State var rootViewType: RootViewType = .mapView
+    @State var rootViewType: RootViewType = .launchView
     var body: some View {
-        switch rootViewType {
-        case .mapView:
-            NavigationStack {
-                MapView(rootViewType: $rootViewType)
+        ZStack {
+            switch rootViewType {
+            case .launchView:
+                LaunchView(rootViewType: $rootViewType)
+            case .signInView:
+                NavigationStack {
+                    SignInView(rootViewType: $rootViewType)
+                }
+            case .mapView:
+                NavigationStack {
+                    MapView(rootViewType: $rootViewType)
+                }
             }
         }
     }
