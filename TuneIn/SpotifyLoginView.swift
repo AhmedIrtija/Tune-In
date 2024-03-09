@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LoginView: View {
+struct SpotifyLoginView: View {
     @Binding var rootViewType: RootViewType
     
     var body: some View {
@@ -31,5 +31,5 @@ struct LoginView: View {
 }
 
 #Preview {
-    LoginView(rootViewType: .constant(.authenticationView))
+    SpotifyLoginView(rootViewType: .constant(.authenticationView))
 }

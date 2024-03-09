@@ -64,7 +64,7 @@ struct SignInEmailView: View {
                     .cornerRadius(10.0)
             }
             .navigationDestination(isPresented: $viewModel.showLoginView) {
-                LoginView(rootViewType: $rootViewType)
+                SpotifyLoginView(rootViewType: $rootViewType)
             }
             
             Spacer()
