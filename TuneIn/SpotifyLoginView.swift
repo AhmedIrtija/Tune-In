@@ -31,5 +31,5 @@ struct SpotifyLoginView: View {
 }
 
 #Preview {
-    SpotifyLoginView(rootViewType: .constant(.authenticationView))
+    SpotifyLoginView(rootViewType: .constant(.signInView))
 }

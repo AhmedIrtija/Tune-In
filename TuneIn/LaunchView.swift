@@ -26,7 +26,7 @@ struct LaunchView: View {
             let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 withAnimation {
-                    rootViewType = authUser == nil ? .authenticationView : .mapView
+                    rootViewType = authUser == nil ? .signInView : .mapView
                 }
             }
             

@@ -119,7 +119,7 @@ struct SettingsView: View {
                         do {
                             try await viewModel.resetPassword()
                            print("Password reset")
-                            rootViewType = .authenticationView
+                            rootViewType = .launchView
                         }
                     }
                 }) {
@@ -163,7 +163,7 @@ struct SettingsView: View {
                     Task {
                         do {
                             try viewModel.signOut()
-                            rootViewType = .authenticationView
+                            rootViewType = .launchView
                         } catch {
                             print(error)
                         }
