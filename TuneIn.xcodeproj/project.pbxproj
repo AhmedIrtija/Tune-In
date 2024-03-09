@@ -14,8 +14,7 @@
 		F452119A2B91557F00E5EF77 /* Damion.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F45211992B91557F00E5EF77 /* Damion.ttf */; };
 		F486ACC52B970A3B00D1182E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486ACC42B970A3B00D1182E /* SettingsView.swift */; };
 		F62214A02B9C180D00EFDABC /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F622149B2B9C180C00EFDABC /* AuthenticationManager.swift */; };
-		F62214A12B9C180D00EFDABC /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F622149C2B9C180C00EFDABC /* AuthenticationView.swift */; };
-		F62214A22B9C180D00EFDABC /* SignInEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F622149D2B9C180C00EFDABC /* SignInEmailView.swift */; };
+		F62214A22B9C180D00EFDABC /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F622149D2B9C180C00EFDABC /* SignInView.swift */; };
 		F62214A32B9C180D00EFDABC /* SpotifyLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F622149E2B9C180C00EFDABC /* SpotifyLoginView.swift */; };
 		F62214A42B9C180D00EFDABC /* LaunchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F622149F2B9C180C00EFDABC /* LaunchView.swift */; };
 		F62214A62B9C185000EFDABC /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F62214A52B9C185000EFDABC /* FirebaseAuth */; };
@@ -48,8 +47,7 @@
 		F45211992B91557F00E5EF77 /* Damion.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Damion.ttf; sourceTree = "<group>"; };
 		F486ACC42B970A3B00D1182E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		F622149B2B9C180C00EFDABC /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
-		F622149C2B9C180C00EFDABC /* AuthenticationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
-		F622149D2B9C180C00EFDABC /* SignInEmailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInEmailView.swift; sourceTree = "<group>"; };
+		F622149D2B9C180C00EFDABC /* SignInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		F622149E2B9C180C00EFDABC /* SpotifyLoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyLoginView.swift; sourceTree = "<group>"; };
 		F622149F2B9C180C00EFDABC /* LaunchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchView.swift; sourceTree = "<group>"; };
 		F679036B2B8BD1ED008EC6DC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -140,8 +138,7 @@
 				F69A3D7B2B86749D008E6EC1 /* TuneInApp.swift */,
 				F69A3D7D2B86749D008E6EC1 /* RootView.swift */,
 				F622149F2B9C180C00EFDABC /* LaunchView.swift */,
-				F622149C2B9C180C00EFDABC /* AuthenticationView.swift */,
-				F622149D2B9C180C00EFDABC /* SignInEmailView.swift */,
+				F622149D2B9C180C00EFDABC /* SignInView.swift */,
 				F622149E2B9C180C00EFDABC /* SpotifyLoginView.swift */,
 				F69A3D892B8674F7008E6EC1 /* MapView.swift */,
 				F69A3D8D2B8693AD008E6EC1 /* ListView.swift */,
@@ -305,8 +302,7 @@
 				F67903F42B8BF4BB008EC6DC /* UserManager.swift in Sources */,
 				F69A3D8E2B8693AD008E6EC1 /* ListView.swift in Sources */,
 				F62214A32B9C180D00EFDABC /* SpotifyLoginView.swift in Sources */,
-				F62214A22B9C180D00EFDABC /* SignInEmailView.swift in Sources */,
-				F62214A12B9C180D00EFDABC /* AuthenticationView.swift in Sources */,
+				F62214A22B9C180D00EFDABC /* SignInView.swift in Sources */,
 				F69A3D8A2B8674F7008E6EC1 /* MapView.swift in Sources */,
 				F69A3D7C2B86749D008E6EC1 /* TuneInApp.swift in Sources */,
 				B7D897E32B868488000CACB2 /* Constants.swift in Sources */,
