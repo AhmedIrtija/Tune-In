@@ -11,24 +11,23 @@ import SwiftUI
 final class SignInEmailViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
-    @Published var showLoginView = false
     
-    func signIn() {
+    func signUp() async throws {
         guard !email.isEmpty, !password.isEmpty else {
             print("No email or password found.")
             return
         }
         
-        Task {
-            do {
-                let returnedUserData = try await AuthenticationManager.shared.createUser(email: email, password: password)
-                self.showLoginView = true
-                print("success")
-                print(returnedUserData)
-            } catch {
-                print("Error: \(error)")
-            }
+        let _ = try await AuthenticationManager.shared.createUser(email: email, password: password)
+    }
+    
+    func signIn() async throws {
+        guard !email.isEmpty, !password.isEmpty else {
+            print("No email or password found.")
+            return
         }
+        
+        let _ = try await AuthenticationManager.shared.signInUser(email: email, password: password)
     }
 }
 
@@ -52,7 +51,26 @@ struct SignInEmailView: View {
                 .cornerRadius(10.0)
             
             Button(action: {
-                viewModel.signIn()
+                Task {
+                    // sign up if new account
+                    do {
+                        try await viewModel.signUp()
+                        showLoginView = true
+                        return
+                    } catch {
+                        print(error)
+                    }
+                    
+                    // sign in if account exists
+                    do {
+                        try await viewModel.signIn()
+                        showLoginView = true
+                        return
+                    } catch {
+                        print(error)
+                    }
+                }
+                
             }) {
                 Text("Sign In")
                     .font(.custom("Avenir", size: 16.0).uppercaseSmallCaps())
@@ -63,7 +81,7 @@ struct SignInEmailView: View {
                     .background(Color.blue)
                     .cornerRadius(10.0)
             }
-            .navigationDestination(isPresented: $viewModel.showLoginView) {
+            .navigationDestination(isPresented: $showLoginView) {
                 SpotifyLoginView(rootViewType: $rootViewType)
             }
             
