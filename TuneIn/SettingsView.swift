@@ -12,6 +12,18 @@ final class SettingsViewModel: ObservableObject {
     func signOut() throws {
         try AuthenticationManager.shared.signOut()
     }
+    
+    func resetPassword() async throws {
+        let authUser = try AuthenticationManager.shared.getAuthenticatedUser()
+        guard let email = authUser.email else {
+            throw URLError(.fileDoesNotExist)
+        }
+        try await AuthenticationManager.shared.resetPassword(email: email)
+    }
+    
+    func updatePassword(password: String) async throws {
+        try await AuthenticationManager.shared.updatePassword(password: password)
+    }
 }
 
 struct SettingsView: View {
@@ -21,6 +33,7 @@ struct SettingsView: View {
     @State private var temp: String = ""
     @State private var temp2: String = ""
     @StateObject private var viewModel = SettingsViewModel()
+    @State private var newPassword: String = ""
     
     var body: some View {
         ZStack() {
@@ -100,6 +113,52 @@ struct SettingsView: View {
                 .padding([.top],30)
                 .preferredColorScheme(.dark)
                 
+                // Reset Password Button
+                Button(action: {
+                    Task {
+                        do {
+                            try await viewModel.resetPassword()
+                           print("Password reset")
+                            rootViewType = .authenticationView
+                        }
+                    }
+                }) {
+                    Text("Reset password")
+                        .font(.custom("Avenir", size: 16.0).uppercaseSmallCaps())
+                        .foregroundColor(.white)
+                        .padding(10.0)
+                        .frame(height: 32.0)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .background(Color.blue)
+                        .cornerRadius(10.0)
+                }
+                
+                // Secure Field to enter new password
+                SecureField("New password", text: $newPassword)
+                    .padding()
+                    .background(Color.gray.opacity(0.4))
+                    .cornerRadius(10.0)
+                
+                // Update Password Button
+                Button(action: {
+                    Task {
+                        do {
+                            try await viewModel.updatePassword(password: newPassword)
+                           print("Password updated")
+                        }
+                    }
+                }) {
+                    Text("Update password")
+                        .font(.custom("Avenir", size: 16.0).uppercaseSmallCaps())
+                        .foregroundColor(.white)
+                        .padding(10.0)
+                        .frame(height: 32.0)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .background(Color.blue)
+                        .cornerRadius(10.0)
+                }
+                
+                // Logout Button
                 Button(action: {
                     Task {
                         do {
@@ -114,7 +173,7 @@ struct SettingsView: View {
                         .font(.custom("Avenir", size: 16.0).uppercaseSmallCaps())
                         .foregroundColor(.white)
                         .padding(10.0)
-                        .frame(height: 55.0)
+                        .frame(height: 32.0)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .background(Color.red)
                         .cornerRadius(10.0)
