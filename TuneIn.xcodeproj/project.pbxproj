@@ -7,12 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0705258A2B9D9703001C97EB /* SpotifyLogin.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 070525892B9D9703001C97EB /* SpotifyLogin.xcframework */; };
+		0705258B2B9D9703001C97EB /* SpotifyLogin.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 070525892B9D9703001C97EB /* SpotifyLogin.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		07835A122B8CF595007D077F /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07835A112B8CF595007D077F /* LoginView.swift */; };
 		07835A2A2B8F1426007D077F /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 07835A292B8F1426007D077F /* Config.plist */; };
 		07835A2C2B8F1491007D077F /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 07835A2B2B8F1491007D077F /* .gitignore */; };
 		07835A2E2B8F14AF007D077F /* SpotifyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07835A2D2B8F14AF007D077F /* SpotifyController.swift */; };
 		07D5A2DF2B9403A0002FAA6E /* WebModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D5A2DE2B9403A0002FAA6E /* WebModel.swift */; };
-		B766AE8D2B9D486B005737D6 /* SpotifyLogin.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B766AE8C2B9D486B005737D6 /* SpotifyLogin.xcframework */; };
 		B7867EFE2B906D9500B06691 /* MusicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7867EFD2B906D9500B06691 /* MusicView.swift */; };
 		B7867F002B94EFE300B06691 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7867EFF2B94EFE300B06691 /* LoadingView.swift */; };
 		B7D897E32B868488000CACB2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D897E22B868488000CACB2 /* Constants.swift */; };
@@ -34,13 +35,27 @@
 		F69A3D8E2B8693AD008E6EC1 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69A3D8D2B8693AD008E6EC1 /* ListView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		0705258C2B9D9703001C97EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0705258B2B9D9703001C97EB /* SpotifyLogin.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		070525892B9D9703001C97EB /* SpotifyLogin.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SpotifyLogin.xcframework; path = "../../ios-auth/SpotifyLogin.xcframework"; sourceTree = "<group>"; };
 		07835A112B8CF595007D077F /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		07835A292B8F1426007D077F /* Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
 		07835A2B2B8F1491007D077F /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		07835A2D2B8F14AF007D077F /* SpotifyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyController.swift; sourceTree = "<group>"; };
 		07D5A2DE2B9403A0002FAA6E /* WebModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebModel.swift; sourceTree = "<group>"; };
-		B766AE8C2B9D486B005737D6 /* SpotifyLogin.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SpotifyLogin.xcframework; path = "../ios-auth/SpotifyLogin.xcframework"; sourceTree = "<group>"; };
 		B7867EFD2B906D9500B06691 /* MusicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicView.swift; sourceTree = "<group>"; };
 		B7867EFF2B94EFE300B06691 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		B7D897DE2B868008000CACB2 /* TuneIn-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TuneIn-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -66,10 +81,10 @@
 			files = (
 				F67903E92B8BD690008EC6DC /* FirebaseAnalyticsSwift in Frameworks */,
 				F67903E72B8BD690008EC6DC /* FirebaseAnalytics in Frameworks */,
+				0705258A2B9D9703001C97EB /* SpotifyLogin.xcframework in Frameworks */,
 				F67903DD2B8BD4B8008EC6DC /* FirebaseAnalytics in Frameworks */,
 				F67903E12B8BD4B8008EC6DC /* FirebaseAnalyticsSwift in Frameworks */,
 				F67903F02B8BEFB4008EC6DC /* FirebaseFirestore in Frameworks */,
-				B766AE8D2B9D486B005737D6 /* SpotifyLogin.xcframework in Frameworks */,
 				F67903F22B8BEFB4008EC6DC /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -80,7 +95,7 @@
 		F67903EE2B8BEFB4008EC6DC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				B766AE8C2B9D486B005737D6 /* SpotifyLogin.xcframework */,
+				070525892B9D9703001C97EB /* SpotifyLogin.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -147,6 +162,7 @@
 				F69A3D742B86749D008E6EC1 /* Sources */,
 				F69A3D752B86749D008E6EC1 /* Frameworks */,
 				F69A3D762B86749D008E6EC1 /* Resources */,
+				0705258C2B9D9703001C97EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -369,7 +385,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TuneIn/Preview Content\"";
-				DEVELOPMENT_TEAM = TX839HW6LC;
+				DEVELOPMENT_TEAM = HLL689PTWK;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -390,7 +406,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.ucdavis.ecs189e.TuneInNow;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.ucdavis.ecs189e.TuneIn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "TuneIn-Bridging-Header.h";
@@ -409,7 +425,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TuneIn/Preview Content\"";
-				DEVELOPMENT_TEAM = TX839HW6LC;
+				DEVELOPMENT_TEAM = HLL689PTWK;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -430,7 +446,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.ucdavis.ecs189e.TuneInNow;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.ucdavis.ecs189e.TuneIn;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "TuneIn-Bridging-Header.h";

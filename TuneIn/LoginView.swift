@@ -93,6 +93,7 @@ private extension SpotifyController {
             return "Bummer"
 
         case .success:
+            print(UserDefaults.standard.string(forKey: "accessToken") ?? "AAAAAAA")
             return "Nice"
         }
     }

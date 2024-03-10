@@ -9,9 +9,9 @@ import Foundation
 enum APIConstants {
     static let apiHost = "api.spotify.com"
     static let authHost = "accounts.spotify.com"
-    static let clientId = "251fb800ac914bd094ce79cce00d24ae"
-    static let clientSecret = "da1029132bb64990a898ceae6367a8e8"
-    static let redirectUri = "spotify-ios-quick-start://spotify-login-callback"
+    static let clientId = "3b028a6bf8154789ae148a0c03ef8e5e"
+    static let clientSecret = "14bb0871f5424ef68bd9dac48244481a"
+    static let redirectUri = "TuneIn://Test"
     static let responseType = "token"
     static let scopes = "user-read-private"
    

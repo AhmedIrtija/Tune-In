@@ -15,8 +15,7 @@
 	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>spotify-ios-tune-in://spotify-login-callback
-</string>
+		<string>TuneIn://Test</string>
 		<string>spotify</string>
 	</array>
 </dict>
