@@ -12,8 +12,9 @@ final class SpotifyController: ObservableObject {
 
     @Published private(set) var state: State = .idle
     private var accessToken: String?
-    private let spotifyClientID = "3b028a6bf8154789ae148a0c03ef8e5e"
-    private let spotifyRedirectURL = "TuneIn://Test"
+    private let spotifyClientID = "251fb800ac914bd094ce79cce00d24ae"
+    private let spotifyRedirectURL = "spotify-ios-tune-in://spotify-login-callback"
+    private let spotifyClientSecret = "da1029132bb64990a898ceae6367a8e8"
     private lazy var sessionManager: SessionManager = {
         let configuration = Configuration(clientID: spotifyClientID, redirectURLString: spotifyRedirectURL)
         return SessionManager(configuration: configuration)
@@ -64,7 +65,7 @@ extension SpotifyController: SessionManagerDelegate {
             "code": code,
             "redirect_uri": spotifyRedirectURL,
             "client_id": spotifyClientID,
-            "client_secret": "14bb0871f5424ef68bd9dac48244481a"
+            "client_secret": spotifyClientSecret
         ]
         
         request.httpBody = parameters.map { "\($0)=\($1)" }.joined(separator: "&").data(using: .utf8)

@@ -26,7 +26,9 @@ struct LoginView: View {
                 }
             )
         ) {
-            Button(viewModel.alertButtonTitle, role: .cancel) { }
+            Button(viewModel.alertButtonTitle, role: .cancel) { 
+                print(UserDefaults.standard.string(forKey: "accessToken") ?? "AAAAAAA")
+            }
         }
     }
 }
@@ -93,7 +95,6 @@ private extension SpotifyController {
             return "Bummer"
 
         case .success:
-            print(UserDefaults.standard.string(forKey: "accessToken") ?? "AAAAAAA")
             return "Nice"
         }
     }
