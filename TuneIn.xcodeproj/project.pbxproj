@@ -12,7 +12,7 @@
 		07835A2C2B8F1491007D077F /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 07835A2B2B8F1491007D077F /* .gitignore */; };
 		07835A2E2B8F14AF007D077F /* SpotifyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07835A2D2B8F14AF007D077F /* SpotifyController.swift */; };
 		07D5A2DF2B9403A0002FAA6E /* WebModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07D5A2DE2B9403A0002FAA6E /* WebModel.swift */; };
-		B7867EF62B8FDF7800B06691 /* SpotifyiOS in Frameworks */ = {isa = PBXBuildFile; productRef = B7867EF52B8FDF7800B06691 /* SpotifyiOS */; };
+		B766AE8D2B9D486B005737D6 /* SpotifyLogin.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B766AE8C2B9D486B005737D6 /* SpotifyLogin.xcframework */; };
 		B7867EFE2B906D9500B06691 /* MusicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7867EFD2B906D9500B06691 /* MusicView.swift */; };
 		B7867F002B94EFE300B06691 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7867EFF2B94EFE300B06691 /* LoadingView.swift */; };
 		B7D897E32B868488000CACB2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D897E22B868488000CACB2 /* Constants.swift */; };
@@ -40,6 +40,7 @@
 		07835A2B2B8F1491007D077F /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		07835A2D2B8F14AF007D077F /* SpotifyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyController.swift; sourceTree = "<group>"; };
 		07D5A2DE2B9403A0002FAA6E /* WebModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebModel.swift; sourceTree = "<group>"; };
+		B766AE8C2B9D486B005737D6 /* SpotifyLogin.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SpotifyLogin.xcframework; path = "../ios-auth/SpotifyLogin.xcframework"; sourceTree = "<group>"; };
 		B7867EFD2B906D9500B06691 /* MusicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicView.swift; sourceTree = "<group>"; };
 		B7867EFF2B94EFE300B06691 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		B7D897DE2B868008000CACB2 /* TuneIn-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TuneIn-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -64,11 +65,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				F67903E92B8BD690008EC6DC /* FirebaseAnalyticsSwift in Frameworks */,
-				B7867EF62B8FDF7800B06691 /* SpotifyiOS in Frameworks */,
 				F67903E72B8BD690008EC6DC /* FirebaseAnalytics in Frameworks */,
 				F67903DD2B8BD4B8008EC6DC /* FirebaseAnalytics in Frameworks */,
 				F67903E12B8BD4B8008EC6DC /* FirebaseAnalyticsSwift in Frameworks */,
 				F67903F02B8BEFB4008EC6DC /* FirebaseFirestore in Frameworks */,
+				B766AE8D2B9D486B005737D6 /* SpotifyLogin.xcframework in Frameworks */,
 				F67903F22B8BEFB4008EC6DC /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -79,6 +80,7 @@
 		F67903EE2B8BEFB4008EC6DC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B766AE8C2B9D486B005737D6 /* SpotifyLogin.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -158,7 +160,6 @@
 				F67903E82B8BD690008EC6DC /* FirebaseAnalyticsSwift */,
 				F67903EF2B8BEFB4008EC6DC /* FirebaseFirestore */,
 				F67903F12B8BEFB4008EC6DC /* FirebaseFirestoreSwift */,
-				B7867EF52B8FDF7800B06691 /* SpotifyiOS */,
 			);
 			productName = TuneIn;
 			productReference = F69A3D782B86749D008E6EC1 /* TuneIn.app */;
@@ -191,7 +192,6 @@
 			mainGroup = F69A3D6F2B86749D008E6EC1;
 			packageReferences = (
 				F67903DB2B8BD4B8008EC6DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				B7867EF42B8FDF7800B06691 /* XCRemoteSwiftPackageReference "ios-sdk" */,
 			);
 			productRefGroup = F69A3D792B86749D008E6EC1 /* Products */;
 			projectDirPath = "";
@@ -369,7 +369,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TuneIn/Preview Content\"";
-				DEVELOPMENT_TEAM = HLL689PTWK;
+				DEVELOPMENT_TEAM = TX839HW6LC;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -390,7 +390,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.ucdavis.ecs189e.TuneIn;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.ucdavis.ecs189e.TuneInNow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "TuneIn-Bridging-Header.h";
@@ -409,7 +409,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TuneIn/Preview Content\"";
-				DEVELOPMENT_TEAM = HLL689PTWK;
+				DEVELOPMENT_TEAM = TX839HW6LC;
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -430,7 +430,7 @@
 				);
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = edu.ucdavis.ecs189e.TuneIn;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.ucdavis.ecs189e.TuneInNow;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "TuneIn-Bridging-Header.h";
@@ -463,14 +463,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B7867EF42B8FDF7800B06691 /* XCRemoteSwiftPackageReference "ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/spotify/ios-sdk.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		F67903DB2B8BD4B8008EC6DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -482,11 +474,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B7867EF52B8FDF7800B06691 /* SpotifyiOS */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B7867EF42B8FDF7800B06691 /* XCRemoteSwiftPackageReference "ios-sdk" */;
-			productName = SpotifyiOS;
-		};
 		F67903DC2B8BD4B8008EC6DC /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F67903DB2B8BD4B8008EC6DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

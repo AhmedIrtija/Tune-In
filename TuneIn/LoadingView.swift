@@ -10,25 +10,10 @@ import SwiftUI
 
 struct LoadingView : View {
     
-    @State var openView = false
-    var finalURL = SpotifyController.shared.getAccessTokenURL()
-    
+    @State var openView = false    
     var body: some View {
         ZStack {
             Text("Loading...")
-            if let unwrappedURLRequest = finalURL {
-                if let unwrappedURL = unwrappedURLRequest.url {
-                    WebView(url: unwrappedURL)
-                        .onAppear {
-                            Task {
-                                //load data on appear
-                                // apply an overlay for loading screen
-                                let song = try await SpotifyController.shared.getCurrentlyPlayingTrack()
-                                print(song?.name as Any)
-                            }
-                        }
-                }
-            }
         }
         .overlay {
                 ZStack {

@@ -7,12 +7,15 @@
 
 import SwiftUI
 import FirebaseCore
+import SpotifyLogin
+
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         FirebaseApp.configure()
         return true
     }
+    
 }
 
 @main
@@ -23,10 +26,7 @@ struct TuneInApp: App {
     
     var body: some Scene {
         WindowGroup {
-//            RootView()
-//            LoginView(spotifyController: spotifyController)
-            WebView(url: URL(string: "https://www.google.com")!)
-                        .edgesIgnoringSafeArea(.all)
+            RootView()
         }
     }
 }

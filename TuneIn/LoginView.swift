@@ -1,115 +1,106 @@
-//
-//  LoginView.swift
-//  Test
-//
-//  Created by Ahmed Irtija on 2/26/24.
-//
-
 import SwiftUI
-import WebKit
 
 struct LoginView: View {
-    @ObservedObject var spotifyController: SpotifyController
-    @State private var isAuthenticated: Bool = false
+    @StateObject var viewModel = SpotifyController()
 
     var body: some View {
-        NavigationStack {
-            ZStack{
-                Color.black.edgesIgnoringSafeArea(.all)
-                
-                VStack{
-                    Spacer()
-                    
-                    Image("SpotifyIcon")
-                        .resizable()
-                        .frame(width: 195, height: 195)
-                        .padding(.bottom)
-                                        
-                    Text("it's time to")
-                        .font(.title3)
-                        .foregroundColor(.gray)
-                        .padding()
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.green.opacity(0.6)]), startPoint: .leading, endPoint: .trailing))
-                        .cornerRadius(10)
-                        .shadow(color: .green, radius: 10, x: 0, y: 0)
-                                                            
-                    // Apply the gradient to the text
-                    Text("Tune In")
-                        .font(.largeTitle.bold())
-                        .foregroundColor(.black)
-                        .padding()
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.green.opacity(0.6)]), startPoint: .leading, endPoint: .trailing))
-                        .cornerRadius(10)
-                        .shadow(color: .green, radius: 10, x: 0, y: 0)
-                        
-                    
-                    
-                    if spotifyController.isAuthenticationFailed {
-                        Button(action: {
-                            spotifyController.authenticate()
-                            if(!spotifyController.isAuthenticationFailed){
-                                isAuthenticated = true
-                            }
-                        }) {
-                            Text("Authenticate Again")
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                                .frame(minWidth: 0, maxWidth: .infinity)
-                                .padding()
-                                .background(Color.green)
-                                .cornerRadius(40)
-                                .padding(.horizontal, 20)
-                        }
-                        .shadow(radius: 10)
-                    }
-                    Spacer()
+        VStack(spacing: 16) {
+            Image("SpotifyIcon")
+                .resizable()
+                .frame(width: 195, height: 195)
+                .padding(.bottom)
+            Text("It's time to Tune In")
+            button
+        }
+        .padding()
+        .onOpenURL { url in
+            viewModel.open(url: url)
+        }
+        .alert(
+            viewModel.alertTitle,
+            isPresented: Binding(
+                get: {
+                    viewModel.isAlertPresented
+                }, set: { _ in
+                    viewModel.setStateIdle()
                 }
-                .onAppear(){
-                    if(!spotifyController.isAuthenticationFailed){
-                        isAuthenticated = true
-//                        print(spotifyController.getAccessTokenURL() ?? "")
-//                        print(spotifyController.createURLRequest() ?? "")
-//                        print(getAccessTokenFromWebView())
-                    }
-                }
-                .navigationBarHidden(true)
-                .navigationDestination(isPresented: $isAuthenticated){
-                    RootView()
-                }
-                .navigationBarBackButtonHidden(true)
-            }
+            )
+        ) {
+            Button(viewModel.alertButtonTitle, role: .cancel) { }
         }
     }
-    
-    
-//    func getAccessTokenFromWebView() {
-//        guard let urlRequest = SpotifyController.shared.getAccessTokenURL() else { return }
-//        let webview = WKWebView()
-//        
-//        webview.load(urlRequest)
-//        webview.navigationDelegate = self
-//        view = webview
-//    }
 }
 
-
-
-
-struct Config {
-    private static var configDict: [String: Any]? {
-        guard let path = Bundle.main.path(forResource: "Config", ofType: "plist"),
-              let dict = NSDictionary(contentsOfFile: path) as? [String: Any] else {
-            fatalError("Config.plist file not found")
+private extension LoginView {
+    var button: some View {
+        Button {
+            viewModel.startAuthorizationCodeProcess()
+        } label: {
+            Text("CONNECT")
+                .font(.system(.body, weight: .heavy))
+                .kerning(2.0)
+                .padding(
+                    EdgeInsets(
+                        top: 11.75,
+                        leading: 32.0,
+                        bottom: 11.75,
+                        trailing: 32.0
+                    )
+                )
+                .foregroundColor(.white)
+                .background(
+                    Color(
+                        red: 29.0 / 255.0,
+                        green: 185.0 / 255.0,
+                        blue: 84.0 / 255.0
+                    )
+                )
+                .cornerRadius(20)
         }
-        return dict
-    }
-
-    static func value(forKey key: String) -> String? {
-        return configDict?[key] as? String
+        .contentShape(Rectangle())
     }
 }
 
+private extension SpotifyController {
+    var isAlertPresented: Bool {
+        switch state {
+        case .idle:
+            return false
+        default:
+            return true
+        }
+    }
 
-#Preview {
-    LoginView(spotifyController: SpotifyController())
+    var alertTitle: String {
+        switch state {
+        case .idle:
+            return ""
+
+        case .failure(let errorMessage):
+            return errorMessage
+
+        case .success(let successMessage):
+            return successMessage
+        }
+    }
+
+    var alertButtonTitle: String {
+        switch state {
+        case .idle:
+            return ""
+
+        case .failure:
+            return "Bummer"
+
+        case .success:
+            return "Nice"
+        }
+    }
 }
+
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginView()
+    }
+}
+
