@@ -48,10 +48,8 @@ struct ProfileView: View {
                         .padding([.bottom], 5)
                 }
                 //Location
-//                if let pronouns = currentUser?.pronouns {
-//                    Text(pronouns.rawValue)
-//                        .padding([.bottom], 20)
-//                }
+                Text("Davis, CA, USA")
+                    .padding([.bottom], 20)
                 //Bio
                 if let bio = currentUser?.bio {
                     Text(bio)

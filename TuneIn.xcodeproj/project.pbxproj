@@ -105,6 +105,7 @@
 		F4E8E0872B9E79CB00BB6E57 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F69A3D7D2B86749D008E6EC1 /* RootView.swift */,
 				F622149F2B9C180C00EFDABC /* LaunchView.swift */,
 				F622149D2B9C180C00EFDABC /* SignInView.swift */,
 				F622149E2B9C180C00EFDABC /* SpotifyLoginView.swift */,
@@ -151,7 +152,6 @@
 				B7D897DA2B867F6F000CACB2 /* SpotifyiOS.framework */,
 				B7D897DB2B867F70000CACB2 /* SpotifyiOS.xcframework */,
 				F69A3D7B2B86749D008E6EC1 /* TuneInApp.swift */,
-				F69A3D7D2B86749D008E6EC1 /* RootView.swift */,
 				F45211972B91549D00E5EF77 /* Fonts */,
 				B7D897E22B868488000CACB2 /* Constants.swift */,
 				F622149B2B9C180C00EFDABC /* AuthenticationManager.swift */,

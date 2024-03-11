@@ -28,10 +28,14 @@ final class SettingsViewModel: ObservableObject {
 
 struct SettingsView: View {
     @Binding var rootViewType: RootViewType
+    @State private var showProfileView: Bool = false
     @ObservedObject var userModel = UserModel()
-    @FocusState var isFocused
-    @State private var newDisplayName: String = ""
     @StateObject private var viewModel = SettingsViewModel()
+    var authenticationManager = AuthenticationManager.shared
+    @State private var currentUser: DBUser?
+    @State private var newDisplayName: String = ""
+    @State private var newPronouns = Pronouns.na
+    @State private var newBio: String = ""
     @State private var newPassword: String = ""
     
     var body: some View {
@@ -68,40 +72,86 @@ struct SettingsView: View {
                 )
                 .padding([.top],15)
                 Form {
-                    //Display Name
+                    // Display Name
                     Section(header: Text("Display Name")) {
-                        TextField("TuneIn", text: $newDisplayName)
-                            .foregroundColor(.white)
-                            .focused($isFocused)
+                        TextField(currentUser?.name ?? "", text: $newDisplayName)
+                            .foregroundColor(Colors.gray)
+                            .onTapGesture {
+                                self.newDisplayName = ""
+                            }
+                            .foregroundColor(Colors.white)
                     }
                     .textCase(nil)
-//                    //Pronouns
-//                    Section(header: Text("Pronouns")) {
-//                        TextField("--", text: $temp2)
-//                            .foregroundColor(.white)
-//                            .focused($isFocused)
-//                    }
-//                    .textCase(nil)
-//                    //Location
-//                    Section(header: Text("Location")) {
-//                        TextField("--", text: $temp2)
-//                            .foregroundColor(.white)
-//                            .focused($isFocused)
-//                    }
-//                    .textCase(nil)
-//                    //Bio
-//                    Section(header: Text("Bio")) {
-//                        TextField("--", text: $temp2)
-//                            .onTapGesture{
-//                                isFocused = true
-//                            }
-//                            .foregroundColor(.white)
-//                            .focused($isFocused)
-//                    }
-//                    .textCase(nil)
+                    
+                    // Pronouns
+                    Section(header: Text("Pronouns")) {
+                        HStack {
+                            Text(newPronouns.rawValue)
+                                .foregroundColor(.gray)
+                            Spacer()
+                            
+                            Menu {
+                                ForEach(Pronouns.allCases, id: \.self) { pronoun in
+                                    Button(action: {
+                                        self.newPronouns = pronoun
+                                    }) {
+                                        Text(pronoun.rawValue)
+                                    }
+                                }
+                            } label: {
+                                Label("", systemImage: "chevron.down")
+                                    .foregroundColor(.primary)
+                            }
+                            .menuStyle(BorderlessButtonMenuStyle())
+                        }
+                    }
+                    .textCase(nil)
+                    
+                    // Bio
+                    Section(header: Text("Bio")) {
+                        TextField(userModel.currentUser?.bio ?? "", text: $newBio)
+                            .foregroundColor(Colors.gray)
+                            .onTapGesture {
+                                self.newDisplayName = ""
+                            }
+                            .foregroundColor(Colors.white)
+                    }
+                    .textCase(nil)
                 }
                 .padding([.top],30)
                 .preferredColorScheme(.dark)
+                
+                // Save Changes Button
+                Button(action: {
+                    Task {
+                        do {
+                            if let userId = currentUser?.userId {
+                                if !newDisplayName.isEmpty {
+                                    try await UserManager.shared.updateName(userId: userId, newName: newDisplayName)
+                                }
+                                if newPronouns != .na {
+                                    try await UserManager.shared.updatePronouns(userId: userId, newPronouns: newPronouns)
+                                }
+                                if !newBio.isEmpty {
+                                    try await UserManager.shared.updateBio(userId: userId, newBio: newBio)
+                                }
+                            }
+                        } catch {
+                            print("Error updating profile: \(error)")
+                        }
+                    }
+                }) {
+                    Text("Save Changes")
+                        .foregroundColor(.white)
+                        .padding(10.0)
+                        .frame(height: 32.0)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .cornerRadius(10.0)
+                }
+                .navigationDestination(isPresented: $showProfileView) {
+                    ProfileView(rootViewType: $rootViewType)
+                    
+                }
                 
                 // Reset Password Button
                 Button(action: {
@@ -119,7 +169,6 @@ struct SettingsView: View {
                         .padding(10.0)
                         .frame(height: 32.0)
                         .frame(maxWidth: .infinity, alignment: .center)
-                        .background(Color.blue)
                         .cornerRadius(10.0)
                 }
                 
@@ -139,12 +188,10 @@ struct SettingsView: View {
                     }
                 }) {
                     Text("Update password")
-                        .font(.custom("Avenir", size: 16.0).uppercaseSmallCaps())
                         .foregroundColor(.white)
                         .padding(10.0)
                         .frame(height: 32.0)
                         .frame(maxWidth: .infinity, alignment: .center)
-                        .background(Color.blue)
                         .cornerRadius(10.0)
                 }
                 
@@ -160,18 +207,27 @@ struct SettingsView: View {
                     }
                 }) {
                     Text("Log out")
-                        .font(.custom("Avenir", size: 16.0).uppercaseSmallCaps())
                         .foregroundColor(.white)
                         .padding(10.0)
                         .frame(height: 32.0)
                         .frame(maxWidth: .infinity, alignment: .center)
-                        .background(Color.red)
                         .cornerRadius(10.0)
                 }
             }
             .font(.custom("Helvetica", size: 16))
             .padding([.horizontal], 24)
             .foregroundColor(Colors.gray)
+        }
+        .onAppear {
+            Task {
+                do {
+                    let authData = try authenticationManager.getAuthenticatedUser()
+                    let userManager = UserManager.shared
+                    currentUser = try await userManager.getUser(userId: authData.uid)
+                } catch {
+                    print("Error: \(error)")
+                }
+            }
         }
     }
 }

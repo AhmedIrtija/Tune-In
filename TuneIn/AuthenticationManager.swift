@@ -63,7 +63,7 @@ final class AuthenticationManager {
         try Auth.auth().signOut()
     }
     
-    // Updates user info
+    // Updates user info to default values
     func linkUser(user: User, additionalUserInfo: [String: Any]) async throws {
         let userManager = UserManager.shared
         let dbUser = DBUser(userId: user.uid, 
@@ -76,6 +76,7 @@ final class AuthenticationManager {
         try await userManager.createNewUser(newUser: mergedUserInfo)
     }
     
+    // Updates user info with information provided at log in
     private func mergeAdditionalUserInfo(user: DBUser, additionalUserInfo: [String: Any]) throws -> DBUser {
         var mergedUserInfo = user
         for (key, value) in additionalUserInfo {
