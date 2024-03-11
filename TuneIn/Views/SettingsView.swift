@@ -13,14 +13,6 @@ final class SettingsViewModel: ObservableObject {
         try AuthenticationManager.shared.signOut()
     }
     
-    func resetPassword() async throws {
-        let authUser = try AuthenticationManager.shared.getAuthenticatedUser()
-        guard let email = authUser.email else {
-            throw URLError(.fileDoesNotExist)
-        }
-        try await AuthenticationManager.shared.resetPassword(email: email)
-    }
-    
     func updatePassword(password: String) async throws {
         try await AuthenticationManager.shared.updatePassword(password: password)
     }
@@ -109,7 +101,7 @@ struct SettingsView: View {
                     
                     // Bio
                     Section(header: Text("Bio")) {
-                        TextField(userModel.currentUser?.bio ?? "", text: $newBio)
+                        TextField(currentUser?.bio ?? "", text: $newBio)
                             .foregroundColor(Colors.gray)
                             .onTapGesture {
                                 self.newDisplayName = ""
@@ -117,6 +109,7 @@ struct SettingsView: View {
                             .foregroundColor(Colors.white)
                     }
                     .textCase(nil)
+
                 }
                 .padding([.top],30)
                 .preferredColorScheme(.dark)
@@ -141,35 +134,23 @@ struct SettingsView: View {
                         }
                     }
                 }) {
+                    Spacer()
                     Text("Save Changes")
-                        .foregroundColor(.white)
-                        .padding(10.0)
-                        .frame(height: 32.0)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .cornerRadius(10.0)
+                        .frame(width: 135, height: 32)
+                        .background(
+                            RoundedRectangle(
+                                cornerRadius: 15,
+                                style: .circular
+                            )
+                            .stroke(Colors.gray, lineWidth: 2)
+                        )
                 }
                 .navigationDestination(isPresented: $showProfileView) {
                     ProfileView(rootViewType: $rootViewType)
-                    
                 }
                 
-                // Reset Password Button
-                Button(action: {
-                    Task {
-                        do {
-                            try await viewModel.resetPassword()
-                           print("Password reset")
-                            rootViewType = .launchView
-                        }
-                    }
-                }) {
-                    Text("Reset password")
-                        .font(.custom("Avenir", size: 16.0).uppercaseSmallCaps())
-                        .foregroundColor(.white)
-                        .padding(10.0)
-                        .frame(height: 32.0)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .cornerRadius(10.0)
+                HStack{
+
                 }
                 
                 // Secure Field to enter new password

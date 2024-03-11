@@ -29,6 +29,14 @@ final class SignInViewModel: ObservableObject {
         
         let _ = try await AuthenticationManager.shared.signInUser(email: email, password: password)
     }
+    
+    func resetPassword() async throws {
+        let authUser = try AuthenticationManager.shared.getAuthenticatedUser()
+        guard let email = authUser.email else {
+            throw URLError(.fileDoesNotExist)
+        }
+        try await AuthenticationManager.shared.resetPassword(email: email)
+    }
 }
 
 struct SignInView: View {
@@ -79,12 +87,36 @@ struct SignInView: View {
                 }
                 .preferredColorScheme(.dark)
                 
+                // Reset Password Button
+                HStack{
+                    Button(action: {
+                        Task {
+                            do {
+                                try await viewModel.resetPassword()
+                               print("Password reset")
+                                rootViewType = .launchView
+                            }
+                        }
+                    }) {
+                        Text("Reset password")
+                            .frame(width: 170, height: 32.0)
+                            .padding([.top], -80)
+                            .font(.custom("Helvetica", size: 16))
+                            .underline()
+                            .foregroundColor(Colors.gray)
+                    }
+                    Spacer()
+                }
+                
                 if !errorMessage.isEmpty {
                     Label(
                         title: { Text(errorMessage) },
                         icon: { Image(systemName: "xmark.circle") }
                     )
                     .foregroundStyle(.red)
+                    .padding(-32)
+                } else {
+                    Text("")
                 }
                 
                 Button("Sign In") {
@@ -125,12 +157,14 @@ struct SignInView: View {
                     )
                     .stroke(Colors.gray, lineWidth: 2)
                 )
-                .padding([.top], -180.0)
+                .padding([.top], 70.0)
                 .navigationDestination(isPresented: $showLoginView) {
                     SpotifyLoginView(rootViewType: $rootViewType)
                 }
+                Spacer(minLength: 50)
             }
             .padding()
+            .font(.custom("Helvetica", size: 18))
             .ignoresSafeArea(.keyboard)
         }
         .onTapGesture { isTextFieldFocused = false }
