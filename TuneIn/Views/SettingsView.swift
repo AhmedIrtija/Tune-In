@@ -30,8 +30,7 @@ struct SettingsView: View {
     @Binding var rootViewType: RootViewType
     @ObservedObject var userModel = UserModel()
     @FocusState var isFocused
-    @State private var temp: String = ""
-    @State private var temp2: String = ""
+    @State private var newDisplayName: String = ""
     @StateObject private var viewModel = SettingsViewModel()
     @State private var newPassword: String = ""
     
@@ -71,44 +70,35 @@ struct SettingsView: View {
                 Form {
                     //Display Name
                     Section(header: Text("Display Name")) {
-                        TextField("TuneIn", text: $temp)
-                            .onTapGesture{
-                                isFocused = true
-                            }
+                        TextField("TuneIn", text: $newDisplayName)
                             .foregroundColor(.white)
                             .focused($isFocused)
                     }
                     .textCase(nil)
-                    //Pronouns
-                    Section(header: Text("Pronouns")) {
-                        TextField("--", text: $temp2)
-                            .onTapGesture{
-                                isFocused = true
-                            }
-                            .foregroundColor(.white)
-                            .focused($isFocused)
-                    }
-                    .textCase(nil)
-                    //Location
-                    Section(header: Text("Location")) {
-                        TextField("--", text: $temp2)
-                            .onTapGesture{
-                                isFocused = true
-                            }
-                            .foregroundColor(.white)
-                            .focused($isFocused)
-                    }
-                    .textCase(nil)
-                    //Bio
-                    Section(header: Text("Bio")) {
-                        TextField("--", text: $temp2)
-                            .onTapGesture{
-                                isFocused = true
-                            }
-                            .foregroundColor(.white)
-                            .focused($isFocused)
-                    }
-                    .textCase(nil)
+//                    //Pronouns
+//                    Section(header: Text("Pronouns")) {
+//                        TextField("--", text: $temp2)
+//                            .foregroundColor(.white)
+//                            .focused($isFocused)
+//                    }
+//                    .textCase(nil)
+//                    //Location
+//                    Section(header: Text("Location")) {
+//                        TextField("--", text: $temp2)
+//                            .foregroundColor(.white)
+//                            .focused($isFocused)
+//                    }
+//                    .textCase(nil)
+//                    //Bio
+//                    Section(header: Text("Bio")) {
+//                        TextField("--", text: $temp2)
+//                            .onTapGesture{
+//                                isFocused = true
+//                            }
+//                            .foregroundColor(.white)
+//                            .focused($isFocused)
+//                    }
+//                    .textCase(nil)
                 }
                 .padding([.top],30)
                 .preferredColorScheme(.dark)

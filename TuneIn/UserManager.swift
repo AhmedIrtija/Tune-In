@@ -11,9 +11,22 @@ import FirebaseFirestoreSwift
 import GeoFire
 import MapKit
 
+enum Pronouns: String, Codable {
+    case na = "--"
+    case heHim = "He/Him"
+    case sheHer = "She/Her"
+    case theyThem = "They/Them"
+    
+    static var allCases: [Pronouns] {
+        return [.na, .heHim, .sheHer, .theyThem]
+    }
+}
+
 struct DBUser: Codable {
     let userId: String
     var name: String
+    var pronouns: Pronouns?
+    var bio: String?
     var imageUrl: String?
     var currentTrack: Track?
     var location: GeoPoint?
@@ -23,6 +36,8 @@ struct DBUser: Codable {
     init(user: AppUser) {
         self.userId = user.userId
         self.name = user.name
+        self.pronouns = user.pronouns
+        self.bio = user.bio
         self.imageUrl = user.imageUrl
         self.currentTrack = user.currentTrack
         self.location = user.location
@@ -32,6 +47,8 @@ struct DBUser: Codable {
     init(
         userId: String,
         name: String,
+        pronouns: Pronouns = .na,
+        bio: String = "Hey there! I am using TuneIn",
         imageUrl: String? = nil,
         currentTrack: Track? = nil,
         location: GeoPoint? = nil,
@@ -40,6 +57,8 @@ struct DBUser: Codable {
     ) {
         self.userId = userId
         self.name = name
+        self.pronouns = pronouns
+        self.bio = bio
         self.imageUrl = imageUrl
         self.currentTrack = currentTrack
         self.location = location
@@ -49,6 +68,14 @@ struct DBUser: Codable {
     
     mutating func updateName(newName: String) {
         name = newName
+    }
+    
+    mutating func updatePronouns(newPronouns: Pronouns) {
+        pronouns = newPronouns
+    }
+    
+    mutating func updateBio(newBio: String) {
+        bio = newBio
     }
     
     mutating func updateImage(newImageUrl: String) {
@@ -67,6 +94,8 @@ struct DBUser: Codable {
     enum CodingKeys: String, CodingKey {
         case userId = "user_id"
         case name = "name"
+        case pronouns = "pronouns"
+        case bio = "bio"
         case imageUrl = "image_url"
         case currentTrack = "current_track"
         case location = "location"
@@ -78,6 +107,8 @@ struct DBUser: Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.userId = try container.decode(String.self, forKey: .userId)
         self.name = try container.decode(String.self, forKey: .name)
+        self.pronouns = try container.decodeIfPresent(Pronouns.self, forKey: .pronouns)
+        self.bio = try container.decodeIfPresent(String.self, forKey: .bio)
         self.imageUrl = try container.decodeIfPresent(String.self, forKey: .imageUrl)
         self.currentTrack = try container.decodeIfPresent(Track.self, forKey: .currentTrack)
         self.location = try container.decodeIfPresent(GeoPoint.self, forKey: .location)
@@ -89,6 +120,8 @@ struct DBUser: Codable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(self.userId, forKey: .userId)
         try container.encode(self.name, forKey: .name)
+        try container.encodeIfPresent(self.pronouns, forKey: .pronouns)
+        try container.encodeIfPresent(self.bio, forKey: .bio)
         try container.encodeIfPresent(self.imageUrl, forKey: .imageUrl)
         try container.encodeIfPresent(self.currentTrack, forKey: .currentTrack)
         try container.encodeIfPresent(self.location, forKey: .location)
@@ -119,6 +152,20 @@ final class UserManager {
     func updateName(userId: String, newName: String) async throws {
         let data: [String: Any] = [
             DBUser.CodingKeys.name.rawValue: newName
+        ]
+        try await userDocument(userId: userId).updateData(data)
+    }
+    
+    func updatePronouns(userId: String, newPronouns: Pronouns) async throws {
+        let data: [String: Any] = [
+            DBUser.CodingKeys.pronouns.rawValue: newPronouns.rawValue
+        ]
+        try await userDocument(userId: userId).updateData(data)
+    }
+    
+    func updateBio(userId: String, newBio: String) async throws {
+        let data: [String: Any] = [
+            DBUser.CodingKeys.bio.rawValue: newBio
         ]
         try await userDocument(userId: userId).updateData(data)
     }

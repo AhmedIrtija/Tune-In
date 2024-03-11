@@ -28,13 +28,17 @@ final class AuthenticationManager {
         guard let user = Auth.auth().currentUser else {
             throw URLError(.badServerResponse)
         }
-        
         return AuthDataResultModel(user: user)
     }
     
     @discardableResult
     func createUser(email: String, password: String) async throws -> AuthDataResultModel {
         let authDataResult = try await Auth.auth().createUser(withEmail: email, password: password)
+        let additionalUserInfo: [String: Any] = [
+            "name": email,
+            "imageUrl": ""
+        ]
+        try await linkUser(user: authDataResult.user, additionalUserInfo: additionalUserInfo)
         return AuthDataResultModel(user: authDataResult.user)
     }
     
@@ -57,5 +61,37 @@ final class AuthenticationManager {
     
     func signOut() throws {
         try Auth.auth().signOut()
+    }
+    
+    // Updates user info
+    func linkUser(user: User, additionalUserInfo: [String: Any]) async throws {
+        let userManager = UserManager.shared
+        let dbUser = DBUser(userId: user.uid, 
+                            name: user.displayName ?? "",
+                            pronouns: (additionalUserInfo["pronouns"] as? Pronouns) ?? .na,
+                            bio: additionalUserInfo["bio"] as? String ?? "Hey there! I am using TuneIn",
+                            imageUrl: user.photoURL?.absoluteString,
+                            date_created: Date())
+        let mergedUserInfo = try mergeAdditionalUserInfo(user: dbUser, additionalUserInfo: additionalUserInfo)
+        try await userManager.createNewUser(newUser: mergedUserInfo)
+    }
+    
+    private func mergeAdditionalUserInfo(user: DBUser, additionalUserInfo: [String: Any]) throws -> DBUser {
+        var mergedUserInfo = user
+        for (key, value) in additionalUserInfo {
+            switch key {
+            case "name":
+                if let newName = value as? String {
+                    mergedUserInfo.name = newName
+                }
+            case "imageUrl":
+                if let newImageUrl = value as? String {
+                    mergedUserInfo.imageUrl = newImageUrl
+                }
+            default:
+                break
+            }
+        }
+        return mergedUserInfo
     }
 }

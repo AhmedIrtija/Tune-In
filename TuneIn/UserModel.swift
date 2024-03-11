@@ -12,6 +12,8 @@ import FirebaseFirestoreSwift
 struct AppUser: Codable {
     let userId: String
     let name: String
+    let pronouns: Pronouns?
+    let bio: String?
     let imageUrl: String?
     let currentTrack: Track?
     let location: GeoPoint?
@@ -19,6 +21,8 @@ struct AppUser: Codable {
     init(dbUser: DBUser) {
         self.userId = dbUser.userId
         self.name = dbUser.name
+        self.pronouns = dbUser.pronouns
+        self.bio = dbUser.bio
         self.imageUrl = dbUser.imageUrl
         self.currentTrack = dbUser.currentTrack
         self.location = dbUser.location
