@@ -81,7 +81,6 @@ struct SettingsView: View {
                             Text(newPronouns.rawValue)
                                 .foregroundColor(.gray)
                             Spacer()
-                            
                             Menu {
                                 ForEach(Pronouns.allCases, id: \.self) { pronoun in
                                     Button(action: {
@@ -128,6 +127,7 @@ struct SettingsView: View {
                                 if !newBio.isEmpty {
                                     try await UserManager.shared.updateBio(userId: userId, newBio: newBio)
                                 }
+                                showProfileView = true
                             }
                         } catch {
                             print("Error updating profile: \(error)")
@@ -149,32 +149,37 @@ struct SettingsView: View {
                     ProfileView(rootViewType: $rootViewType)
                 }
                 
-                HStack{
-
-                }
-                
-                // Secure Field to enter new password
-                SecureField("New password", text: $newPassword)
-                    .padding()
-                    .background(Color.gray.opacity(0.4))
-                    .cornerRadius(10.0)
-                
-                // Update Password Button
-                Button(action: {
-                    Task {
-                        do {
-                            try await viewModel.updatePassword(password: newPassword)
-                           print("Password updated")
-                        }
+                Form {
+                    Section(header: Text("Update Password")) {
+                        SecureField("New password", text: $newPassword)
+                            .cornerRadius(10.0)
                     }
-                }) {
-                    Text("Update password")
-                        .foregroundColor(.white)
-                        .padding(10.0)
-                        .frame(height: 32.0)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .cornerRadius(10.0)
+                    .textCase(nil)
                 }
+                .padding([.top], 20)
+                
+                HStack{
+                    Spacer()
+                    Button(action: {
+                        Task {
+                            do {
+                                try await viewModel.updatePassword(password: newPassword)
+                                print("Password updated")
+                            }
+                        }
+                    }) {
+                        Text("Update password")
+                            .frame(width: 160, height: 32)
+                            .background(
+                                RoundedRectangle(
+                                    cornerRadius: 15,
+                                    style: .circular
+                                )
+                                .stroke(Colors.gray, lineWidth: 2)
+                            )
+                    }
+                }
+                .padding([.bottom], 20)
                 
                 // Logout Button
                 Button(action: {
@@ -188,12 +193,17 @@ struct SettingsView: View {
                     }
                 }) {
                     Text("Log out")
-                        .foregroundColor(.white)
-                        .padding(10.0)
-                        .frame(height: 32.0)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .cornerRadius(10.0)
+                        .frame(width: 100, height: 32)
+                        .background(
+                            RoundedRectangle(
+                                cornerRadius: 15,
+                                style: .circular
+                            )
+                            .fill(Colors.gray)
+                        )
                 }
+                .foregroundColor(Colors.black)
+                .padding([.top], 15)
             }
             .font(.custom("Helvetica", size: 16))
             .padding([.horizontal], 24)

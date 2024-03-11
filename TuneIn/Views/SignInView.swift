@@ -32,6 +32,7 @@ final class SignInViewModel: ObservableObject {
     
     func resetPassword() async throws {
         let authUser = try AuthenticationManager.shared.getAuthenticatedUser()
+        print("in here")
         guard let email = authUser.email else {
             throw URLError(.fileDoesNotExist)
         }
@@ -92,8 +93,9 @@ struct SignInView: View {
                     Button(action: {
                         Task {
                             do {
+                                print("Attempting Password reset")
                                 try await viewModel.resetPassword()
-                               print("Password reset")
+                                print("Password reset")
                                 rootViewType = .launchView
                             }
                         }
