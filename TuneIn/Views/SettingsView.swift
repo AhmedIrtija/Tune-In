@@ -49,7 +49,7 @@ struct SettingsView: View {
                         
                     }, label: {
                         Text("Edit Image")
-                            .foregroundColor(Colors.gray)
+                            .foregroundColor(Color.gray)
                     }
                 )
                 .frame(width: 125, height: 32)
@@ -58,18 +58,18 @@ struct SettingsView: View {
                         cornerRadius: 15,
                         style: .circular
                     )
-                    .stroke(Colors.gray, lineWidth: 2)
+                    .stroke(Color.gray, lineWidth: 2)
                 )
                 .padding([.top],15)
                 Form {
                     // Display Name
                     Section(header: Text("Display Name")) {
                         TextField(userModel.currentUser?.name ?? "", text: $newDisplayName)
-                            .foregroundColor(Colors.gray)
+                            .foregroundColor(Color.gray)
                             .onTapGesture {
                                 self.newDisplayName = ""
                             }
-                            .foregroundColor(Colors.white)
+                            .foregroundColor(Color.white)
                     }
                     .textCase(nil)
                     
@@ -99,11 +99,11 @@ struct SettingsView: View {
                     // Bio
                     Section(header: Text("Bio")) {
                         TextField(userModel.currentUser?.bio ?? "", text: $newBio)
-                            .foregroundColor(Colors.gray)
+                            .foregroundColor(Color.gray)
                             .onTapGesture {
                                 self.newDisplayName = ""
                             }
-                            .foregroundColor(Colors.white)
+                            .foregroundColor(Color.white)
                     }
                     .textCase(nil)
 
@@ -138,7 +138,7 @@ struct SettingsView: View {
                                 cornerRadius: 15,
                                 style: .circular
                             )
-                            .stroke(Colors.gray, lineWidth: 2)
+                            .stroke(Color.gray, lineWidth: 2)
                         )
                 }
                 .navigationDestination(isPresented: $showProfileView) {
@@ -171,7 +171,7 @@ struct SettingsView: View {
                                     cornerRadius: 15,
                                     style: .circular
                                 )
-                                .stroke(Colors.gray, lineWidth: 2)
+                                .stroke(Color.gray, lineWidth: 2)
                             )
                     }
                 }
@@ -195,15 +195,15 @@ struct SettingsView: View {
                                 cornerRadius: 15,
                                 style: .circular
                             )
-                            .fill(Colors.gray)
+                            .fill(Color.gray)
                         )
                 }
-                .foregroundColor(Colors.black)
+                .foregroundColor(Color.black)
                 .padding([.top], 15)
             }
             .font(.custom("Helvetica", size: 16))
             .padding([.horizontal], 24)
-            .foregroundColor(Colors.gray)
+            .foregroundColor(Color.gray)
         }
     }
 }

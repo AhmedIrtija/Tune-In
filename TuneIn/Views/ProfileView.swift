@@ -60,7 +60,7 @@ struct ProfileView: View {
             }
             .font(.custom("Helvetica", size: 18))
             .padding([.horizontal], 20)
-            .foregroundColor(Colors.gray)
+            .foregroundColor(Color.gray)
         }
     }
 }

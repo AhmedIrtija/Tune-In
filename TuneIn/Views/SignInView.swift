@@ -125,7 +125,7 @@ struct SignInView: View {
                             .padding([.top], -80)
                             .font(.custom("Helvetica", size: 16))
                             .underline()
-                            .foregroundColor(Colors.gray)
+                            .foregroundColor(Color.gray)
                     }
                     Spacer()
                 }
@@ -177,7 +177,7 @@ struct SignInView: View {
                         cornerRadius: 15,
                         style: .circular
                     )
-                    .stroke(Colors.gray, lineWidth: 2)
+                    .stroke(Color.gray, lineWidth: 2)
                 )
                 .padding([.top], 70.0)
                 .navigationDestination(isPresented: $showLoginView) {

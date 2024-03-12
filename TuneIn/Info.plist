@@ -7,7 +7,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>spotify-ios-quick-start</string>
+				<string>TuneIn</string>
 			</array>
 			<key>CFBundleURLName</key>
 			<string>edu.ucdavis.ecs189e.TuneIn</string>
@@ -15,6 +15,7 @@
 	</array>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>TuneIn://Test</string>
 		<string>spotify</string>
 	</array>
 	<key>UIAppFonts</key>

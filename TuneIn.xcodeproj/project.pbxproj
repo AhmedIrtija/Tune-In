@@ -7,9 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		077209682BA0119E00E03F15 /* SpotifyLogin.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 077209672BA0119E00E03F15 /* SpotifyLogin.xcframework */; };
+		077209692BA0119E00E03F15 /* SpotifyLogin.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 077209672BA0119E00E03F15 /* SpotifyLogin.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		0772096C2BA012DB00E03F15 /* SpotifyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0772096B2BA012DB00E03F15 /* SpotifyController.swift */; };
+		0772096E2BA0175800E03F15 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0772096D2BA0175800E03F15 /* LoadingView.swift */; };
 		5812695745F4FDF739CF6AF5 /* Pods_TuneIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E917913DF728B9857490A3DF /* Pods_TuneIn.framework */; };
-		B7D897DC2B867F70000CACB2 /* SpotifyiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D897DA2B867F6F000CACB2 /* SpotifyiOS.framework */; };
-		B7D897DD2B867F70000CACB2 /* SpotifyiOS.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D897DB2B867F70000CACB2 /* SpotifyiOS.xcframework */; };
 		B7D897E32B868488000CACB2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D897E22B868488000CACB2 /* Constants.swift */; };
 		F452119A2B91557F00E5EF77 /* Damion.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F45211992B91557F00E5EF77 /* Damion.ttf */; };
 		F486ACC52B970A3B00D1182E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486ACC42B970A3B00D1182E /* SettingsView.swift */; };
@@ -36,10 +38,25 @@
 		F69A3D8E2B8693AD008E6EC1 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69A3D8D2B8693AD008E6EC1 /* ListView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		0772096A2BA0119F00E03F15 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				077209692BA0119E00E03F15 /* SpotifyLogin.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		077209672BA0119E00E03F15 /* SpotifyLogin.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SpotifyLogin.xcframework; path = "../../ios-auth/SpotifyLogin.xcframework"; sourceTree = "<group>"; };
+		0772096B2BA012DB00E03F15 /* SpotifyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyController.swift; sourceTree = "<group>"; };
+		0772096D2BA0175800E03F15 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		215EB38AE8E921EF4B9CFB0C /* Pods-TuneIn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TuneIn.release.xcconfig"; path = "Target Support Files/Pods-TuneIn/Pods-TuneIn.release.xcconfig"; sourceTree = "<group>"; };
-		B7D897DA2B867F6F000CACB2 /* SpotifyiOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyiOS.framework; sourceTree = "<group>"; };
-		B7D897DB2B867F70000CACB2 /* SpotifyiOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = SpotifyiOS.xcframework; sourceTree = "<group>"; };
 		B7D897DE2B868008000CACB2 /* TuneIn-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TuneIn-Bridging-Header.h"; sourceTree = "<group>"; };
 		B7D897E12B8680FC000CACB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B7D897E22B868488000CACB2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -69,11 +86,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				077209682BA0119E00E03F15 /* SpotifyLogin.xcframework in Frameworks */,
 				F67903E92B8BD690008EC6DC /* FirebaseAnalyticsSwift in Frameworks */,
 				F62214A62B9C185000EFDABC /* FirebaseAuth in Frameworks */,
-				B7D897DD2B867F70000CACB2 /* SpotifyiOS.xcframework in Frameworks */,
 				F67903E72B8BD690008EC6DC /* FirebaseAnalytics in Frameworks */,
-				B7D897DC2B867F70000CACB2 /* SpotifyiOS.framework in Frameworks */,
 				F67903DD2B8BD4B8008EC6DC /* FirebaseAnalytics in Frameworks */,
 				F67903E12B8BD4B8008EC6DC /* FirebaseAnalyticsSwift in Frameworks */,
 				F67903F02B8BEFB4008EC6DC /* FirebaseFirestore in Frameworks */,
@@ -109,6 +125,7 @@
 				F622149F2B9C180C00EFDABC /* LaunchView.swift */,
 				F622149D2B9C180C00EFDABC /* SignInView.swift */,
 				F622149E2B9C180C00EFDABC /* SpotifyLoginView.swift */,
+				0772096D2BA0175800E03F15 /* LoadingView.swift */,
 				F69A3D892B8674F7008E6EC1 /* MapView.swift */,
 				F69A3D8D2B8693AD008E6EC1 /* ListView.swift */,
 				F69A3D8B2B869127008E6EC1 /* ProfileView.swift */,
@@ -120,6 +137,7 @@
 		F67903EE2B8BEFB4008EC6DC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				077209672BA0119E00E03F15 /* SpotifyLogin.xcframework */,
 				E917913DF728B9857490A3DF /* Pods_TuneIn.framework */,
 			);
 			name = Frameworks;
@@ -149,14 +167,13 @@
 			children = (
 				F4E8E0872B9E79CB00BB6E57 /* Views */,
 				B7D897E12B8680FC000CACB2 /* Info.plist */,
-				B7D897DA2B867F6F000CACB2 /* SpotifyiOS.framework */,
-				B7D897DB2B867F70000CACB2 /* SpotifyiOS.xcframework */,
 				F69A3D7B2B86749D008E6EC1 /* TuneInApp.swift */,
 				F45211972B91549D00E5EF77 /* Fonts */,
 				B7D897E22B868488000CACB2 /* Constants.swift */,
 				F622149B2B9C180C00EFDABC /* AuthenticationManager.swift */,
 				F67903F32B8BF4BA008EC6DC /* UserManager.swift */,
 				F67903F52B8BF6EB008EC6DC /* UserModel.swift */,
+				0772096B2BA012DB00E03F15 /* SpotifyController.swift */,
 				F679036B2B8BD1ED008EC6DC /* GoogleService-Info.plist */,
 				F69A3D7F2B86749E008E6EC1 /* Assets.xcassets */,
 				F69A3D812B86749E008E6EC1 /* Preview Content */,
@@ -184,6 +201,7 @@
 				F69A3D752B86749D008E6EC1 /* Frameworks */,
 				F69A3D762B86749D008E6EC1 /* Resources */,
 				2BD1E3F4D8D8551E22B49C29 /* [CP] Embed Pods Frameworks */,
+				0772096A2BA0119F00E03F15 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -301,6 +319,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0772096C2BA012DB00E03F15 /* SpotifyController.swift in Sources */,
 				F69A3D8C2B869127008E6EC1 /* ProfileView.swift in Sources */,
 				F69A3D7E2B86749D008E6EC1 /* RootView.swift in Sources */,
 				F67903F62B8BF6EB008EC6DC /* UserModel.swift in Sources */,
@@ -308,6 +327,7 @@
 				F62214A02B9C180D00EFDABC /* AuthenticationManager.swift in Sources */,
 				F486ACC52B970A3B00D1182E /* SettingsView.swift in Sources */,
 				F67903F42B8BF4BB008EC6DC /* UserManager.swift in Sources */,
+				0772096E2BA0175800E03F15 /* LoadingView.swift in Sources */,
 				F69A3D8E2B8693AD008E6EC1 /* ListView.swift in Sources */,
 				F62214A32B9C180D00EFDABC /* SpotifyLoginView.swift in Sources */,
 				F62214A22B9C180D00EFDABC /* SignInView.swift in Sources */,
@@ -449,7 +469,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TuneIn/Preview Content\"";
-				DEVELOPMENT_TEAM = UKY8C2YK58;
+				DEVELOPMENT_TEAM = HLL689PTWK;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -490,7 +510,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TuneIn/Preview Content\"";
-				DEVELOPMENT_TEAM = UKY8C2YK58;
+				DEVELOPMENT_TEAM = HLL689PTWK;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				FRAMEWORK_SEARCH_PATHS = (

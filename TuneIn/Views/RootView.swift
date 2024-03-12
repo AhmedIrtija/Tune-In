@@ -11,6 +11,7 @@ enum RootViewType {
     case launchView
     case signInView
     case mapView
+    case loadingView
 }
 
 struct RootView: View {
@@ -29,6 +30,10 @@ struct RootView: View {
             case .mapView:
                 NavigationStack {
                     MapView(rootViewType: $rootViewType)
+                }
+            case .loadingView:
+                NavigationStack {
+                    LoadingView(rootViewType: $rootViewType)
                 }
             }
         }
