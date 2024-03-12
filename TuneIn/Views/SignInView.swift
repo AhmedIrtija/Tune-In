@@ -84,7 +84,7 @@ struct SignInView: View {
                     .font(Font.custom("Damion", size: 50))
                     .padding([.top], -10)
                     .padding([.bottom], 10)
-                    .foregroundColor(.white)
+                    .foregroundColor(.green)
                 Form {
                     // Email
                     Section(header: Text("Email")) {

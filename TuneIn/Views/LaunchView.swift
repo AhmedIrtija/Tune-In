@@ -19,7 +19,7 @@ struct LaunchView: View {
             VStack {
                 Text("Tune In")
                     .font(Font.custom("Damion", size: 80))
-                    .foregroundColor(.white)
+                    .foregroundColor(.green)
             }
             
         }

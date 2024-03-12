@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 struct SpotifyLoginView: View {
     @Binding var rootViewType: RootViewType
     @StateObject var viewModel = SpotifyController()
@@ -19,36 +18,31 @@ struct SpotifyLoginView: View {
                 .frame(width: 195, height: 195)
                 .padding(.bottom)
             Text("It's time to Tune In")
+                .font(Font.custom("Damion", size: 50))
+                .foregroundColor(.white)
             button
         }
         .padding()
         .onOpenURL { url in
             viewModel.open(url: url)
         }
-        .alert(
-            viewModel.alertTitle,
-            isPresented: Binding(
-                get: {
-                    viewModel.isAlertPresented
-                }, set: { _ in
-                    viewModel.setStateIdle()
-                }
-            )
-        ) {
-            Button(viewModel.alertButtonTitle, role: .cancel) {
+        .onChange(of: viewModel.state) { newState in
+            switch newState {
+            case .success:
                 rootViewType = .loadingView
+            default:
+                break
             }
         }
     }
 }
-
 
 private extension SpotifyLoginView {
     var button: some View {
         Button {
             viewModel.startAuthorizationCodeProcess()
         } label: {
-            Text("CONNECT")
+            Text("CONNECT USING SPOTIFY")
                 .font(.system(.body, weight: .heavy))
                 .kerning(2.0)
                 .padding(
@@ -73,42 +67,7 @@ private extension SpotifyLoginView {
     }
 }
 
-private extension SpotifyController {
-    var isAlertPresented: Bool {
-        switch state {
-        case .idle:
-            return false
-        default:
-            return true
-        }
-    }
 
-    var alertTitle: String {
-        switch state {
-        case .idle:
-            return ""
-
-        case .failure(let errorMessage):
-            return errorMessage
-
-        case .success(let successMessage):
-            return successMessage
-        }
-    }
-
-    var alertButtonTitle: String {
-        switch state {
-        case .idle:
-            return ""
-
-        case .failure:
-            return "Bummer"
-
-        case .success:
-            return "Nice"
-        }
-    }
-}
 
 
 #Preview {
