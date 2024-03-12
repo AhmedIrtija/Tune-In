@@ -34,6 +34,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
 
 struct MapView: View {
+    @EnvironmentObject var userModel: UserModel
     @Binding var rootViewType: RootViewType
     @StateObject private var locationManager = LocationManager()
     @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)

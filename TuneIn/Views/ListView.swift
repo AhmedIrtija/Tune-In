@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ListView: View {
+    @EnvironmentObject var userModel: UserModel
     @Environment(\.dismiss) var dismiss
     var body: some View {
         Text("TUNE IN")

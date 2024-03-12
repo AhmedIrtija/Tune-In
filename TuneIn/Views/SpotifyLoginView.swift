@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SpotifyLoginView: View {
+    @EnvironmentObject var userModel: UserModel
     @Binding var rootViewType: RootViewType
     
     var body: some View {

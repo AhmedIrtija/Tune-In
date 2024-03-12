@@ -21,10 +21,10 @@ final class SettingsViewModel: ObservableObject {
 struct SettingsView: View {
     @Binding var rootViewType: RootViewType
     @State private var showProfileView: Bool = false
-    @ObservedObject var userModel = UserModel()
+    @EnvironmentObject var userModel: UserModel
     @StateObject private var viewModel = SettingsViewModel()
-    var authenticationManager = AuthenticationManager.shared
-    @State private var currentUser: DBUser?
+//    var authenticationManager = AuthenticationManager.shared
+//    @State private var currentUser: DBUser?
     @State private var newDisplayName: String = ""
     @State private var newPronouns = Pronouns.na
     @State private var newBio: String = ""
@@ -66,7 +66,7 @@ struct SettingsView: View {
                 Form {
                     // Display Name
                     Section(header: Text("Display Name")) {
-                        TextField(currentUser?.name ?? "", text: $newDisplayName)
+                        TextField(userModel.currentUser?.name ?? "", text: $newDisplayName)
                             .foregroundColor(Colors.gray)
                             .onTapGesture {
                                 self.newDisplayName = ""
@@ -100,7 +100,7 @@ struct SettingsView: View {
                     
                     // Bio
                     Section(header: Text("Bio")) {
-                        TextField(currentUser?.bio ?? "", text: $newBio)
+                        TextField(userModel.currentUser?.bio ?? "", text: $newBio)
                             .foregroundColor(Colors.gray)
                             .onTapGesture {
                                 self.newDisplayName = ""
@@ -117,15 +117,15 @@ struct SettingsView: View {
                 Button(action: {
                     Task {
                         do {
-                            if let userId = currentUser?.userId {
+                            if let userId = userModel.currentUser?.userId {
                                 if !newDisplayName.isEmpty {
-                                    try await UserManager.shared.updateName(userId: userId, newName: newDisplayName)
+                                    try await userModel.setUserName(name: newDisplayName)
                                 }
                                 if newPronouns != .na {
-                                    try await UserManager.shared.updatePronouns(userId: userId, newPronouns: newPronouns)
+                                    try await userModel.setPronouns(pronouns: newPronouns)
                                 }
                                 if !newBio.isEmpty {
-                                    try await UserManager.shared.updateBio(userId: userId, newBio: newBio)
+                                    try await userModel.setBio(bio: newBio)
                                 }
                                 showProfileView = true
                             }
@@ -209,17 +209,17 @@ struct SettingsView: View {
             .padding([.horizontal], 24)
             .foregroundColor(Colors.gray)
         }
-        .onAppear {
-            Task {
-                do {
-                    let authData = try authenticationManager.getAuthenticatedUser()
-                    let userManager = UserManager.shared
-                    currentUser = try await userManager.getUser(userId: authData.uid)
-                } catch {
-                    print("Error: \(error)")
-                }
-            }
-        }
+//        .onAppear {
+//            Task {
+//                do {
+//                    let authData = try authenticationManager.getAuthenticatedUser()
+//                    let userManager = UserManager.shared
+//                    currentUser = try await userManager.getUser(userId: authData.uid)
+//                } catch {
+//                    print("Error: \(error)")
+//                }
+//            }
+//        }
     }
 }
 

@@ -12,13 +12,30 @@ final class SignInViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     
+    // set up environment variable
+    var userModel: UserModel?
+    func setUserModel(userModel: UserModel) {
+        self.userModel = userModel
+    }
+    
     func signUp() async throws {
         guard !email.isEmpty, !password.isEmpty else {
             print("No email or password found.")
             return
         }
         
-        let _ = try await AuthenticationManager.shared.createUser(email: email, password: password)
+        // create new authenticated user in Firebase
+        let authDataResult = try await AuthenticationManager.shared.createUser(email: email, password: password)
+        
+        // load authentication token to user model
+        try await userModel?.loadAuthenticationToken(authDataResult: authDataResult)
+        
+        // load new appUser object with authentication token
+        try await userModel?.loadNewUser()
+        
+        // create new document in database
+        guard let currentUser = userModel?.currentUser else { return }
+        try await UserManager.shared.createNewUser(newUser: DBUser(user: currentUser))
     }
     
     func signIn() async throws {
@@ -27,12 +44,14 @@ final class SignInViewModel: ObservableObject {
             return
         }
         
-        let _ = try await AuthenticationManager.shared.signInUser(email: email, password: password)
+        // get authentication token of existing user
+        let authDataResult = try await AuthenticationManager.shared.signInUser(email: email, password: password)
+        try await userModel?.loadAuthenticationToken(authDataResult: authDataResult)
+        try await userModel?.loadUser()
     }
     
     func resetPassword() async throws {
         let authUser = try AuthenticationManager.shared.getAuthenticatedUser()
-        print("in here")
         guard let email = authUser.email else {
             throw URLError(.fileDoesNotExist)
         }
@@ -41,6 +60,7 @@ final class SignInViewModel: ObservableObject {
 }
 
 struct SignInView: View {
+    @EnvironmentObject var userModel: UserModel
     @Binding var rootViewType: RootViewType
     @State private var showLoginView: Bool = false
     @State private var errorMessage: String = ""

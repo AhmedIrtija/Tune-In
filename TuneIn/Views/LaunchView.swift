@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LaunchView: View {
+    @EnvironmentObject var userModel: UserModel
     @Binding var rootViewType: RootViewType
     
     var body: some View {

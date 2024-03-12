@@ -14,6 +14,7 @@ enum RootViewType {
 }
 
 struct RootView: View {
+    @EnvironmentObject var userModel: UserModel
     @State var rootViewType: RootViewType = .launchView
     var body: some View {
         ZStack {

@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @EnvironmentObject var userModel: UserModel
     @Binding var rootViewType: RootViewType
     @State private var showSettingsView: Bool = false
-    var authenticationManager = AuthenticationManager.shared
-    @State private var currentUser: DBUser?
+    //var authenticationManager = AuthenticationManager.shared
+    //@State private var currentUser: DBUser?
     var body: some View {
         ZStack() {
             Color.black
@@ -36,13 +37,13 @@ struct ProfileView: View {
                     .resizable()
                     .frame(width: 135.0, height: 135.0)
                 //Display Name
-                if let displayName = currentUser?.name {
+                if let displayName = userModel.currentUser?.name {
                     Text(displayName)
                         .font(Font.custom("Damion", size: 40))
                         .foregroundColor(.white)
                 }
                 //Pronouns
-                if let pronouns = currentUser?.pronouns {
+                if let pronouns = userModel.currentUser?.pronouns {
                     Text(pronouns.rawValue)
                         .font(.custom("Helvetica", size: 14))
                         .padding([.bottom], 5)
@@ -51,7 +52,7 @@ struct ProfileView: View {
                 Text("Davis, CA, USA")
                     .padding([.bottom], 20)
                 //Bio
-                if let bio = currentUser?.bio {
+                if let bio = userModel.currentUser?.bio {
                     Text(bio)
                         .padding([.bottom], 20)
                 }
@@ -60,17 +61,17 @@ struct ProfileView: View {
             .font(.custom("Helvetica", size: 18))
             .padding([.horizontal], 20)
             .foregroundColor(Colors.gray)
-            .onAppear {
-                Task {
-                    do {
-                        let authData = try authenticationManager.getAuthenticatedUser()
-                        let userManager = UserManager.shared
-                        currentUser = try await userManager.getUser(userId: authData.uid)
-                    } catch {
-                        print("Error: \(error)")
-                    }
-                }
-            }
+//            .onAppear {
+//                Task {
+//                    do {
+//                        let authData = try authenticationManager.getAuthenticatedUser()
+//                        let userManager = UserManager.shared
+//                        currentUser = try await userManager.getUser(userId: authData.uid)
+//                    } catch {
+//                        print("Error: \(error)")
+//                    }
+//                }
+//            }
         }
     }
 }
