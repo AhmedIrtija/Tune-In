@@ -12,7 +12,7 @@ final class SignInViewModel: ObservableObject {
     @Published var email = ""
     @Published var password = ""
     
-    // set up environment variable
+    // Set up environment variable
     var userModel: UserModel?
     func setUserModel(userModel: UserModel) {
         self.userModel = userModel
@@ -189,6 +189,7 @@ struct SignInView: View {
             .font(.custom("Helvetica", size: 18))
             .ignoresSafeArea(.keyboard)
         }
+        .onAppear{ self.viewModel.setUserModel(userModel: userModel) }
         .onTapGesture { isTextFieldFocused = false }
     }
 }

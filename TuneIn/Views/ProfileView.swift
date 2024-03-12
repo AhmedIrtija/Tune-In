@@ -11,13 +11,13 @@ struct ProfileView: View {
     @EnvironmentObject var userModel: UserModel
     @Binding var rootViewType: RootViewType
     @State private var showSettingsView: Bool = false
-    //var authenticationManager = AuthenticationManager.shared
-    //@State private var currentUser: DBUser?
     var body: some View {
         ZStack() {
             Color.black
                 .ignoresSafeArea()
             VStack() {
+                Text("Current User ID: \(userModel.currentUser?.userId ?? "No user")")
+                    .foregroundColor(.white)
                 HStack {
                     Spacer()
                     //Settings Icon
@@ -61,17 +61,6 @@ struct ProfileView: View {
             .font(.custom("Helvetica", size: 18))
             .padding([.horizontal], 20)
             .foregroundColor(Colors.gray)
-//            .onAppear {
-//                Task {
-//                    do {
-//                        let authData = try authenticationManager.getAuthenticatedUser()
-//                        let userManager = UserManager.shared
-//                        currentUser = try await userManager.getUser(userId: authData.uid)
-//                    } catch {
-//                        print("Error: \(error)")
-//                    }
-//                }
-//            }
         }
     }
 }

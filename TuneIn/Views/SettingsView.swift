@@ -19,12 +19,10 @@ final class SettingsViewModel: ObservableObject {
 }
 
 struct SettingsView: View {
-    @Binding var rootViewType: RootViewType
-    @State private var showProfileView: Bool = false
     @EnvironmentObject var userModel: UserModel
     @StateObject private var viewModel = SettingsViewModel()
-//    var authenticationManager = AuthenticationManager.shared
-//    @State private var currentUser: DBUser?
+    @Binding var rootViewType: RootViewType
+    @State private var showProfileView: Bool = false
     @State private var newDisplayName: String = ""
     @State private var newPronouns = Pronouns.na
     @State private var newBio: String = ""
@@ -117,18 +115,16 @@ struct SettingsView: View {
                 Button(action: {
                     Task {
                         do {
-                            if let userId = userModel.currentUser?.userId {
-                                if !newDisplayName.isEmpty {
-                                    try await userModel.setUserName(name: newDisplayName)
-                                }
-                                if newPronouns != .na {
-                                    try await userModel.setPronouns(pronouns: newPronouns)
-                                }
-                                if !newBio.isEmpty {
-                                    try await userModel.setBio(bio: newBio)
-                                }
-                                showProfileView = true
+                            if !newDisplayName.isEmpty {
+                                try await userModel.setUserName(name: newDisplayName)
                             }
+                            if newPronouns != .na {
+                                try await userModel.setPronouns(pronouns: newPronouns)
+                            }
+                            if !newBio.isEmpty {
+                                try await userModel.setBio(bio: newBio)
+                            }
+                            showProfileView = true
                         } catch {
                             print("Error updating profile: \(error)")
                         }
@@ -209,17 +205,6 @@ struct SettingsView: View {
             .padding([.horizontal], 24)
             .foregroundColor(Colors.gray)
         }
-//        .onAppear {
-//            Task {
-//                do {
-//                    let authData = try authenticationManager.getAuthenticatedUser()
-//                    let userManager = UserManager.shared
-//                    currentUser = try await userManager.getUser(userId: authData.uid)
-//                } catch {
-//                    print("Error: \(error)")
-//                }
-//            }
-//        }
     }
 }
 

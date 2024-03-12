@@ -22,7 +22,7 @@ struct AppUser: Codable {
         self.userId = userId
         self.name = ""
         self.pronouns = Pronouns.na
-        self.bio = nil
+        self.bio = "Hey there! I'm using TuneIn."
         self.imageUrl = nil
         self.currentTrack = nil
         self.location = nil

@@ -83,7 +83,7 @@ struct MapView: View {
                         let otherUser = usersAroundLocation[index]
                         if let otherUserLocation = otherUser.location {
                             let otherUserCoordinates = CLLocationCoordinate2D(latitude: otherUserLocation.latitude, longitude: otherUserLocation.longitude)
-                            Annotation(otherUser.name, coordinate: otherUserCoordinates) {
+                            Annotation(otherUser.name ?? "", coordinate: otherUserCoordinates) {
                                 ZStack {
                                     Circle()
                                         .fill(Color.black)

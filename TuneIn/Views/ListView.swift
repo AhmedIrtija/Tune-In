@@ -10,6 +10,7 @@ import SwiftUI
 struct ListView: View {
     @EnvironmentObject var userModel: UserModel
     @Environment(\.dismiss) var dismiss
+
     var body: some View {
         Text("TUNE IN")
             .font(.custom("Avenir", size: 16.0).uppercaseSmallCaps())
