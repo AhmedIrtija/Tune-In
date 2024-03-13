@@ -79,6 +79,7 @@ extension SpotifyController {
 }
 
 extension SpotifyController: SessionManagerDelegate {
+    
     func sessionManager(manager: SessionManager, didFailWith error: Error) {
         state = .failure("Authorization Failed")
     }
@@ -129,53 +130,49 @@ extension SpotifyController: SessionManagerDelegate {
         task.resume()
     }
     
-    func fetchCurrentPlayingTrack() {
+    func fetchCurrentPlayingTrack() async throws -> Track? {
         guard let urlRequest = createURLRequest() else {
-            state = .failure("Failed to create URL request")
-            return
+                throw CustomError.failedToCreateURLRequest
         }
         
-        let task = URLSession.shared.dataTask(with: urlRequest) { [weak self] data, response, error in
-            guard let data = data, error == nil else {
-                DispatchQueue.main.async {
-                    self?.state = .failure("Network request failed")
-                }
-                return
-            }
+//        let task = URLSession.shared.dataTask(with: urlRequest) { [weak self] data, response, error in
+//            guard let data = data, error == nil else {
+//                DispatchQueue.main.async {
+//                    self?.state = .failure("Network request failed")
+//                }
+//                return
+//            }
+        let (data, _) = try await URLSession.shared.data(for: urlRequest)
             
-            do {
-                let decoder = JSONDecoder()
-                let trackResponse = try decoder.decode(SpotifyTrackResponse.self, from: data)
-                if let trackItem = trackResponse.item {
-                    let artistsNames = trackItem.artists.map { $0.name }.joined(separator: ", ")
-                    let firstAlbumImageUrl = trackItem.album.images.first?.url ?? ""
-                    
-                    let track = Track(
-                        id: trackItem.id,
-                        name: trackItem.name,
-                        artist: artistsNames,
-                        album: trackItem.album.name,
-                        albumUrl: firstAlbumImageUrl
-                    )
-                    
-                    
-                    DispatchQueue.main.async {
-                        self?.state = .success(track.name)
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        self?.state = .failure("No currently playing track found")
-                    }
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    self?.state = .failure("Failed to decode response")
-                }
-            }
-        }
-        task.resume()
-    }
+        let decoder = JSONDecoder()
+           let trackResponse = try decoder.decode(SpotifyTrackResponse.self, from: data)
+           
+           if let trackItem = trackResponse.item {
+               let artistsNames = trackItem.artists.map { $0.name }.joined(separator: ", ")
+               let firstAlbumImageUrl = trackItem.album.images.first?.url ?? ""
+               
+               let track = Track(
+                   id: trackItem.id,
+                   name: trackItem.name,
+                   artist: artistsNames,
+                   album: trackItem.album.name,
+                   albumUrl: firstAlbumImageUrl
+               )
+               
+               return track
+           } else {
+               throw CustomError.noCurrentlyPlayingTrackFound
+           }
+       }
 }
+
+enum CustomError: Error {
+    case failedToCreateURLRequest
+    case noCurrentlyPlayingTrackFound
+    case networkRequestFailed
+    case failedToDecodeResponse
+}
+
 
 struct AccessTokenResponse: Codable {
     let access_token: String

@@ -11,8 +11,10 @@ import SwiftUI
 struct LoadingView: View {
     @Binding var rootViewType: RootViewType
     @StateObject var viewModel = SpotifyController()
+    @EnvironmentObject var userModel: UserModel
     @State var openView = false
     @State private var progress: CGFloat = 0.0
+    @State var track: Track? = nil
 
     let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
 
@@ -72,8 +74,17 @@ struct LoadingView: View {
             if let URLRequestForCurrentTrack = viewModel.createURLRequest() {
                 if let insideURL = URLRequestForCurrentTrack.url {
                     viewModel.open(url: insideURL)
-//                    viewModel.fetchCurrentPlayingTrack()
-//                    This is where we set the current track to the database?
+                    Task {
+                            do {
+                                if let fetchedTrack = try await viewModel.fetchCurrentPlayingTrack() {
+                                    track = fetchedTrack
+                                    try await userModel.setCurrentTrack(track: fetchedTrack)
+                                } 
+                            } catch {
+                                print("Failed to fetch current track: \(error)")
+                            }
+                        }
+
                 }
             }
         }
