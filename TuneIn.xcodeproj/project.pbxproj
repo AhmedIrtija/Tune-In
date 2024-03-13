@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		077209682BA0119E00E03F15 /* SpotifyLogin.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 077209672BA0119E00E03F15 /* SpotifyLogin.xcframework */; };
-		077209692BA0119E00E03F15 /* SpotifyLogin.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 077209672BA0119E00E03F15 /* SpotifyLogin.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0772096C2BA012DB00E03F15 /* SpotifyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0772096B2BA012DB00E03F15 /* SpotifyController.swift */; };
 		0772096E2BA0175800E03F15 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0772096D2BA0175800E03F15 /* LoadingView.swift */; };
+		077209702BA101E400E03F15 /* SpotifyLogin.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0772096F2BA101E400E03F15 /* SpotifyLogin.xcframework */; };
+		077209712BA101E400E03F15 /* SpotifyLogin.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0772096F2BA101E400E03F15 /* SpotifyLogin.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5812695745F4FDF739CF6AF5 /* Pods_TuneIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E917913DF728B9857490A3DF /* Pods_TuneIn.framework */; };
 		B7D897E32B868488000CACB2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D897E22B868488000CACB2 /* Constants.swift */; };
 		F452119A2B91557F00E5EF77 /* Damion.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F45211992B91557F00E5EF77 /* Damion.ttf */; };
@@ -39,13 +39,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		0772096A2BA0119F00E03F15 /* Embed Frameworks */ = {
+		077209722BA101E400E03F15 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				077209692BA0119E00E03F15 /* SpotifyLogin.xcframework in Embed Frameworks */,
+				077209712BA101E400E03F15 /* SpotifyLogin.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -53,9 +53,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		077209672BA0119E00E03F15 /* SpotifyLogin.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SpotifyLogin.xcframework; path = "../../ios-auth/SpotifyLogin.xcframework"; sourceTree = "<group>"; };
 		0772096B2BA012DB00E03F15 /* SpotifyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyController.swift; sourceTree = "<group>"; };
 		0772096D2BA0175800E03F15 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		0772096F2BA101E400E03F15 /* SpotifyLogin.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SpotifyLogin.xcframework; path = "../ios-auth/SpotifyLogin.xcframework"; sourceTree = "<group>"; };
 		215EB38AE8E921EF4B9CFB0C /* Pods-TuneIn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TuneIn.release.xcconfig"; path = "Target Support Files/Pods-TuneIn/Pods-TuneIn.release.xcconfig"; sourceTree = "<group>"; };
 		B7D897DE2B868008000CACB2 /* TuneIn-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TuneIn-Bridging-Header.h"; sourceTree = "<group>"; };
 		B7D897E12B8680FC000CACB2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				077209682BA0119E00E03F15 /* SpotifyLogin.xcframework in Frameworks */,
+				077209702BA101E400E03F15 /* SpotifyLogin.xcframework in Frameworks */,
 				F67903E92B8BD690008EC6DC /* FirebaseAnalyticsSwift in Frameworks */,
 				F62214A62B9C185000EFDABC /* FirebaseAuth in Frameworks */,
 				F67903E72B8BD690008EC6DC /* FirebaseAnalytics in Frameworks */,
@@ -137,7 +137,7 @@
 		F67903EE2B8BEFB4008EC6DC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				077209672BA0119E00E03F15 /* SpotifyLogin.xcframework */,
+				0772096F2BA101E400E03F15 /* SpotifyLogin.xcframework */,
 				E917913DF728B9857490A3DF /* Pods_TuneIn.framework */,
 			);
 			name = Frameworks;
@@ -201,7 +201,7 @@
 				F69A3D752B86749D008E6EC1 /* Frameworks */,
 				F69A3D762B86749D008E6EC1 /* Resources */,
 				2BD1E3F4D8D8551E22B49C29 /* [CP] Embed Pods Frameworks */,
-				0772096A2BA0119F00E03F15 /* Embed Frameworks */,
+				077209722BA101E400E03F15 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

@@ -52,10 +52,10 @@ final class SpotifyController: ObservableObject {
         urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
         urlRequest.httpMethod = "GET"
-        print("URL: \(urlRequest.url?.absoluteString ?? "N/A")")
-        print("HTTP Method: \(urlRequest.httpMethod ?? "N/A")")
-        print("AllHTTPHeaderFields: \(urlRequest.allHTTPHeaderFields ?? [:])")
-        print("HTTP Body: \(String(data: urlRequest.httpBody ?? Data(), encoding: .utf8) ?? "N/A")")
+//        print("URL: \(urlRequest.url?.absoluteString ?? "N/A")")
+//        print("HTTP Method: \(urlRequest.httpMethod ?? "N/A")")
+//        print("AllHTTPHeaderFields: \(urlRequest.allHTTPHeaderFields ?? [:])")
+//        print("HTTP Body: \(String(data: urlRequest.httpBody ?? Data(), encoding: .utf8) ?? "N/A")")
         return urlRequest
     }
 }
@@ -128,6 +128,53 @@ extension SpotifyController: SessionManagerDelegate {
         
         task.resume()
     }
+    
+    func fetchCurrentPlayingTrack() {
+        guard let urlRequest = createURLRequest() else {
+            state = .failure("Failed to create URL request")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: urlRequest) { [weak self] data, response, error in
+            guard let data = data, error == nil else {
+                DispatchQueue.main.async {
+                    self?.state = .failure("Network request failed")
+                }
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let trackResponse = try decoder.decode(SpotifyTrackResponse.self, from: data)
+                if let trackItem = trackResponse.item {
+                    let artistsNames = trackItem.artists.map { $0.name }.joined(separator: ", ")
+                    let firstAlbumImageUrl = trackItem.album.images.first?.url ?? ""
+                    
+                    let track = Track(
+                        id: trackItem.id,
+                        name: trackItem.name,
+                        artist: artistsNames,
+                        album: trackItem.album.name,
+                        albumUrl: firstAlbumImageUrl
+                    )
+                    
+                    
+                    DispatchQueue.main.async {
+                        self?.state = .success(track.name)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self?.state = .failure("No currently playing track found")
+                    }
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self?.state = .failure("Failed to decode response")
+                }
+            }
+        }
+        task.resume()
+    }
 }
 
 struct AccessTokenResponse: Codable {
@@ -136,4 +183,28 @@ struct AccessTokenResponse: Codable {
     let scope: String
     let expires_in: Int
     let refresh_token: String?
+}
+
+struct SpotifyTrackResponse: Codable {
+    let item: SpotifyTrackItem?
+}
+
+struct SpotifyTrackItem: Codable {
+    let id: String
+    let name: String
+    let artists: [SpotifyArtist]
+    let album: SpotifyAlbum
+}
+
+struct SpotifyArtist: Codable {
+    let name: String
+}
+
+struct SpotifyAlbum: Codable {
+    let name: String
+    let images: [SpotifyImage]
+}
+
+struct SpotifyImage: Codable {
+    let url: String
 }

@@ -72,6 +72,8 @@ struct LoadingView: View {
             if let URLRequestForCurrentTrack = viewModel.createURLRequest() {
                 if let insideURL = URLRequestForCurrentTrack.url {
                     viewModel.open(url: insideURL)
+//                    viewModel.fetchCurrentPlayingTrack()
+//                    This is where we set the current track to the database?
                 }
             }
         }
