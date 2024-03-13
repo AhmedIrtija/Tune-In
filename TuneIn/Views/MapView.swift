@@ -241,7 +241,7 @@ struct MapView: View {
             }
         }
         .sheet(isPresented: $showListView) {
-            ListView()
+            ListView(usersAroundLocation: usersAroundLocation)
         }
     }
 }
