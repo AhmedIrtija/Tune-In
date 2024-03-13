@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import PopupView
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var locationManager = CLLocationManager()
@@ -41,6 +42,7 @@ struct MapView: View {
     @State private var mapStyle: Int = 0
     @State private var selectedRadius: Double = 1.0
     @State private var showProfileView: Bool = false
+    @State private var showPopUp: Bool = false
     @State private var showListView: Bool = false
     @State private var usersAroundLocation: [AppUser] = []
     
@@ -83,31 +85,48 @@ struct MapView: View {
                         let otherUser = usersAroundLocation[index]
                         if let otherUserLocation = otherUser.location {
                             let otherUserCoordinates = CLLocationCoordinate2D(latitude: otherUserLocation.latitude, longitude: otherUserLocation.longitude)
-                            Annotation(otherUser.name ?? "", coordinate: otherUserCoordinates) {
+                            Annotation(otherUser.name , coordinate: otherUserCoordinates) {
+                                //in loop and if statement
+                                Button(action:{
+                                    showPopUp = true
+                                    print("Button tappoed!")
+    
+                                }, label:
+                                        {
+                                    Image("playbutton")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 25, height: 25)
+                                        .clipShape(Circle())
+                                })
+                            
                                 ZStack {
-                                    Circle()
-                                        .fill(Color.black)
-                                        .frame(width: 36.0, height: 36.0)
-                                    Circle()
-                                        .fill(Color.green)
-                                        .frame(width: 33.0, height: 33.0)
-                                    AsyncImage(url: URL(string: otherUser.imageUrl ?? "")) { image in
-                                        image
-                                            .resizable()
-                                            .frame(width: 30.0, height: 30.0)
-                                            .foregroundStyle(Color.white)
-                                            .background(Color.black)
-                                            .clipShape(.circle)
-                                    } placeholder: {
-                                        Image(systemName: "person.circle")
-                                            .resizable()
-                                            .frame(width: 30.0, height: 30.0)
-                                            .foregroundStyle(Color.white)
-                                            .background(Color.black)
-                                            .clipShape(.circle)
-                                    }
+                                        Circle()
+                                            .fill(Color.black)
+                                            .frame(width: 36.0, height: 36.0)
+                                        Circle()
+                                            .fill(Color.green)
+                                            .frame(width: 33.0, height: 33.0)
+                                    
+                                        AsyncImage(url: URL(string: otherUser.imageUrl ?? "")) { image in
+                                            image
+                                                .resizable()
+                                                .frame(width: 30.0, height: 30.0)
+                                                .foregroundStyle(Color.white)
+                                                .background(Color.black)
+                                                .clipShape(.circle)
+                                        } placeholder: {
+                                            Image(systemName: "person.circle")
+                                                .resizable()
+                                                .frame(width: 30.0, height: 30.0)
+                                                .foregroundStyle(Color.white)
+                                                .background(Color.black)
+                                                .clipShape(.circle)
+                                        }
+                                        
                                 }
                             }
+
                         }
                     }
                 }
@@ -241,9 +260,50 @@ struct MapView: View {
             }
         }
         .sheet(isPresented: $showListView) {
-            ListView(usersAroundLocation: usersAroundLocation)
+            ListView()
         }
+        .popup(isPresented: $showPopUp) {
+            HStack(/*spacing: 0*/) {
+                //image here and then vstack with song name and artist
+                VStack{
+                    Image("MidnightsTalor")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 40.0, height: 40.0)
+                        .padding(2)
+                    // add a gif of music playing or some icon
+                    Image(systemName: "speaker.wave.3")
+                        .frame(width: 6.0, height: 6.0)
+                } // end vstack 1
+                .padding()
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Karma")
+                        .foregroundColor(.white)
+                        .font(.system(size: 18))
+                    
+                    Text("From \"Midnights\" by Taylor Swift")
+                        .foregroundColor(.white)
+                        .font(.system(size: 16))
+                        .opacity(0.8)
+                }
+            }
+            .padding(16)
+            .background(Color.black.opacity(0.8).cornerRadius(12))
+            .shadow(color: Color("9265F8").opacity(0.5), radius: 40, x: 0, y: 12)
+            .padding(.horizontal, 16)
+        }
+        customize: {
+            $0
+                .type(.floater())
+                .position(.top)
+                .animation(.spring())
+                .closeOnTapOutside(true)
+        }
+
+        
     }
+    
 }
 #Preview {
     NavigationStack {
