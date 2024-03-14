@@ -99,7 +99,7 @@ class UserModel: ObservableObject {
     }
     
     func setLocation(latitude: Double, longitude: Double) async throws {
-        guard let authToken = self.authToken else { return }
-        try await UserManager.shared.updateLocation(userId: authToken, newLatitude: latitude, newLongitude: longitude)
+      guard let authToken = self.authToken else { return }
+      try await UserManager.shared.updateLocationAndGeohash(userId: authToken, newLatitude: latitude, newLongitude: longitude)
     }
 }

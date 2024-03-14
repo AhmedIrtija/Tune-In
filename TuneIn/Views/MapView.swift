@@ -38,6 +38,7 @@ struct MapView: View {
     @EnvironmentObject var userModel: UserModel
     @Binding var rootViewType: RootViewType
     @StateObject private var locationManager = LocationManager()
+    @StateObject var viewModel = SpotifyController()
     @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
     @State private var mapStyle: Int = 0
     @State private var selectedRadius: Double = 1.0
@@ -45,6 +46,9 @@ struct MapView: View {
     @State private var showPopUp: Bool = false
     @State private var showListView: Bool = false
     @State private var usersAroundLocation: [AppUser] = []
+    @State var track: Track? = nil
+    @State private var previousLocation: CLLocation?
+    let moveDistanceThreshold: CLLocationDistance = 1.0     // one meter
     
     let distances: [Double] = [1.0, 2.0, 3.0, 4.0, 5.0]     // in miles
     
@@ -97,7 +101,7 @@ struct MapView: View {
         
                                     }, label:
                                             {
-                                        Image(systemName: "play.fill")
+                                        Image(uiImage: UIImage(imageLiteralResourceName: "SpotifyPlayButton"))
                                             .resizable()
                                             .scaledToFit()
                                             .frame(width: 25, height: 25)
@@ -244,7 +248,28 @@ struct MapView: View {
                 .padding([.top, .horizontal], 12.0)
             }
             .onReceive(locationManager.$userLocation) { userLocation in
+                // * * * update user location * * * //
+                guard let currentUserLocation = userLocation else { return }
+                guard let previousUserLocation = previousLocation else {
+                    previousLocation = currentUserLocation
+                    Task {
+                        try await userModel.setLocation(latitude: currentUserLocation.coordinate.latitude, longitude: currentUserLocation.coordinate.longitude)
+                    }
+                    return
+                }
+                
+                // if user moves > 1 meter, update user location on database
+                let distance = currentUserLocation.distance(from: previousUserLocation)
+                if distance >= moveDistanceThreshold {
+                    previousLocation = currentUserLocation
+                    Task {
+                        try await userModel.setLocation(latitude: currentUserLocation.coordinate.latitude, longitude: currentUserLocation.coordinate.longitude)
+                    }
+                }
+                
+                // * * * listen to users around location * * * //
                 if let location = userLocation {
+                    // listen to users around location
                     let myLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
                     Task {
                         do {
@@ -265,30 +290,13 @@ struct MapView: View {
                                 }
                             }
                         }
-                    }
-                }
-            }
-            .onChange(of: selectedRadius) {
-                if let location = locationManager.userLocation {
-                    let myLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-                    Task {
                         do {
-                            UserManager.shared.listenToPeopleAroundUser(center: myLocation, radius: selectedRadius * 1609.34) { updatedUsers in
-                                for updatedUser in updatedUsers {
-                                    if let existingIndex = usersAroundLocation.firstIndex(where: { $0.userId == updatedUser.userId }) {
-                                        // update existing user
-                                        usersAroundLocation[existingIndex] = updatedUser
-                                    } else {
-                                        // append new user
-                                        usersAroundLocation.append(updatedUser)
-                                    }
-                                }
-                                
-                                // remove users that are not in updatedUsers
-                                usersAroundLocation.removeAll { user in
-                                    !updatedUsers.contains(where: { $0.userId == user.userId })
-                                }
+                            if let fetchedTrack = try await viewModel.fetchCurrentPlayingTrack() {
+                                track = fetchedTrack
+                                try await userModel.setCurrentTrack(track: fetchedTrack)
                             }
+                        } catch {
+                            print("Failed to fetch current track: \(error)")
                         }
                     }
                 }

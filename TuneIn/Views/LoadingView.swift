@@ -79,7 +79,7 @@ struct LoadingView: View {
                                 if let fetchedTrack = try await viewModel.fetchCurrentPlayingTrack() {
                                     track = fetchedTrack
                                     try await userModel.setCurrentTrack(track: fetchedTrack)
-                                } 
+                                }
                             } catch {
                                 print("Failed to fetch current track: \(error)")
                             }

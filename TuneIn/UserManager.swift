@@ -204,6 +204,13 @@ final class UserManager {
         try await userDocument(userId: userId).updateData(data)
     }
     
+    func updateLocationAndGeohash(userId: String, newLatitude: Double, newLongitude: Double) async throws {
+        try await self.updateLocation(userId: userId, newLatitude: newLatitude, newLongitude: newLongitude)
+        
+        let newGeohash = GFUtils.geoHash(forLocation: CLLocationCoordinate2D(latitude: newLatitude, longitude: newLongitude))
+        try await updateGeohash(userId: userId, newGeohash: newGeohash)
+    }
+    
     private func fetchMatchingDocs(from snapshot: QuerySnapshot, center: CLLocationCoordinate2D, radius: Double) async throws -> [QueryDocumentSnapshot] {     // radius in meters
         // filter false positives
         return snapshot.documents.filter { document in

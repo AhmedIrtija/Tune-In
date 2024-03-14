@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07065E5C2BA386BB00E395A9 /* PopupView in Frameworks */ = {isa = PBXBuildFile; productRef = 07065E5B2BA386BB00E395A9 /* PopupView */; };
 		0772096C2BA012DB00E03F15 /* SpotifyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0772096B2BA012DB00E03F15 /* SpotifyController.swift */; };
 		0772096E2BA0175800E03F15 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0772096D2BA0175800E03F15 /* LoadingView.swift */; };
 		077209702BA101E400E03F15 /* SpotifyLogin.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0772096F2BA101E400E03F15 /* SpotifyLogin.xcframework */; };
@@ -88,6 +89,7 @@
 			files = (
 				077209702BA101E400E03F15 /* SpotifyLogin.xcframework in Frameworks */,
 				F67903E92B8BD690008EC6DC /* FirebaseAnalyticsSwift in Frameworks */,
+				07065E5C2BA386BB00E395A9 /* PopupView in Frameworks */,
 				F62214A62B9C185000EFDABC /* FirebaseAuth in Frameworks */,
 				F67903E72B8BD690008EC6DC /* FirebaseAnalytics in Frameworks */,
 				F67903DD2B8BD4B8008EC6DC /* FirebaseAnalytics in Frameworks */,
@@ -216,6 +218,7 @@
 				F67903EF2B8BEFB4008EC6DC /* FirebaseFirestore */,
 				F67903F12B8BEFB4008EC6DC /* FirebaseFirestoreSwift */,
 				F62214A52B9C185000EFDABC /* FirebaseAuth */,
+				07065E5B2BA386BB00E395A9 /* PopupView */,
 			);
 			productName = TuneIn;
 			productReference = F69A3D782B86749D008E6EC1 /* TuneIn.app */;
@@ -248,6 +251,7 @@
 			mainGroup = F69A3D6F2B86749D008E6EC1;
 			packageReferences = (
 				F67903DB2B8BD4B8008EC6DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				07065E5A2BA386BB00E395A9 /* XCRemoteSwiftPackageReference "PopupView" */,
 			);
 			productRefGroup = F69A3D792B86749D008E6EC1 /* Products */;
 			projectDirPath = "";
@@ -564,6 +568,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		07065E5A2BA386BB00E395A9 /* XCRemoteSwiftPackageReference "PopupView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/PopupView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.0;
+			};
+		};
 		F67903DB2B8BD4B8008EC6DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -575,6 +587,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		07065E5B2BA386BB00E395A9 /* PopupView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 07065E5A2BA386BB00E395A9 /* XCRemoteSwiftPackageReference "PopupView" */;
+			productName = PopupView;
+		};
 		F62214A52B9C185000EFDABC /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F67903DB2B8BD4B8008EC6DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
