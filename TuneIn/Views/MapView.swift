@@ -301,6 +301,31 @@ struct MapView: View {
                     }
                 }
             }
+            .onChange(of: selectedRadius) {
+                if let location = locationManager.userLocation {
+                    let myLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+                    Task {
+                        do {
+                            UserManager.shared.listenToPeopleAroundUser(center: myLocation, radius: selectedRadius * 1609.34) { updatedUsers in
+                                for updatedUser in updatedUsers {
+                                    if let existingIndex = usersAroundLocation.firstIndex(where: { $0.userId == updatedUser.userId }) {
+                                        // update existing user
+                                        usersAroundLocation[existingIndex] = updatedUser
+                                    } else {
+                                        // append new user
+                                        usersAroundLocation.append(updatedUser)
+                                    }
+                                }
+                                
+                                // remove users that are not in updatedUsers
+                                usersAroundLocation.removeAll { user in
+                                    !updatedUsers.contains(where: { $0.userId == user.userId })
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             .sheet(isPresented: $showListView) {
                 ListView(usersAroundLocation: usersAroundLocation)
             }
