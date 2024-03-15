@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 @MainActor
 final class SettingsViewModel: ObservableObject {
@@ -15,6 +16,14 @@ final class SettingsViewModel: ObservableObject {
     
     func updatePassword(password: String) async throws {
         try await AuthenticationManager.shared.updatePassword(password: password)
+    }
+    
+    func saveProfileImage(item: PhotosPickerItem) {
+        Task {
+            let data = try await item.loadTransferable(type: Data.self) else { return }
+            let (path, name) = try await StorageManager.shared.saveImage(data: <#T##Data#>)
+            print("Save Profile Image Success")
+        }
     }
 }
 
@@ -27,6 +36,7 @@ struct SettingsView: View {
     @State private var newPronouns = Pronouns.na
     @State private var newBio: String = ""
     @State private var newPassword: String = ""
+    @State private var newPhoto: PhotosPicker? = nil
     
     var body: some View {
         ZStack() {
@@ -61,6 +71,12 @@ struct SettingsView: View {
                     .stroke(Color.gray, lineWidth: 2)
                 )
                 .padding([.top],15)
+                
+                
+                PhotosPicker(selection: $newPhoto, matching: .images, photoLibrary: .shared()){
+                    Text("Edit Image")
+                }
+                
                 Form {
                     // Display Name
                     Section(header: Text("Display Name")) {
@@ -204,6 +220,12 @@ struct SettingsView: View {
             .font(.custom("Helvetica", size: 16))
             .padding([.horizontal], 24)
             .foregroundColor(Color.gray)
+            
+            .onChange(of: newPhoto, perform: { newValue in
+                if let newValue {
+                    viewModel.saveProfileImage(item: newValue)
+                }
+            })
         }
     }
 }

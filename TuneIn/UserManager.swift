@@ -8,6 +8,7 @@
 import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
+import FirebaseStorage
 import GeoFire
 import MapKit
 
@@ -352,4 +353,26 @@ final class UserManager {
         }
     }
     
+}
+
+
+final class StorageManager {
+    static let shared = StorageManager()
+    privite init() {}
+    
+    private let storage = Storage.storage().reference()
+    
+    func saveImage (data: Data) async throws -> (path: String, name: String) {
+        let meta = StorageMetaData()
+        meta.contentType = "image/jpeg"
+        
+        let path = "\(UUID().uuidString).jpeg"
+        let returnedMetaData = try await storage.child(path).putDataAsync(data, metadata: meta)
+        
+        guard let returnedPath = returnedMetaData.path, let returnedName = returnedMetaData.name else {
+            throw URLError(.badServerResponse)
+        }
+        
+        return (returnedPath, returnedName)
+    }
 }
