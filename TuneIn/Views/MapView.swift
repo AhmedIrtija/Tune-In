@@ -341,7 +341,7 @@ struct MapView: View {
                 HStack(/*spacing: 0*/) {
                     //image here and then vstack with song name and artist
                     VStack{
-                 //   ForEach(usersAroundLocation.indices, id:\.self) { index in
+                        //   ForEach(usersAroundLocation.indices, id:\.self) { index in
                         if let currenttrack = popUpTrack {
                             AsyncImage(url: URL(string: currenttrack.albumUrl)) { image in
                                 image.resizable()
@@ -349,13 +349,36 @@ struct MapView: View {
                                 Image(systemName: "music.note.list")
                                     .aspectRatio(contentMode: .fit)
                             }
-                            .frame(width: 60, height: 60)
+                            .frame(width: 80, height: 80)
                             .padding(.trailing, 20)
+                                   }
+                            
+                            // add a gif of music playing or some icon
+//                            Button(action: {
+//                                guard let previewURL = URL(string: currenttrack.preview_url ?? "") else {
+//                                    print("Invalid preview URL")
+//                                    return
+//                                }
+//                                player = AVPlayer(url: previewURL)
+//                                player?.play()
+//                            }) {
+                        if let currenttrack = popUpTrack {
+                            Button(action: {
+                            guard let previewURL = URL(string: currenttrack.preview_url ?? "")
+                            else {
+                                print("Invalid preview URL")
+                                return
+                            }
+                              player = AVPlayer(url: previewURL)
+                              player?.play()
+                                print("preview url \(previewURL)")
+                                
+                            }, label : {Image(systemName: "speaker.wave.3")
+                                    .frame(width: 12.0, height: 12.0)
+                            })
                         }
-
-                        // add a gif of music playing or some icon
-                        Image(systemName: "speaker.wave.3")
-                            .frame(width: 6.0, height: 6.0)
+//                            }
+//                        }
                     } // end vstack 1
                     .padding()
                     VStack(alignment: .leading, spacing: 2) {
@@ -373,7 +396,6 @@ struct MapView: View {
                 }
                 .padding(16)
                 .background(Color.black.opacity(0.8).cornerRadius(12))
-                .shadow(color: Color("9265F8").opacity(0.5), radius: 40, x: 0, y: 12)
                 .padding(.horizontal, 16)
             }
             customize: {
