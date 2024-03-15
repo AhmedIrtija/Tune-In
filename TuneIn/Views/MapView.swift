@@ -8,6 +8,7 @@
 import SwiftUI
 import MapKit
 import PopupView
+import AVKit
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var locationManager = CLLocationManager()
@@ -47,6 +48,8 @@ struct MapView: View {
     @State private var showListView: Bool = false
     @State private var usersAroundLocation: [AppUser] = []
     @State var track: Track? = nil
+    @State var trackFilled = false
+    @State var popUpTrack : Track?
     @State private var previousLocation: CLLocation?
     let moveDistanceThreshold: CLLocationDistance = 1.0     // one meter
     
@@ -97,11 +100,12 @@ struct MapView: View {
                                     //in loop and if statement
                                     Button(action:{
                                         showPopUp = true
-                                        print("Button tapped!")
+                                        //print("Button tapped!")
+                                        popUpTrack = otherUser.currentTrack
         
                                     }, label:
                                             {
-                                        Image(uiImage: UIImage(imageLiteralResourceName: "SpotifyPlayButton"))
+                                        Image("playbutton")
                                             .resizable()
                                             .scaledToFit()
                                             .frame(width: 25, height: 25)
@@ -293,6 +297,8 @@ struct MapView: View {
                         do {
                             if let fetchedTrack = try await viewModel.fetchCurrentPlayingTrack() {
                                 track = fetchedTrack
+                                print (track?.name ?? "No track name")
+                                trackFilled = (true && showPopUp)
                                 try await userModel.setCurrentTrack(track: fetchedTrack)
                             }
                         } catch {
@@ -333,26 +339,34 @@ struct MapView: View {
                 HStack(/*spacing: 0*/) {
                     //image here and then vstack with song name and artist
                     VStack{
-                        Image("MidnightsTalor")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 40.0, height: 40.0)
-                            .padding(2)
+                 //   ForEach(usersAroundLocation.indices, id:\.self) { index in
+                        if let currenttrack = popUpTrack {
+                            AsyncImage(url: URL(string: currenttrack.albumUrl)) { image in
+                                image.resizable()
+                            } placeholder: {
+                                Image(systemName: "music.note.list")
+                                    .aspectRatio(contentMode: .fit)
+                            }
+                            .frame(width: 60, height: 60)
+                            .padding(.trailing, 20)
+                        }
+
                         // add a gif of music playing or some icon
                         Image(systemName: "speaker.wave.3")
                             .frame(width: 6.0, height: 6.0)
                     } // end vstack 1
                     .padding()
-                    
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Karma")
-                            .foregroundColor(.white)
-                            .font(.system(size: 18))
-                        
-                        Text("From \"Midnights\" by Taylor Swift")
-                            .foregroundColor(.white)
-                            .font(.system(size: 16))
-                            .opacity(0.8)
+                        if let currentTrack = popUpTrack {
+                            Text(currentTrack.name)
+                                .foregroundColor(.white)
+                                .font(.system(size: 18))
+                            
+                            Text("From \"\(currentTrack.album)\" by \"\(currentTrack.artist)\"")
+                                .foregroundColor(.white)
+                                .font(.system(size: 18))
+                        }
+
                     }
                 }
                 .padding(16)
