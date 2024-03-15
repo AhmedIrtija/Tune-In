@@ -50,6 +50,8 @@ struct MapView: View {
     @State var track: Track? = nil
     @State var trackFilled = false
     @State var popUpTrack : Track?
+    @State private var player: AVPlayer?
+    @State private var isPlaying = false
     @State private var previousLocation: CLLocation?
     let moveDistanceThreshold: CLLocationDistance = 1.0     // one meter
     
