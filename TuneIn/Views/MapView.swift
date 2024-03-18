@@ -86,7 +86,7 @@ struct MapView: View {
     
     var body: some View {
         ZStack {
-            Color.backgroundGray
+            Color.black
                 .ignoresSafeArea()
             
             VStack {
@@ -412,6 +412,7 @@ struct MapView: View {
         }
     }
 }
+
 
 #Preview {
     NavigationStack {
