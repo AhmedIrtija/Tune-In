@@ -16,12 +16,9 @@ struct LaunchView: View {
             Color.black
                 .ignoresSafeArea()
             
-            VStack {
-                Text("Tune In")
-                    .font(Font.custom("Damion", size: 80))
-                    .foregroundColor(.green)
-            }
-            
+            Image("TuneIn_Splash")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
         }
         .onAppear {
             let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
@@ -30,8 +27,6 @@ struct LaunchView: View {
                     rootViewType = authUser == nil ? .signInView : .mapView
                 }
             }
-            
-//
         }
     }
 }
