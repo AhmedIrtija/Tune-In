@@ -252,25 +252,6 @@ struct MapView: View {
                 .padding([.top, .horizontal], 12.0)
             }
             .onReceive(locationManager.$userLocation) { userLocation in
-                // * * * update user location * * * //
-                guard let currentUserLocation = userLocation else { return }
-                guard let previousUserLocation = previousLocation else {
-                    previousLocation = currentUserLocation
-                    Task {
-                        try await userModel.setLocation(latitude: currentUserLocation.coordinate.latitude, longitude: currentUserLocation.coordinate.longitude)
-                    }
-                    return
-                }
-                
-                // if user moves > 1 meter, update user location on database
-                let distance = currentUserLocation.distance(from: previousUserLocation)
-                if distance >= moveDistanceThreshold {
-                    previousLocation = currentUserLocation
-                    Task {
-                        try await userModel.setLocation(latitude: currentUserLocation.coordinate.latitude, longitude: currentUserLocation.coordinate.longitude)
-                    }
-                }
-                
                 // * * * listen to users around location * * * //
                 if let location = userLocation {
                     // listen to users around location
@@ -304,6 +285,25 @@ struct MapView: View {
                         } catch {
                             print("Failed to fetch current track: \(error)")
                         }
+                    }
+                }
+                
+                // * * * update user location * * * //
+                guard let currentUserLocation = userLocation else { return }
+                guard let previousUserLocation = previousLocation else {
+                    previousLocation = currentUserLocation
+                    Task {
+                        try await userModel.setLocation(latitude: currentUserLocation.coordinate.latitude, longitude: currentUserLocation.coordinate.longitude)
+                    }
+                    return
+                }
+                
+                // if user moves > 1 meter, update user location on database
+                let distance = currentUserLocation.distance(from: previousUserLocation)
+                if distance >= moveDistanceThreshold {
+                    previousLocation = currentUserLocation
+                    Task {
+                        try await userModel.setLocation(latitude: currentUserLocation.coordinate.latitude, longitude: currentUserLocation.coordinate.longitude)
                     }
                 }
             }
