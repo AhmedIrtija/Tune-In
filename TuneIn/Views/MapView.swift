@@ -37,6 +37,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 
 struct MapView: View {
     @EnvironmentObject var userModel: UserModel
+    @Environment(\.colorScheme) var colorScheme
     @Binding var rootViewType: RootViewType
     @StateObject private var locationManager = LocationManager()
     @StateObject var viewModel = SpotifyController()
@@ -73,11 +74,19 @@ struct MapView: View {
         }
     }
     
+    func regionForUserLocation(withRadius radius: Double, userLocation: CLLocation) -> MKCoordinateRegion {
+        let radiusInMeters = radius * 1609.34   // convert miles to meters
+        let regionSpan = radiusInMeters * 2     // approximation to ensure the circle fits within the view
+        let region = MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: regionSpan, longitudinalMeters: regionSpan)
+        return region
+    }
+
+    
     @Namespace var mapScope
     
     var body: some View {
         ZStack {
-            Color.black
+            Color.backgroundGray
                 .ignoresSafeArea()
             
             VStack {
@@ -88,8 +97,8 @@ struct MapView: View {
                                 center: location.coordinate,
                                 radius: selectedRadius * 1609.34    // in meters, = 1 mile
                             )
-                            .stroke(Color.green, lineWidth: 4.0)
-                            .foregroundStyle(Color.green.opacity(0.4))
+//                            .stroke(Color.green, lineWidth: 4.0)
+                            .foregroundStyle(Color.customGreen.opacity(0.4))
                         }
                             
                         ForEach(usersAroundLocation.indices, id:\.self) { index in
@@ -97,45 +106,48 @@ struct MapView: View {
                             if let otherUserLocation = otherUser.location {
                                 let otherUserCoordinates = CLLocationCoordinate2D(latitude: otherUserLocation.latitude, longitude: otherUserLocation.longitude)
                                 Annotation(otherUser.name , coordinate: otherUserCoordinates) {
-                                    //in loop and if statement
+                                    // button for popup
+                                    // in loop and if statement
                                     Button(action:{
                                         showPopUp = true
                                         //print("Button tapped!")
                                         popUpTrack = otherUser.currentTrack
         
-                                    }, label:
-                                            {
+                                    }, label: {
                                         Image("playbutton")
                                             .resizable()
                                             .scaledToFit()
                                             .frame(width: 25, height: 25)
                                             .clipShape(Circle())
                                     })
-                                
+                                    
+                                    // user map annotation
                                     ZStack {
-                                            Circle()
-                                                .fill(Color.black)
-                                                .frame(width: 36.0, height: 36.0)
-                                            Circle()
-                                                .fill(Color.green)
-                                                .frame(width: 33.0, height: 33.0)
-                                        
-                                            AsyncImage(url: URL(string: otherUser.imageUrl ?? "")) { image in
-                                                image
-                                                    .resizable()
-                                                    .frame(width: 30.0, height: 30.0)
-                                                    .foregroundStyle(Color.white)
-                                                    .background(Color.black)
-                                                    .clipShape(.circle)
-                                            } placeholder: {
-                                                Image(systemName: "person.circle")
-                                                    .resizable()
-                                                    .frame(width: 30.0, height: 30.0)
-                                                    .foregroundStyle(Color.white)
-                                                    .background(Color.black)
-                                                    .clipShape(.circle)
-                                            }
-                                            
+                                        Circle()
+                                            .fill(Color.backgroundGray)
+                                            .frame(width: 58.0, height: 58.0)
+                                        Circle()
+                                            .fill(Color.customGreen)
+                                            .frame(width: 52.0, height: 52.0)
+                                        Circle()
+                                            .fill(Color.backgroundGray)
+                                            .frame(width: 50.0, height: 50.0)
+                                    
+                                        AsyncImage(url: URL(string: otherUser.imageUrl ?? "")) { image in
+                                            image
+                                                .resizable()
+                                                .frame(width: 48.0, height: 48.0)
+                                                .foregroundStyle(Color.textGray)
+                                                .background(Color.backgroundGray)
+                                                .clipShape(.circle)
+                                        } placeholder: {
+                                            Image(systemName: "person.fill")
+                                                .resizable()
+                                                .frame(width: 48.0, height: 48.0)
+                                                .foregroundStyle(Color.textGray)
+                                                .background(Color.backgroundGray)
+                                                .clipShape(.circle)
+                                        }
                                     }
                                 }
 
@@ -177,17 +189,17 @@ struct MapView: View {
                             } label: {
                                 ZStack {
                                     Circle()
-                                        .foregroundStyle(Color.blue)
+                                        .foregroundStyle(colorScheme == .dark ? Color.backgroundGray : Color.white)
                                         .frame(width: 48.0, height: 48.0)
                                     VStack {
                                         Image(systemName: "map.fill")
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
                                             .frame(width: 20.0, height: 20.0)
-                                            .foregroundStyle(Color.white)
+                                            .foregroundStyle(Color.customGreen)
                                         Text("\(selectedMapStyleDescription)")
                                             .font(.system(size: 8.0))
-                                            .foregroundStyle(Color.white)
+                                            .foregroundStyle(Color.customGreen)
                                     }
                                 }
                             }
@@ -203,17 +215,17 @@ struct MapView: View {
                             } label: {
                                 ZStack {
                                     Circle()
-                                        .foregroundStyle(Color.blue)
+                                        .foregroundStyle(colorScheme == .dark ? Color.backgroundGray : Color.white)
                                         .frame(width: 48.0, height: 48.0)
                                     VStack {
                                         Image(systemName: "mappin.and.ellipse")
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
                                             .frame(width: 22.0, height: 22.0)
-                                            .foregroundStyle(Color.white)
+                                            .foregroundStyle(Color.customGreen)
                                         Text("\(Int(selectedRadius)) mi")
                                             .font(.system(size: 10.0))
-                                            .foregroundStyle(Color.white)
+                                            .foregroundStyle(Color.customGreen)
                                     }
                                 }
                             }
@@ -228,8 +240,10 @@ struct MapView: View {
                                 .mapControlVisibility(.visible)
                             MapCompass(scope: mapScope)
                                 .mapControlVisibility(.visible)
+                                
                         }
                         .padding(12.0)
+                        .tint(Color.customGreen)
                         .buttonBorderShape(.circle)
                     }
                 }
@@ -241,15 +255,22 @@ struct MapView: View {
                     }) {
                         Text("EXPLORE MUSIC")
                             .font(.custom("Avenir", size: 16.0).uppercaseSmallCaps())
-                            .foregroundColor(.white)
+                            .foregroundStyle(Color.white)
                             .padding(10.0)
                             .frame(height: 55.0)
                             .frame(maxWidth: .infinity, alignment: .center)
-                            .background(Color.green)
+                            .background(Color.customGreen)
                             .cornerRadius(10.0)
                     }
                 }
                 .padding([.top, .horizontal], 12.0)
+            }
+            .onAppear {
+                // * * * update map region * * * //
+                if let userLocation = locationManager.userLocation {
+                    let newRegion = regionForUserLocation(withRadius: selectedRadius, userLocation: userLocation)
+                    self.position = .region(newRegion)
+                }
             }
             .onReceive(locationManager.$userLocation) { userLocation in
                 // * * * listen to users around location * * * //
@@ -308,6 +329,13 @@ struct MapView: View {
                 }
             }
             .onChange(of: selectedRadius) {
+                // * * * update map region * * * //
+                if let userLocation = locationManager.userLocation {
+                    let newRegion = regionForUserLocation(withRadius: selectedRadius, userLocation: userLocation)
+                    self.position = .region(newRegion)
+                }
+                
+                // * * * listen to users around location * * * //
                 if let location = locationManager.userLocation {
                     let myLocation = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
                     Task {
@@ -359,18 +387,18 @@ struct MapView: View {
                     VStack(alignment: .leading, spacing: 2) {
                         if let currentTrack = popUpTrack {
                             Text(currentTrack.name)
-                                .foregroundColor(.white)
+                                .foregroundStyle(Color.textGray)
                                 .font(.system(size: 18))
                             
                             Text("From \"\(currentTrack.album)\" by \"\(currentTrack.artist)\"")
-                                .foregroundColor(.white)
+                                .foregroundStyle(Color.textGray)
                                 .font(.system(size: 18))
                         }
 
                     }
                 }
                 .padding(16)
-                .background(Color.black.opacity(0.8).cornerRadius(12))
+                .background(Color.backgroundGray.opacity(0.8).cornerRadius(12))
                 .shadow(color: Color("9265F8").opacity(0.5), radius: 40, x: 0, y: 12)
                 .padding(.horizontal, 16)
             }

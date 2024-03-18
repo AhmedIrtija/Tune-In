@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+extension Color {
+    static let backgroundGray = Color(red: 33/255, green: 33/255, blue: 33/255)
+    static let textGray = Color(red: 179/255, green: 179/255, blue: 179/255)
+}
+
 struct ListView: View {
     var usersAroundLocation: [AppUser]
     @Environment(\.dismiss) var dismiss
@@ -19,8 +24,9 @@ struct ListView: View {
             VStack {
                 Text("EXPLORE MUSIC")
                     .font(.custom("Avenir", size: 24.0).uppercaseSmallCaps().bold())
-                    .foregroundStyle(Color.gray)
-                    .padding()
+                    .foregroundStyle(Color.white)
+                    .padding(.top, 48.0)
+                    .padding(.bottom, 12.0)
 
                 ScrollView {
                     VStack {
@@ -38,16 +44,16 @@ struct ListView: View {
                                     .padding(.trailing, 10)
 
                                     VStack(alignment: .leading) {
-                                        Text(user.name ?? "Anonymous User")
+                                        Text(user.name )
                                             .font(.system(size: 14, weight: .medium))
                                             .foregroundStyle(Color.white)
                                             .padding(.bottom, 2)
-                                        Text("Track: \(track.name)")
+                                        Text("\(track.name) ⋅ \(track.artist)")
                                             .font(.system(size: 12, weight: .light))
-                                        Text("Artist: \(track.artist)")
+                                            .foregroundStyle(Color.textGray)
+                                        Text("\(track.album)")
                                             .font(.system(size: 12, weight: .light))
-                                        Text("Album: \(track.album)")
-                                            .font(.system(size: 12, weight: .light))
+                                            .foregroundStyle(Color.textGray)
                                         
                                     }
                                     
@@ -55,8 +61,9 @@ struct ListView: View {
                                 }
                                 .padding(20)
                                 .frame(maxWidth: .infinity)
-                                .background(RoundedRectangle(cornerRadius: 10).fill(Color.gray))
+                                .background(RoundedRectangle(cornerRadius: 10).fill(Color.backgroundGray))
                                 .shadow(radius: 5)
+                                .padding(.vertical, 5)
                             }
                         }
                     }
@@ -71,8 +78,9 @@ struct ListView: View {
                         .font(.custom("Avenir", size: 16.0).uppercaseSmallCaps())
                         .foregroundColor(.white)
                         .padding(10.0)
+                        .frame(height: 55.0)
                         .frame(maxWidth: .infinity, alignment: .center)
-                        .background(Color.green)
+                        .background(Color.customGreen)
                         .cornerRadius(10.0)
                 }
                 .padding([.top, .horizontal], 12.0)
