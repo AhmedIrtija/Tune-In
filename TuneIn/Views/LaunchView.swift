@@ -28,9 +28,7 @@ struct LaunchView: View {
                 try await userModel.loadUser()
 //                let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    withAnimation {
-                        rootViewType = userModel.authToken == nil ? .signInView : .mapView
-                    }
+                    rootViewType = userModel.authToken == nil ? .signInView : .spotifyLoginView
                 }
             }
             
