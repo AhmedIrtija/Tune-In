@@ -21,12 +21,19 @@ struct LaunchView: View {
                 .aspectRatio(contentMode: .fill)
         }
         .onAppear {
-            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                withAnimation {
-                    rootViewType = authUser == nil ? .signInView : .mapView
+            Task {
+                // load authentication token from local storage
+                try await userModel.loadAuthenticationTokenFromStorage()
+                // load user
+                try await userModel.loadUser()
+//                let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    withAnimation {
+                        rootViewType = userModel.authToken == nil ? .signInView : .mapView
+                    }
                 }
             }
+            
         }
     }
 }

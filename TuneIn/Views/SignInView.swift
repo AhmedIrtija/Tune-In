@@ -32,7 +32,10 @@ final class SignInViewModel: ObservableObject {
         let authDataResult = try await AuthenticationManager.shared.createUser(email: email, password: password)
         
         // load authentication token to user model
-        try await userModel?.loadAuthenticationToken(authDataResult: authDataResult)
+        try await userModel?.loadAuthenticationTokenFromAuth(authDataResult: authDataResult)
+        
+        // save authentication token to local storage
+        try await userModel?.saveAuthenticationTokenToStorage(authToken: authDataResult.uid)
         
         // load new appUser object with authentication token
         try await userModel?.loadNewUser()
@@ -50,7 +53,14 @@ final class SignInViewModel: ObservableObject {
         
         // get authentication token of existing user
         let authDataResult = try await AuthenticationManager.shared.signInUser(email: email, password: password)
-        try await userModel?.loadAuthenticationToken(authDataResult: authDataResult)
+        
+        // load authentication token to user model
+        try await userModel?.loadAuthenticationTokenFromAuth(authDataResult: authDataResult)
+        
+        // save authentication token to local storage
+        try await userModel?.saveAuthenticationTokenToStorage(authToken: authDataResult.uid)
+        
+        // load user
         try await userModel?.loadUser()
     }
 }

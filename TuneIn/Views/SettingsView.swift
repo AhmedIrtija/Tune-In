@@ -182,6 +182,7 @@ struct SettingsView: View {
                     Task {
                         do {
                             try viewModel.signOut()
+                            try await userModel.deleteAuthenticationTokenToStorage()
                             rootViewType = .launchView
                         } catch {
                             print(error)
