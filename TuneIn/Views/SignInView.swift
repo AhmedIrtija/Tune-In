@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+extension Color {
+    static let customGreen = Color(red: 27/255, green: 185/255, blue: 84/255)
+}
+
 @MainActor
 final class SignInViewModel: ObservableObject {
     @Published var email = ""
@@ -49,14 +53,6 @@ final class SignInViewModel: ObservableObject {
         try await userModel?.loadAuthenticationToken(authDataResult: authDataResult)
         try await userModel?.loadUser()
     }
-    
-    func resetPassword() async throws {
-        let authUser = try AuthenticationManager.shared.getAuthenticatedUser()
-        guard let email = authUser.email else {
-            throw URLError(.fileDoesNotExist)
-        }
-        try await AuthenticationManager.shared.resetPassword(email: email)
-    }
 }
 
 struct SignInView: View {
@@ -84,7 +80,7 @@ struct SignInView: View {
                     .font(Font.custom("Damion", size: 50))
                     .padding([.top], -10)
                     .padding([.bottom], 10)
-                    .foregroundColor(.green)
+                    .foregroundColor(.customGreen)
                 Form {
                     // Email
                     Section(header: Text("Email")) {
@@ -94,6 +90,7 @@ struct SignInView: View {
                             .onChange(of: viewModel.email) {
                                 errorMessage = ""
                             }
+                            .textInputAutocapitalization(.never)
                             .keyboardType(.emailAddress)
                     }
                     // Password
@@ -107,28 +104,6 @@ struct SignInView: View {
                     }
                 }
                 .preferredColorScheme(.dark)
-                
-                // Reset Password Button
-                HStack{
-                    Button(action: {
-                        Task {
-                            do {
-                                print("Attempting Password reset")
-                                try await viewModel.resetPassword()
-                                print("Password reset")
-                                rootViewType = .launchView
-                            }
-                        }
-                    }) {
-                        Text("Reset password")
-                            .frame(width: 170, height: 32.0)
-                            .padding([.top], -80)
-                            .font(.custom("Helvetica", size: 16))
-                            .underline()
-                            .foregroundColor(Color.gray)
-                    }
-                    Spacer()
-                }
                 
                 if !errorMessage.isEmpty {
                     Label(
