@@ -33,21 +33,24 @@ struct ProfileView: View {
                 }
                 .padding([.bottom], 50)
                 //Profile Photo
-                if let imageUrl = userModel.currentUser?.imageUrl {
-                    AsyncImage(url: URL(string: imageUrl)) { image in
+                if let _ = userModel.currentUser?.imageUrl {
+                    AsyncImage(url: URL(string: userModel.currentUser?.imageUrl ?? "")) { image in
                         image
                             .resizable()
+                            .aspectRatio(contentMode: .fill)
                             .frame(width: 135.0, height: 135.0)
                             .clipShape(.circle)
                     } placeholder: {
                         Image("DefaultImage")
                             .resizable()
                             .frame(width: 135.0, height: 135.0)
+                            .clipShape(.circle)
                     }
                 } else {
                     Image("DefaultImage")
                         .resizable()
                         .frame(width: 135.0, height: 135.0)
+                        .clipShape(.circle)
                 }
                 //Display Name
                 if let displayName = userModel.currentUser?.name {
