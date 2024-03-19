@@ -102,41 +102,53 @@ class UserModel: ObservableObject {
         guard let authToken = self.authToken else { return }
         try await UserManager.shared.updateName(userId: authToken, newName: name)
         let newDbUser = try await UserManager.shared.getUser(userId: authToken)
-        self.currentUser = AppUser(dbUser: newDbUser)
+        DispatchQueue.main.async {
+            self.currentUser = AppUser(dbUser: newDbUser)
+        }
     }
     
     func setPronouns(pronouns: Pronouns) async throws {
         guard let authToken = self.authToken else { return }
         try await UserManager.shared.updatePronouns(userId: authToken, newPronouns: pronouns)
         let newDbUser = try await UserManager.shared.getUser(userId: authToken)
-        self.currentUser = AppUser(dbUser: newDbUser)
+        DispatchQueue.main.async {
+            self.currentUser = AppUser(dbUser: newDbUser)
+        }
     }
     
     func setBio(bio: String) async throws {
         guard let authToken = self.authToken else { return }
         try await UserManager.shared.updateBio(userId: authToken, newBio: bio)
         let newDbUser = try await UserManager.shared.getUser(userId: authToken)
-        self.currentUser = AppUser(dbUser: newDbUser)
+        DispatchQueue.main.async {
+            self.currentUser = AppUser(dbUser: newDbUser)
+        }
     }
     
     func setUserImageUrl(imageUrl: String) async throws {
         guard let authToken = self.authToken else { return }
         try await UserManager.shared.updateImage(userId: authToken, newImageUrl: imageUrl)
         let newDbUser = try await UserManager.shared.getUser(userId: authToken)
-        self.currentUser = AppUser(dbUser: newDbUser)
+        DispatchQueue.main.async {
+            self.currentUser = AppUser(dbUser: newDbUser)
+        }
     }
     
     func setCurrentTrack(track: Track) async throws {
         guard let authToken = self.authToken else { return }
         try await UserManager.shared.updateTrack(userId: authToken, newTrack: track)
         let newDbUser = try await UserManager.shared.getUser(userId: authToken)
-        self.currentUser = AppUser(dbUser: newDbUser)
+        DispatchQueue.main.async {
+            self.currentUser = AppUser(dbUser: newDbUser)
+        }
     }
     
     func setLocation(latitude: Double, longitude: Double) async throws {
         guard let authToken = self.authToken else { return }
         try await UserManager.shared.updateLocationAndGeohash(userId: authToken, newLatitude: latitude, newLongitude: longitude)
         let newDbUser = try await UserManager.shared.getUser(userId: authToken)
-        self.currentUser = AppUser(dbUser: newDbUser)
+        DispatchQueue.main.async {
+            self.currentUser = AppUser(dbUser: newDbUser)
+        }
     }
 }
