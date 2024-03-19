@@ -40,9 +40,20 @@ struct SettingsView: View {
                     .padding([.bottom], 10)
                     .foregroundColor(.white)
                 //Profile Photo
-                Image("DefaultImage")
-                    .resizable()
-                    .frame(width: 135.0, height: 135.0)
+                AsyncImage(url: URL(string: userModel.currentUser?.imageUrl ?? "")) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 135.0, height: 135.0)
+                        .clipShape(.circle)
+                        .padding(12.0)
+                } placeholder: {
+                    Image("DefaultImage")
+                        .resizable()
+                        .frame(width: 135.0, height: 135.0)
+                        .clipShape(.circle)
+                        .padding(12.0)
+                }
                 //Edit Image Button
                 Button(
                     action: {
@@ -143,6 +154,7 @@ struct SettingsView: View {
                             .stroke(Color.gray, lineWidth: 2)
                         )
                 }
+
                 
                 Form {
                     Section(header: Text("Update Password")) {

@@ -136,13 +136,14 @@ struct MapView: View {
                                         AsyncImage(url: URL(string: otherUser.imageUrl ?? "")) { image in
                                             image
                                                 .resizable()
-                                                .frame(width: 48.0, height: 48.0)
+                                                .aspectRatio(contentMode: .fit)                                                .frame(width: 48.0, height: 48.0)
                                                 .foregroundStyle(Color.textGray)
                                                 .background(Color.backgroundGray)
                                                 .clipShape(.circle)
                                         } placeholder: {
-                                            Image(systemName: "person.fill")
+                                            Image("DefaultImage")
                                                 .resizable()
+                                                .aspectRatio(contentMode: .fit)
                                                 .frame(width: 48.0, height: 48.0)
                                                 .foregroundStyle(Color.textGray)
                                                 .background(Color.backgroundGray)
@@ -160,12 +161,24 @@ struct MapView: View {
                         Button(action: {
                             showProfileView = true
                         }) {
-                            Image("DefaultImage")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundStyle(Color.blue)
-                                .frame(width: 40.0, height: 40.0)
-                                .padding(12.0)
+                            AsyncImage(url: URL(string: userModel.currentUser?.imageUrl ?? "")) { image in
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 40.0, height: 40.0)
+                                    .foregroundStyle(Color.textGray)
+                                    .background(Color.backgroundGray)
+                                    .clipShape(.circle)
+                                    .padding(12.0)
+                            } placeholder: {
+                                Image("DefaultImage")
+                                    .resizable()
+                                    .frame(width: 40.0, height: 40.0)
+                                    .foregroundStyle(Color.textGray)
+                                    .background(Color.backgroundGray)
+                                    .clipShape(.circle)
+                                    .padding(12.0)
+                            }
                         }
                         .navigationDestination(isPresented: $showProfileView) {
                             ProfileView(rootViewType: $rootViewType)
