@@ -10,6 +10,7 @@ import SwiftUI
 enum RootViewType {
     case launchView
     case signInView
+    case spotifyLoginView
     case mapView
     case loadingView
 }
@@ -24,9 +25,9 @@ struct RootView: View {
             case .launchView:
                 LaunchView(rootViewType: $rootViewType)
             case .signInView:
-                NavigationStack {
-                    SignInView(rootViewType: $rootViewType)
-                }
+                SignInView(rootViewType: $rootViewType)
+            case .spotifyLoginView:
+                SpotifyLoginView(rootViewType: $rootViewType)
             case .mapView:
                 NavigationStack {
                     MapView(rootViewType: $rootViewType)

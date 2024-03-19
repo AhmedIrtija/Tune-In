@@ -16,8 +16,8 @@ struct ProfileView: View {
             Color.black
                 .ignoresSafeArea()
             VStack() {
-                Text("Current User ID: \(userModel.currentUser?.userId ?? "No user")")
-                    .foregroundColor(.white)
+//                Text("Current User ID: \(userModel.currentUser?.userId ?? "No user")")
+//                    .foregroundColor(.white)
                 HStack {
                     Spacer()
                     //Settings Icon
@@ -33,9 +33,25 @@ struct ProfileView: View {
                 }
                 .padding([.bottom], 50)
                 //Profile Photo
-                Image("DefaultImage")
-                    .resizable()
-                    .frame(width: 135.0, height: 135.0)
+                if let _ = userModel.currentUser?.imageUrl {
+                    AsyncImage(url: URL(string: userModel.currentUser?.imageUrl ?? "")) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 135.0, height: 135.0)
+                            .clipShape(.circle)
+                    } placeholder: {
+                        Image("DefaultImage")
+                            .resizable()
+                            .frame(width: 135.0, height: 135.0)
+                            .clipShape(.circle)
+                    }
+                } else {
+                    Image("DefaultImage")
+                        .resizable()
+                        .frame(width: 135.0, height: 135.0)
+                        .clipShape(.circle)
+                }
                 //Display Name
                 if let displayName = userModel.currentUser?.name {
                     Text(displayName)

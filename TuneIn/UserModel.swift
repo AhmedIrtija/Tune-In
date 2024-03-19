@@ -28,6 +28,7 @@ struct AppUser: Codable {
         self.location = nil
     }
     
+    
     init(dbUser: DBUser) {
         self.userId = dbUser.userId
         self.name = dbUser.name
@@ -52,7 +53,30 @@ class UserModel: ObservableObject {
     @Published var authToken: String?
     @Published var currentUser: AppUser?
     
-    func loadAuthenticationToken(authDataResult: AuthDataResultModel) async throws {
+    func loadAuthenticationTokenFromStorage() async throws {
+        DispatchQueue.main.async {
+            self.authToken = UserDefaults.standard.string(forKey: "authToken")
+        }
+    }
+    
+    func saveAuthenticationTokenToStorage(authToken: String) async throws {
+        DispatchQueue.main.async {
+            self.authToken = UserDefaults.standard.string(forKey: "authToken")
+        }
+        UserDefaults.standard.setValue(authToken, forKey: "authToken")
+        UserDefaults.standard.synchronize()
+    }
+    
+    func deleteAuthenticationTokenFromStorage() async throws {
+        UserDefaults.standard.removeObject(forKey: "authToken")
+        UserDefaults.standard.synchronize()
+        DispatchQueue.main.async {
+            self.authToken = nil
+            self.currentUser = nil
+        }
+    }
+    
+    func loadAuthenticationTokenFromAuth(authDataResult: AuthDataResultModel) async throws {
         let userId = authDataResult.uid
         DispatchQueue.main.async {
             self.authToken = userId
@@ -77,30 +101,54 @@ class UserModel: ObservableObject {
     func setUserName(name: String) async throws {
         guard let authToken = self.authToken else { return }
         try await UserManager.shared.updateName(userId: authToken, newName: name)
+        let newDbUser = try await UserManager.shared.getUser(userId: authToken)
+        DispatchQueue.main.async {
+            self.currentUser = AppUser(dbUser: newDbUser)
+        }
     }
     
     func setPronouns(pronouns: Pronouns) async throws {
         guard let authToken = self.authToken else { return }
         try await UserManager.shared.updatePronouns(userId: authToken, newPronouns: pronouns)
+        let newDbUser = try await UserManager.shared.getUser(userId: authToken)
+        DispatchQueue.main.async {
+            self.currentUser = AppUser(dbUser: newDbUser)
+        }
     }
     
     func setBio(bio: String) async throws {
         guard let authToken = self.authToken else { return }
         try await UserManager.shared.updateBio(userId: authToken, newBio: bio)
+        let newDbUser = try await UserManager.shared.getUser(userId: authToken)
+        DispatchQueue.main.async {
+            self.currentUser = AppUser(dbUser: newDbUser)
+        }
     }
     
     func setUserImageUrl(imageUrl: String) async throws {
         guard let authToken = self.authToken else { return }
         try await UserManager.shared.updateImage(userId: authToken, newImageUrl: imageUrl)
+        let newDbUser = try await UserManager.shared.getUser(userId: authToken)
+        DispatchQueue.main.async {
+            self.currentUser = AppUser(dbUser: newDbUser)
+        }
     }
     
     func setCurrentTrack(track: Track) async throws {
         guard let authToken = self.authToken else { return }
         try await UserManager.shared.updateTrack(userId: authToken, newTrack: track)
+        let newDbUser = try await UserManager.shared.getUser(userId: authToken)
+        DispatchQueue.main.async {
+            self.currentUser = AppUser(dbUser: newDbUser)
+        }
     }
     
     func setLocation(latitude: Double, longitude: Double) async throws {
-      guard let authToken = self.authToken else { return }
-      try await UserManager.shared.updateLocationAndGeohash(userId: authToken, newLatitude: latitude, newLongitude: longitude)
+        guard let authToken = self.authToken else { return }
+        try await UserManager.shared.updateLocationAndGeohash(userId: authToken, newLatitude: latitude, newLongitude: longitude)
+        let newDbUser = try await UserManager.shared.getUser(userId: authToken)
+        DispatchQueue.main.async {
+            self.currentUser = AppUser(dbUser: newDbUser)
+        }
     }
 }

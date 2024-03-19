@@ -13,6 +13,7 @@ struct SpotifyLoginView: View {
     
     var body: some View {
         VStack(spacing: 16) {
+            Spacer()
             Image(uiImage: UIImage(imageLiteralResourceName: "AppIcon"))
                 .resizable()
                 .frame(width: 195, height: 195)
@@ -21,12 +22,15 @@ struct SpotifyLoginView: View {
                 .font(Font.custom("Damion", size: 50))
                 .foregroundColor(.white)
             button
+            Spacer()
         }
-        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.black)
         .onOpenURL { url in
             viewModel.open(url: url)
         }
-        .onChange(of: viewModel.state) { newState in
+        .onChange(of: viewModel.state) {
+            let newState = viewModel.state
             switch newState {
             case .success:
                 rootViewType = .loadingView

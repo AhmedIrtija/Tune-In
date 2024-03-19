@@ -20,9 +20,9 @@ final class SettingsViewModel: ObservableObject {
 
 struct SettingsView: View {
     @EnvironmentObject var userModel: UserModel
+    @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel = SettingsViewModel()
     @Binding var rootViewType: RootViewType
-    @State private var showProfileView: Bool = false
     @State private var newDisplayName: String = ""
     @State private var newPronouns = Pronouns.na
     @State private var newBio: String = ""
@@ -40,9 +40,20 @@ struct SettingsView: View {
                     .padding([.bottom], 10)
                     .foregroundColor(.white)
                 //Profile Photo
-                Image("DefaultImage")
-                    .resizable()
-                    .frame(width: 135.0, height: 135.0)
+                AsyncImage(url: URL(string: userModel.currentUser?.imageUrl ?? "")) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 135.0, height: 135.0)
+                        .clipShape(.circle)
+                        .padding(12.0)
+                } placeholder: {
+                    Image("DefaultImage")
+                        .resizable()
+                        .frame(width: 135.0, height: 135.0)
+                        .clipShape(.circle)
+                        .padding(12.0)
+                }
                 //Edit Image Button
                 Button(
                     action: {
@@ -117,14 +128,16 @@ struct SettingsView: View {
                         do {
                             if !newDisplayName.isEmpty {
                                 try await userModel.setUserName(name: newDisplayName)
+                                dismiss()
                             }
                             if newPronouns != .na {
                                 try await userModel.setPronouns(pronouns: newPronouns)
+                                dismiss()
                             }
                             if !newBio.isEmpty {
                                 try await userModel.setBio(bio: newBio)
+                                dismiss()
                             }
-                            showProfileView = true
                         } catch {
                             print("Error updating profile: \(error)")
                         }
@@ -141,9 +154,7 @@ struct SettingsView: View {
                             .stroke(Color.gray, lineWidth: 2)
                         )
                 }
-                .navigationDestination(isPresented: $showProfileView) {
-                    ProfileView(rootViewType: $rootViewType)
-                }
+
                 
                 Form {
                     Section(header: Text("Update Password")) {
@@ -181,6 +192,7 @@ struct SettingsView: View {
                 Button(action: {
                     Task {
                         do {
+                            try await userModel.deleteAuthenticationTokenFromStorage()
                             try viewModel.signOut()
                             rootViewType = .launchView
                         } catch {

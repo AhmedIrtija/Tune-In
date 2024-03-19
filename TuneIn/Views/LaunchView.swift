@@ -16,22 +16,22 @@ struct LaunchView: View {
             Color.black
                 .ignoresSafeArea()
             
-            VStack {
-                Text("Tune In")
-                    .font(Font.custom("Damion", size: 80))
-                    .foregroundColor(.green)
-            }
-            
+            Image("TuneIn_Splash")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
         }
         .onAppear {
-            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                withAnimation {
-                    rootViewType = authUser == nil ? .signInView : .mapView
+            Task {
+                // load authentication token from local storage
+                try await userModel.loadAuthenticationTokenFromStorage()
+                // load user
+                try await userModel.loadUser()
+//                let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    rootViewType = userModel.authToken == nil ? .signInView : .spotifyLoginView
                 }
             }
             
-//
         }
     }
 }
