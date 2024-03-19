@@ -8,6 +8,11 @@
 import SwiftUI
 import PhotosUI
 
+enum ImageSaveError: Error {
+    case dataLoadingFailed
+}
+
+
 @MainActor
 final class SettingsViewModel: ObservableObject {
     func signOut() throws {
@@ -18,11 +23,12 @@ final class SettingsViewModel: ObservableObject {
         try await AuthenticationManager.shared.updatePassword(password: password)
     }
     
-    func saveProfileImage(item: PhotosPickerItem) {
-        Task {
-            guard let data = try await item.loadTransferable(type: Data.self) else { return }
-            let (path, name) = try await StorageManager.shared.saveImage(data: data)
+    func saveProfileImage(item: PhotosPickerItem, userId: String) async throws -> URL {
+        guard let data = try await item.loadTransferable(type: Data.self) else {
+            throw ImageSaveError.dataLoadingFailed
         }
+        let (path, _) = try await StorageManager.shared.saveImage(data: data, userId: userId)
+        return try await StorageManager.shared.getImageUrl(userId: userId, path: path)
     }
 }
 
@@ -231,8 +237,13 @@ struct SettingsView: View {
             .padding([.horizontal], 24)
             .foregroundColor(Color.gray)
             .onChange(of: selectedItem) {
+                guard let userId = userModel.currentUser?.userId else { return }
                 if let selectedItem {
-                    viewModel.saveProfileImage(item: selectedItem)
+                    Task {
+                        let url = try await viewModel.saveProfileImage(item: selectedItem, userId: userId)
+                        try await UserManager.shared.updateImage(userId: userId, newImageUrl: url.absoluteString)
+                        try await userModel.setUserImageUrl(imageUrl: url.absoluteString)
+                    }
                 }
             }
         }

@@ -226,48 +226,6 @@ final class UserManager {
         }
     }
     
-//    func getPeopleAroundUser(center: CLLocationCoordinate2D, radius: Double) async throws -> [AppUser] {     // radius in meters
-//        // set query bounds
-//        let queryBounds = GFUtils.queryBounds(forLocation: center, withRadius: radius)
-//        let queries = queryBounds.map { bound -> Query in
-//            return userCollection
-//                    .order(by: "geohash")
-//                    .start(at: [bound.startValue])
-//                    .end(at: [bound.endValue])
-//        }
-//
-//        do {
-//            // get documents within specified radius
-//            let matchingDocs = try await withThrowingTaskGroup(of: [QueryDocumentSnapshot].self) { group -> [QueryDocumentSnapshot] in
-//                for query in queries {
-//                    group.addTask {
-//                        try await self.fetchMatchingDocs(from: query, center: center, radius: radius)
-//                    }
-//                }
-//                var matchingDocs = [QueryDocumentSnapshot]()
-//                for try await documents in group {
-//                      matchingDocs.append(contentsOf: documents)
-//                }
-//                return matchingDocs
-//            }
-//
-//            // get list of User objects within specified radius
-//            var usersInsideRadius = [AppUser]()
-//            for currentDoc in matchingDocs {
-//                if let userId = currentDoc.data()["user_id"] as? String {
-//                    let currentDBUser = try await getUser(userId: userId)
-//                    let currentUser = AppUser(dbUser: currentDBUser)
-//                    usersInsideRadius.append(currentUser)
-//                }
-//            }
-//
-//            return usersInsideRadius
-//        } catch {
-//            print("Unable to fetch snapshot data. \(error)")
-//            throw error
-//        }
-//    }
-    
     func listenToPeopleAroundUser(center: CLLocationCoordinate2D, radius: Double, completion: @escaping ([AppUser]) -> Void) {
         // set query bounds
         let queryBounds = GFUtils.queryBounds(forLocation: center, withRadius: radius)
@@ -315,8 +273,6 @@ final class UserManager {
                                 users.append(user)
                             }
                         }
-                        print("radius: \(radius)")
-                        print("user :\(users.map{$0.name})")
 
                         // Check if user already exists in self.usersAroundLocation
                         for user in users {
