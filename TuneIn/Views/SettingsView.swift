@@ -20,9 +20,9 @@ final class SettingsViewModel: ObservableObject {
 
 struct SettingsView: View {
     @EnvironmentObject var userModel: UserModel
+    @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel = SettingsViewModel()
     @Binding var rootViewType: RootViewType
-    @State private var showProfileView: Bool = false
     @State private var newDisplayName: String = ""
     @State private var newPronouns = Pronouns.na
     @State private var newBio: String = ""
@@ -117,14 +117,16 @@ struct SettingsView: View {
                         do {
                             if !newDisplayName.isEmpty {
                                 try await userModel.setUserName(name: newDisplayName)
+                                dismiss()
                             }
                             if newPronouns != .na {
                                 try await userModel.setPronouns(pronouns: newPronouns)
+                                dismiss()
                             }
                             if !newBio.isEmpty {
                                 try await userModel.setBio(bio: newBio)
+                                dismiss()
                             }
-                            showProfileView = true
                         } catch {
                             print("Error updating profile: \(error)")
                         }
@@ -140,9 +142,6 @@ struct SettingsView: View {
                             )
                             .stroke(Color.gray, lineWidth: 2)
                         )
-                }
-                .navigationDestination(isPresented: $showProfileView) {
-                    ProfileView(rootViewType: $rootViewType)
                 }
                 
                 Form {
