@@ -44,7 +44,8 @@ struct SpotifyLoginView: View {
 private extension SpotifyLoginView {
     var button: some View {
         Button {
-            viewModel.startAuthorizationCodeProcess()
+            rootViewType = .mapView
+//            viewModel.startAuthorizationCodeProcess()
         } label: {
             Text("CONNECT USING SPOTIFY")
                 .font(.system(.body, weight: .heavy))

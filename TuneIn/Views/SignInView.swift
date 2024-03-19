@@ -68,7 +68,6 @@ final class SignInViewModel: ObservableObject {
 struct SignInView: View {
     @EnvironmentObject var userModel: UserModel
     @Binding var rootViewType: RootViewType
-    @State private var showLoginView: Bool = false
     @State private var errorMessage: String = ""
     @StateObject private var viewModel = SignInViewModel()
     @FocusState private var isTextFieldFocused: Bool
@@ -137,7 +136,7 @@ struct SignInView: View {
                         // sign up if new account
                         do {
                             try await viewModel.signUp()
-                            showLoginView = true
+                            rootViewType = .spotifyLoginView
                             return
                         } catch {
                             print(error)
@@ -146,7 +145,7 @@ struct SignInView: View {
                         // sign in if account exists
                         do {
                             try await viewModel.signIn()
-                            showLoginView = true
+                            rootViewType = .spotifyLoginView
                             return
                         } catch {
                             print(error)
@@ -165,9 +164,7 @@ struct SignInView: View {
                     .stroke(Color.gray, lineWidth: 2)
                 )
                 .padding([.top], 70.0)
-                .navigationDestination(isPresented: $showLoginView) {
-                    SpotifyLoginView(rootViewType: $rootViewType)
-                }
+
                 Spacer(minLength: 50)
             }
             .padding()
