@@ -37,6 +37,8 @@
 		F69A3D8A2B8674F7008E6EC1 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69A3D892B8674F7008E6EC1 /* MapView.swift */; };
 		F69A3D8C2B869127008E6EC1 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69A3D8B2B869127008E6EC1 /* ProfileView.swift */; };
 		F69A3D8E2B8693AD008E6EC1 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69A3D8D2B8693AD008E6EC1 /* ListView.swift */; };
+		F6D3B0F32BA96BD100F9B6C7 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = F6D3B0F22BA96BD100F9B6C7 /* FirebaseStorage */; };
+		F6D3B0F52BA96BF100F9B6C7 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6D3B0F42BA96BF100F9B6C7 /* StorageManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -79,6 +81,7 @@
 		F69A3D892B8674F7008E6EC1 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		F69A3D8B2B869127008E6EC1 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		F69A3D8D2B8693AD008E6EC1 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
+		F6D3B0F42BA96BF100F9B6C7 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		FFFA4D0EDA3B70D3DAB20A0F /* Pods-TuneIn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TuneIn.debug.xcconfig"; path = "Target Support Files/Pods-TuneIn/Pods-TuneIn.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -95,6 +98,7 @@
 				F67903DD2B8BD4B8008EC6DC /* FirebaseAnalytics in Frameworks */,
 				F67903E12B8BD4B8008EC6DC /* FirebaseAnalyticsSwift in Frameworks */,
 				F67903F02B8BEFB4008EC6DC /* FirebaseFirestore in Frameworks */,
+				F6D3B0F32BA96BD100F9B6C7 /* FirebaseStorage in Frameworks */,
 				F67903F22B8BEFB4008EC6DC /* FirebaseFirestoreSwift in Frameworks */,
 				5812695745F4FDF739CF6AF5 /* Pods_TuneIn.framework in Frameworks */,
 			);
@@ -179,6 +183,7 @@
 				F679036B2B8BD1ED008EC6DC /* GoogleService-Info.plist */,
 				F69A3D7F2B86749E008E6EC1 /* Assets.xcassets */,
 				F69A3D812B86749E008E6EC1 /* Preview Content */,
+				F6D3B0F42BA96BF100F9B6C7 /* StorageManager.swift */,
 			);
 			path = TuneIn;
 			sourceTree = "<group>";
@@ -219,6 +224,7 @@
 				F67903F12B8BEFB4008EC6DC /* FirebaseFirestoreSwift */,
 				F62214A52B9C185000EFDABC /* FirebaseAuth */,
 				07065E5B2BA386BB00E395A9 /* PopupView */,
+				F6D3B0F22BA96BD100F9B6C7 /* FirebaseStorage */,
 			);
 			productName = TuneIn;
 			productReference = F69A3D782B86749D008E6EC1 /* TuneIn.app */;
@@ -338,6 +344,7 @@
 				F69A3D8A2B8674F7008E6EC1 /* MapView.swift in Sources */,
 				F69A3D7C2B86749D008E6EC1 /* TuneInApp.swift in Sources */,
 				B7D897E32B868488000CACB2 /* Constants.swift in Sources */,
+				F6D3B0F52BA96BF100F9B6C7 /* StorageManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,6 +633,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F67903DB2B8BD4B8008EC6DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		F6D3B0F22BA96BD100F9B6C7 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F67903DB2B8BD4B8008EC6DC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

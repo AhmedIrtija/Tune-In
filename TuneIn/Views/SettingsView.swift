@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 @MainActor
 final class SettingsViewModel: ObservableObject {
@@ -15,6 +16,13 @@ final class SettingsViewModel: ObservableObject {
     
     func updatePassword(password: String) async throws {
         try await AuthenticationManager.shared.updatePassword(password: password)
+    }
+    
+    func saveProfileImage(item: PhotosPickerItem) {
+        Task {
+            guard let data = try await item.loadTransferable(type: Data.self) else { return }
+            let (path, name) = try await StorageManager.shared.saveImage(data: data)
+        }
     }
 }
 
@@ -27,6 +35,7 @@ struct SettingsView: View {
     @State private var newPronouns = Pronouns.na
     @State private var newBio: String = ""
     @State private var newPassword: String = ""
+    @State private var selectedItem: PhotosPickerItem? = nil
     
     var body: some View {
         ZStack() {
@@ -34,9 +43,8 @@ struct SettingsView: View {
                 .ignoresSafeArea()
             VStack() {
                 //Title
-                Text("Settings")
+                Text("Profile Settings")
                     .font(Font.custom("Damion", size: 50))
-                    .padding([.top], 50)
                     .padding([.bottom], 10)
                     .foregroundColor(.white)
                 //Profile Photo
@@ -54,6 +62,12 @@ struct SettingsView: View {
                         .clipShape(.circle)
                         .padding(12.0)
                 }
+                
+                //PhotosPicker
+                PhotosPicker(selection: $selectedItem, matching: .images, photoLibrary: .shared()) {
+                    Text("Select a photo")
+                }
+                
                 //Edit Image Button
                 Button(
                     action: {
@@ -216,6 +230,11 @@ struct SettingsView: View {
             .font(.custom("Helvetica", size: 16))
             .padding([.horizontal], 24)
             .foregroundColor(Color.gray)
+            .onChange(of: selectedItem) {
+                if let selectedItem {
+                    viewModel.saveProfileImage(item: selectedItem)
+                }
+            }
         }
     }
 }
