@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import MapKit
+import CoreLocation
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private var locationManager = CLLocationManager()
