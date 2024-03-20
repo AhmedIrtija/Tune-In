@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-extension Color {
-    static let customGreen = Color(red: 27/255, green: 185/255, blue: 84/255)
-}
-
 @MainActor
 final class SignInViewModel: ObservableObject {
     @Published var email = ""

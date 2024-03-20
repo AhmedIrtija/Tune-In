@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-extension Color {
-    static let backgroundGray = Color(red: 33/255, green: 33/255, blue: 33/255)
-    static let textGray = Color(red: 179/255, green: 179/255, blue: 179/255)
-}
-
 struct ListView: View {
     var usersAroundLocation: [AppUser]
     @Environment(\.dismiss) var dismiss

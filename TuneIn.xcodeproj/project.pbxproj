@@ -18,6 +18,7 @@
 		F486ACC52B970A3B00D1182E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F486ACC42B970A3B00D1182E /* SettingsView.swift */; };
 		F61C9C742BAAC7D000A2B52E /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61C9C732BAAC7D000A2B52E /* MapViewModel.swift */; };
 		F61C9C762BAAC9CE00A2B52E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61C9C752BAAC9CE00A2B52E /* LocationManager.swift */; };
+		F61C9C782BAADD3A00A2B52E /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F61C9C772BAADD3A00A2B52E /* Colors.swift */; };
 		F62214A02B9C180D00EFDABC /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F622149B2B9C180C00EFDABC /* AuthenticationManager.swift */; };
 		F62214A22B9C180D00EFDABC /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F622149D2B9C180C00EFDABC /* SignInView.swift */; };
 		F62214A32B9C180D00EFDABC /* SpotifyLoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F622149E2B9C180C00EFDABC /* SpotifyLoginView.swift */; };
@@ -70,6 +71,7 @@
 		F486ACC42B970A3B00D1182E /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		F61C9C732BAAC7D000A2B52E /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 		F61C9C752BAAC9CE00A2B52E /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		F61C9C772BAADD3A00A2B52E /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		F622149B2B9C180C00EFDABC /* AuthenticationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		F622149D2B9C180C00EFDABC /* SignInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		F622149E2B9C180C00EFDABC /* SpotifyLoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyLoginView.swift; sourceTree = "<group>"; };
@@ -183,13 +185,14 @@
 				F622149B2B9C180C00EFDABC /* AuthenticationManager.swift */,
 				F61C9C752BAAC9CE00A2B52E /* LocationManager.swift */,
 				F67903F32B8BF4BA008EC6DC /* UserManager.swift */,
+				F6D3B0F42BA96BF100F9B6C7 /* StorageManager.swift */,
 				F67903F52B8BF6EB008EC6DC /* UserModel.swift */,
 				0772096B2BA012DB00E03F15 /* SpotifyController.swift */,
 				F679036B2B8BD1ED008EC6DC /* GoogleService-Info.plist */,
 				F69A3D7F2B86749E008E6EC1 /* Assets.xcassets */,
 				F69A3D812B86749E008E6EC1 /* Preview Content */,
-				F6D3B0F42BA96BF100F9B6C7 /* StorageManager.swift */,
 				F61C9C732BAAC7D000A2B52E /* MapViewModel.swift */,
+				F61C9C772BAADD3A00A2B52E /* Colors.swift */,
 			);
 			path = TuneIn;
 			sourceTree = "<group>";
@@ -347,6 +350,7 @@
 				0772096E2BA0175800E03F15 /* LoadingView.swift in Sources */,
 				F69A3D8E2B8693AD008E6EC1 /* ListView.swift in Sources */,
 				F62214A32B9C180D00EFDABC /* SpotifyLoginView.swift in Sources */,
+				F61C9C782BAADD3A00A2B52E /* Colors.swift in Sources */,
 				F62214A22B9C180D00EFDABC /* SignInView.swift in Sources */,
 				F69A3D8A2B8674F7008E6EC1 /* MapView.swift in Sources */,
 				F61C9C742BAAC7D000A2B52E /* MapViewModel.swift in Sources */,
