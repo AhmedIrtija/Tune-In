@@ -6,11 +6,18 @@
 //
 
 import SwiftUI
+import CoreLocation
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 struct ProfileView: View {
     @EnvironmentObject var userModel: UserModel
+    @StateObject private var viewModel = ProfileViewModel()
+    
     @Binding var rootViewType: RootViewType
     @State private var showSettingsView: Bool = false
+    @State private var userAddress: String = ""
+    
     var body: some View {
         ZStack() {
             Color.black
@@ -65,7 +72,8 @@ struct ProfileView: View {
                         .padding([.bottom], 5)
                 }
                 //Location
-                Text("Davis, CA, USA")
+                Text(userAddress)
+                    .multilineTextAlignment(.center)
                     .padding([.bottom], 20)
                 //Bio
                 if let bio = userModel.currentUser?.bio {
@@ -77,6 +85,20 @@ struct ProfileView: View {
             .font(.custom("Helvetica", size: 18))
             .padding([.horizontal], 20)
             .foregroundColor(Color.gray)
+        }
+        .onAppear {
+            guard let location = userModel.currentUser?.location else { return }
+            viewModel.setUserLocation(location: location)
+            viewModel.getLocationAddress { address in
+                userAddress = address ?? ""
+            }
+        }
+        .onChange(of: userModel.currentUser?.location) {
+            guard let location = userModel.currentUser?.location else { return }
+            viewModel.setUserLocation(location: location)
+            viewModel.getLocationAddress { address in
+                userAddress = address ?? ""
+            }
         }
     }
 }

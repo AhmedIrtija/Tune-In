@@ -8,30 +8,6 @@
 import SwiftUI
 import PhotosUI
 
-enum ImageSaveError: Error {
-    case dataLoadingFailed
-}
-
-
-@MainActor
-final class SettingsViewModel: ObservableObject {
-    func signOut() throws {
-        try AuthenticationManager.shared.signOut()
-    }
-    
-    func updatePassword(password: String) async throws {
-        try await AuthenticationManager.shared.updatePassword(password: password)
-    }
-    
-    func saveProfileImage(item: PhotosPickerItem, userId: String) async throws -> URL {
-        guard let data = try await item.loadTransferable(type: Data.self) else {
-            throw ImageSaveError.dataLoadingFailed
-        }
-        let (path, _) = try await StorageManager.shared.saveImage(data: data, userId: userId)
-        return try await StorageManager.shared.getImageUrl(userId: userId, path: path)
-    }
-}
-
 struct SettingsView: View {
     @EnvironmentObject var userModel: UserModel
     @Environment(\.dismiss) var dismiss
@@ -48,50 +24,40 @@ struct SettingsView: View {
             Color.black
                 .ignoresSafeArea()
             VStack() {
-                //Title
-                Text("Profile Settings")
+                // Title
+                Text("Settings")
                     .font(Font.custom("Damion", size: 50))
                     .padding([.bottom], 10)
                     .foregroundColor(.white)
-                //Profile Photo
-                AsyncImage(url: URL(string: userModel.currentUser?.imageUrl ?? "")) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 135.0, height: 135.0)
-                        .clipShape(.circle)
-                        .padding(12.0)
-                } placeholder: {
-                    Image("DefaultImage")
-                        .resizable()
-                        .frame(width: 135.0, height: 135.0)
-                        .clipShape(.circle)
-                        .padding(12.0)
-                }
                 
-                //PhotosPicker
+                // Profile Photo with Edit Button
                 PhotosPicker(selection: $selectedItem, matching: .images, photoLibrary: .shared()) {
-                    Text("Select a photo")
+                    ZStack {
+                        // Profile Photo
+                        AsyncImage(url: URL(string: userModel.currentUser?.imageUrl ?? "")) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 120.0, height: 120.0)
+                                .clipShape(.circle)
+                                .padding(12.0)
+                        } placeholder: {
+                            Image("DefaultImage")
+                                .resizable()
+                                .frame(width: 120.0, height: 120.0)
+                                .clipShape(.circle)
+                                .padding(12.0)
+                        }
+                        
+                        // Edit Icon Overlay
+                        Image(systemName: "pencil.circle.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(Color.gray)
+                            .background(Circle().fill(Color.black))
+                            .offset(x: 45, y: 45)
+                    }
                 }
                 
-                //Edit Image Button
-                Button(
-                    action: {
-                        
-                    }, label: {
-                        Text("Edit Image")
-                            .foregroundColor(Color.gray)
-                    }
-                )
-                .frame(width: 125, height: 32)
-                .background(
-                    RoundedRectangle(
-                        cornerRadius: 15,
-                        style: .circular
-                    )
-                    .stroke(Color.gray, lineWidth: 2)
-                )
-                .padding([.top],15)
                 Form {
                     // Display Name
                     Section(header: Text("Display Name")) {
@@ -137,10 +103,9 @@ struct SettingsView: View {
                             .foregroundColor(Color.white)
                     }
                     .textCase(nil)
-
                 }
-                .padding([.top],30)
                 .preferredColorScheme(.dark)
+                .scrollDisabled(true)
                 
                 // Save Changes Button
                 Button(action: {
@@ -174,39 +139,40 @@ struct SettingsView: View {
                             .stroke(Color.gray, lineWidth: 2)
                         )
                 }
-
+                .offset(y: -30)
                 
-                Form {
-                    Section(header: Text("Update Password")) {
-                        SecureField("New password", text: $newPassword)
-                            .cornerRadius(10.0)
-                    }
-                    .textCase(nil)
-                }
-                .padding([.top], 20)
                 
-                HStack{
-                    Spacer()
-                    Button(action: {
-                        Task {
-                            do {
-                                try await viewModel.updatePassword(password: newPassword)
-                                print("Password updated")
-                            }
-                        }
-                    }) {
-                        Text("Update password")
-                            .frame(width: 160, height: 32)
-                            .background(
-                                RoundedRectangle(
-                                    cornerRadius: 15,
-                                    style: .circular
-                                )
-                                .stroke(Color.gray, lineWidth: 2)
-                            )
-                    }
-                }
-                .padding([.bottom], 20)
+//                Form {
+//                    Section(header: Text("Update Password")) {
+//                        SecureField("New password", text: $newPassword)
+//                            .cornerRadius(10.0)
+//                    }
+//                    .textCase(nil)
+//                }
+//                .padding([.top], 20)
+//                
+//                HStack{
+//                    Spacer()
+//                    Button(action: {
+//                        Task {
+//                            do {
+//                                try await viewModel.updatePassword(password: newPassword)
+//                                print("Password updated")
+//                            }
+//                        }
+//                    }) {
+//                        Text("Update password")
+//                            .frame(width: 160, height: 32)
+//                            .background(
+//                                RoundedRectangle(
+//                                    cornerRadius: 15,
+//                                    style: .circular
+//                                )
+//                                .stroke(Color.gray, lineWidth: 2)
+//                            )
+//                    }
+//                }
+//                .padding([.bottom], 20)
                 
                 // Logout Button
                 Button(action: {

@@ -298,7 +298,6 @@ final class UserManager {
                 if hasSnapshotBeenUpdated {
                     taskDispatchGroup.notify(queue: .main) {
                         queryDispatchGroup.notify(queue: .main) {
-                            print("userNames :\(self.usersAroundLocation.map{$0.name})")
                             completion(self.usersAroundLocation)
                         }
                     }
