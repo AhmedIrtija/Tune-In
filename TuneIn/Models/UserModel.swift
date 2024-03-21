@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-struct AppUser: Codable {
+struct AppUser: Codable, Equatable {
     let userId: String
     let name: String
     let pronouns: Pronouns?
@@ -28,7 +28,6 @@ struct AppUser: Codable {
         self.location = nil
     }
     
-    
     init(dbUser: DBUser) {
         self.userId = dbUser.userId
         self.name = dbUser.name
@@ -37,6 +36,10 @@ struct AppUser: Codable {
         self.imageUrl = dbUser.imageUrl
         self.currentTrack = dbUser.currentTrack
         self.location = dbUser.location
+    }
+    
+    static func ==(lhs: AppUser, rhs: AppUser) -> Bool {
+        return lhs.userId == rhs.userId
     }
 }
 
