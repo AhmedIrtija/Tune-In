@@ -33,11 +33,15 @@ struct SpotifyLoginView: View {
             let newState = viewModel.state
             switch newState {
             case .success:
-                rootViewType = .loadingView
+                withAnimation {
+                    rootViewType = .loadingView
+                }
             default:
                 break
             }
         }
+        .preferredColorScheme(.dark)
+        .transition(.blurReplace)
     }
 }
 

@@ -59,7 +59,9 @@ struct LoadingView: View {
                             progress += stepSize
                         } else {
                             progress = geometry.size.width - 20
-                            rootViewType = .mapView
+                            withAnimation {
+                                rootViewType = .mapView
+                            }
                             timer.upstream.connect().cancel()
                         }
                     }
@@ -88,6 +90,8 @@ struct LoadingView: View {
                 }
             }
         }
+        .preferredColorScheme(.dark)
+        .transition(.blurReplace)
     }
 }
 

@@ -28,11 +28,14 @@ struct LaunchView: View {
                 try await userModel.loadUser()
 //                let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                    rootViewType = userModel.authToken == nil ? .signInView : .spotifyLoginView
+                    withAnimation {
+                        rootViewType = userModel.authToken == nil ? .signInView : .spotifyLoginView
+                    }
                 }
             }
-            
         }
+        .preferredColorScheme(.dark)
+        .transition(.blurReplace)
     }
 }
 

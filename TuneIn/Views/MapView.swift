@@ -22,10 +22,16 @@ struct MapView: View {
     
     @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
     @State private var mapStyle: Int = 0
+    
     @State private var showProfileView: Bool = false
+    @State private var showProfileViewSheet: Bool = false
+
     @State private var showPopUp: Bool = false
+    @State private var showTitleBar: Bool = true
     @State private var showListView: Bool = false
+    
     @State private var previousLocation: CLLocation?
+    @State private var selectedUser: AppUser?
 
     @State var track: Track? = nil
     @State var trackFilled = false
@@ -79,14 +85,21 @@ struct MapView: View {
                         
                         // display users on map
                         ForEach(viewModel.usersAroundLocation.indices, id:\.self) { index in
-                            let otherUser = viewModel.usersAroundLocation[index]
-                            if let otherUserLocation = otherUser.location {
-                                let otherUserCoordinates = CLLocationCoordinate2D(latitude: otherUserLocation.latitude, longitude: otherUserLocation.longitude)
-                                Annotation(otherUser.name , coordinate: otherUserCoordinates) {
-                                    UserMapAnnotationView(user: otherUser) {
-                                        showPopUp = true
-                                        popUpTrack = otherUser.currentTrack
-                                    }
+                            let user = viewModel.usersAroundLocation[index]
+                            if let userLocation = user.location {
+                                let userCoordinates = CLLocationCoordinate2D(latitude: userLocation.latitude, longitude: userLocation.longitude)
+                                Annotation(user.name, coordinate: userCoordinates) {
+                                    UserMapAnnotationView(
+                                        user: user,
+                                        onPlayButtonPressed: {
+                                            popUpTrack = user.currentTrack
+                                            withAnimation {
+                                                showPopUp = true
+                                            }
+                                        },
+                                        onProfileImageTapped: {
+                                            selectedUser = user
+                                        })
                                 }
                             }
                         }
@@ -94,10 +107,13 @@ struct MapView: View {
                     .mapStyle(selectedMapStyle)
                     .mapControlVisibility(.hidden)
                     .overlay(alignment: .topTrailing) {
-                        ProfileButtonView(showProfileView: $showProfileView, imageUrl: userModel.currentUser?.imageUrl ?? "")
-                            .navigationDestination(isPresented: $showProfileView) {
-                                ProfileView(rootViewType: $rootViewType)
-                            }
+                        if let currentUser = userModel.currentUser {
+                            TitleBarView(showProfileView: $showProfileView, showTitleBar: $showTitleBar, imageUrl: currentUser.imageUrl ?? "")
+                                .navigationDestination(isPresented: $showProfileView) {
+                                    ProfileView(rootViewType: $rootViewType, user: currentUser, isSheet: false)
+                                }
+                        }
+                        
                     }
                     .overlay(alignment: .bottomLeading) {
                         MapCustomControlsView(mapStyle: $mapStyle, selectedRadius: $viewModel.selectedRadius, colorScheme: colorScheme, distances: distances)
@@ -184,8 +200,28 @@ struct MapView: View {
                     }
                 }
             }
+            .onChange(of: selectedUser) {
+                showProfileViewSheet = true
+            }
+            .onChange(of: showPopUp) {
+                if showPopUp {
+                    withAnimation {
+                        showTitleBar = false
+                    }
+                } else {
+                    withAnimation {
+                        showTitleBar = true
+                    }
+                }
+            }
             .sheet(isPresented: $showListView) {
                 ListView(usersAroundLocation: viewModel.usersAroundLocation)
+            }
+            .sheet(isPresented: $showProfileViewSheet) {
+                if let user = selectedUser {
+                    ProfileView(rootViewType: $rootViewType, user: user, isSheet: true)
+                        .presentationDetents([.medium])
+                }
             }
             .popup(isPresented: $showPopUp) {
                 HStack(/*spacing: 0*/) {
@@ -206,25 +242,25 @@ struct MapView: View {
                         // add a gif of music playing or some icon
                         Image(systemName: "speaker.wave.3")
                             .frame(width: 6.0, height: 6.0)
+                            .foregroundStyle(Color.textGray)
                     } // end vstack 1
                     .padding()
                     VStack(alignment: .leading, spacing: 2) {
                         if let currentTrack = popUpTrack {
                             Text(currentTrack.name)
                                 .foregroundStyle(Color.textGray)
-                                .font(.system(size: 18))
+                                .font(.system(size: 16, weight: .medium))
                             
-                            Text("From \"\(currentTrack.album)\" by \"\(currentTrack.artist)\"")
+                            Text("From \(currentTrack.album) by \(currentTrack.artist)")
                                 .foregroundStyle(Color.textGray)
-                                .font(.system(size: 18))
+                                .font(.system(size: 14, weight: .light))
                         }
 
                     }
                 }
-                .padding(16)
-                .background(Color.backgroundGray.opacity(0.8).cornerRadius(12))
+                .padding()
+                .background(Color.black.cornerRadius(12))
                 .shadow(color: Color("9265F8").opacity(0.5), radius: 40, x: 0, y: 12)
-                .padding(.horizontal, 16)
             }
             customize: {
                 $0
@@ -238,9 +274,42 @@ struct MapView: View {
 }
 
 
+struct TitleBarView: View {
+    @Binding var showProfileView: Bool
+    @Binding var showTitleBar: Bool
+    let imageUrl: String
+    
+    var body: some View {
+        if showTitleBar {
+            ZStack {
+                // background
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.backgroundGray)
+                    .frame(height: 72)
+                
+                // title
+                Text("Tune In")
+                    .font(Font.custom("Damion", size: 36))
+                    .foregroundColor(.white)
+                
+                // profile button
+                HStack {
+                    Spacer()
+                    ProfileButtonView(showProfileView: $showProfileView, imageUrl: imageUrl)
+                        .padding(.trailing, 20)
+                }
+            }
+            .transition(.blurReplace)
+            .padding(.horizontal)
+        }
+    }
+}
+
+
 struct UserMapAnnotationView: View {
     var user: AppUser
     var onPlayButtonPressed: () -> Void
+    var onProfileImageTapped: () -> Void
 
     var body: some View {
         // popup button
@@ -253,30 +322,33 @@ struct UserMapAnnotationView: View {
         }
         
         // user image
-        ZStack {
-            Circle()
-                .fill(Color.backgroundGray)
-                .frame(width: 58, height: 58)
-            Circle()
-                .fill(Color.customGreen)
-                .frame(width: 52, height: 52)
-            Circle()
-                .fill(Color.backgroundGray)
-                .frame(width: 50, height: 50)
-            AsyncImage(url: URL(string: user.imageUrl ?? "")) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 48, height: 48)
-                    .clipShape(Circle())
-            } placeholder: {
-                Image("DefaultImage")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 48, height: 48)
-                    .clipShape(Circle())
+        Button(action: onProfileImageTapped) {
+            ZStack {
+                Circle()
+                    .fill(Color.backgroundGray)
+                    .frame(width: 58, height: 58)
+                Circle()
+                    .fill(Color.customGreen)
+                    .frame(width: 52, height: 52)
+                Circle()
+                    .fill(Color.backgroundGray)
+                    .frame(width: 50, height: 50)
+                AsyncImage(url: URL(string: user.imageUrl ?? "")) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 48, height: 48)
+                        .clipShape(Circle())
+                } placeholder: {
+                    Image("DefaultImage")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 48, height: 48)
+                        .clipShape(Circle())
+                }
             }
         }
+        .transition(.blurReplace)
     }
 }
 
@@ -292,7 +364,7 @@ struct ProfileButtonView: View {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 40.0, height: 40.0)
+                    .frame(width: 32.0, height: 32.0)
                     .foregroundStyle(Color.textGray)
                     .background(Color.backgroundGray)
                     .clipShape(Circle())
@@ -300,7 +372,7 @@ struct ProfileButtonView: View {
             } placeholder: {
                 Image("DefaultImage")
                     .resizable()
-                    .frame(width: 40.0, height: 40.0)
+                    .frame(width: 32.0, height: 32.0)
                     .foregroundStyle(Color.textGray)
                     .background(Color.backgroundGray)
                     .clipShape(Circle())
@@ -403,8 +475,8 @@ struct MapCustomControlsView: View {
 
 
 
-#Preview {
-    NavigationStack {
-        MapView(rootViewType: .constant(.mapView))
-    }
-}
+//#Preview {
+//    NavigationStack {
+//        MapView(rootViewType: .constant(.mapView))
+//    }
+//}
