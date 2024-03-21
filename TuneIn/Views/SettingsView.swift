@@ -18,12 +18,15 @@ struct SettingsView: View {
     @State private var newBio: String = ""
     @State private var newPassword: String = ""
     @State private var selectedItem: PhotosPickerItem? = nil
+    @FocusState private var isTextFieldFocused: Bool
     
     var body: some View {
         ZStack() {
             Color.black
                 .ignoresSafeArea()
             VStack() {
+                Spacer()
+                
                 // Title
                 Text("Settings")
                     .font(Font.custom("Damion", size: 50))
@@ -63,9 +66,7 @@ struct SettingsView: View {
                     Section(header: Text("Display Name")) {
                         TextField(userModel.currentUser?.name ?? "", text: $newDisplayName)
                             .foregroundColor(Color.gray)
-                            .onTapGesture {
-                                self.newDisplayName = ""
-                            }
+                            .focused($isTextFieldFocused)
                             .foregroundColor(Color.white)
                     }
                     .textCase(nil)
@@ -88,6 +89,7 @@ struct SettingsView: View {
                                 Label("", systemImage: "chevron.down")
                                     .foregroundColor(.primary)
                             }
+                            .focused($isTextFieldFocused)
                             .menuStyle(BorderlessButtonMenuStyle())
                         }
                     }
@@ -97,9 +99,7 @@ struct SettingsView: View {
                     Section(header: Text("Bio")) {
                         TextField(userModel.currentUser?.bio ?? "", text: $newBio)
                             .foregroundColor(Color.gray)
-                            .onTapGesture {
-                                self.newDisplayName = ""
-                            }
+                            .focused($isTextFieldFocused)
                             .foregroundColor(Color.white)
                     }
                     .textCase(nil)
@@ -198,6 +198,8 @@ struct SettingsView: View {
                 }
                 .foregroundColor(Color.black)
                 .padding([.top], 15)
+                
+                Spacer()
             }
             .font(.custom("Helvetica", size: 16))
             .padding([.horizontal], 24)
@@ -213,6 +215,14 @@ struct SettingsView: View {
                 }
             }
         }
+        .onAppear {
+            guard let userPronouns = userModel.currentUser?.pronouns else {
+                return
+            }
+            newPronouns = userPronouns
+        }
+        .onTapGesture { isTextFieldFocused = false }
+        .ignoresSafeArea(.keyboard)
     }
 }
 
