@@ -41,7 +41,7 @@ struct SpotifyLoginView: View {
             }
         }
         .preferredColorScheme(.dark)
-        .transition(.push(from: .bottom))
+        .transition(.blurReplace)
     }
 }
 
