@@ -27,6 +27,7 @@ struct MapView: View {
     @State private var showProfileViewSheet: Bool = false
 
     @State private var showPopUp: Bool = false
+    @State private var showTitleBar: Bool = true
     @State private var showListView: Bool = false
     
     @State private var previousLocation: CLLocation?
@@ -91,7 +92,9 @@ struct MapView: View {
                                     UserMapAnnotationView(
                                         user: user,
                                         onPlayButtonPressed: {
-                                            showPopUp = true
+                                            withAnimation {
+                                                showPopUp = true
+                                            }
                                             popUpTrack = user.currentTrack
                                         },
                                         onProfileImageTapped: {
@@ -105,7 +108,7 @@ struct MapView: View {
                     .mapControlVisibility(.hidden)
                     .overlay(alignment: .topTrailing) {
                         if let currentUser = userModel.currentUser {
-                            TitleBarView(showProfileView: $showProfileView, imageUrl: currentUser.imageUrl ?? "")
+                            TitleBarView(showProfileView: $showProfileView, showTitleBar: $showTitleBar, imageUrl: currentUser.imageUrl ?? "")
                                 .navigationDestination(isPresented: $showProfileView) {
                                     ProfileView(rootViewType: $rootViewType, user: currentUser, isSheet: false)
                                 }
@@ -200,6 +203,17 @@ struct MapView: View {
             .onChange(of: selectedUser) {
                 showProfileViewSheet = true
             }
+            .onChange(of: showPopUp) {
+                if showPopUp {
+                    withAnimation {
+                        showTitleBar = false
+                    }
+                } else {
+                    withAnimation {
+                        showTitleBar = true
+                    }
+                }
+            }
             .sheet(isPresented: $showListView) {
                 ListView(usersAroundLocation: viewModel.usersAroundLocation)
             }
@@ -243,8 +257,8 @@ struct MapView: View {
 
                     }
                 }
-                .padding(16)
-                .background(Color.backgroundGray.opacity(0.8).cornerRadius(12))
+                .padding()
+                .background(Color.backgroundGray.cornerRadius(12))
                 .shadow(color: Color("9265F8").opacity(0.5), radius: 40, x: 0, y: 12)
                 .padding(.horizontal, 16)
             }
@@ -262,28 +276,32 @@ struct MapView: View {
 
 struct TitleBarView: View {
     @Binding var showProfileView: Bool
+    @Binding var showTitleBar: Bool
     let imageUrl: String
     
     var body: some View {
-        ZStack {
-            // background
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.backgroundGray)
-                .frame(height: 72)
-            
-            // title
-            Text("Tune In")
-                .font(Font.custom("Damion", size: 36))
-                .foregroundColor(.white)
-            
-            // profile button
-            HStack {
-                Spacer()
-                ProfileButtonView(showProfileView: $showProfileView, imageUrl: imageUrl)
-                    .padding(.trailing, 20)
+        if showTitleBar {
+            ZStack {
+                // background
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Color.backgroundGray)
+                    .frame(height: 72)
+                
+                // title
+                Text("Tune In")
+                    .font(Font.custom("Damion", size: 36))
+                    .foregroundColor(.white)
+                
+                // profile button
+                HStack {
+                    Spacer()
+                    ProfileButtonView(showProfileView: $showProfileView, imageUrl: imageUrl)
+                        .padding(.trailing, 20)
+                }
             }
+            .transition(.blurReplace)
+            .padding(.horizontal)
         }
-        .padding(.horizontal)
     }
 }
 
