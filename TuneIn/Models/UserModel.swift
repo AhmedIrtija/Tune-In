@@ -40,6 +40,17 @@ struct AppUser: Codable {
     }
 }
 
+enum Pronouns: String, Codable {
+    case na = "--"
+    case heHim = "He/Him"
+    case sheHer = "She/Her"
+    case theyThem = "They/Them"
+    
+    static var allCases: [Pronouns] {
+        return [.na, .heHim, .sheHer, .theyThem]
+    }
+}
+
 struct Track: Codable, Identifiable, Hashable {
     let id: String
     let name: String

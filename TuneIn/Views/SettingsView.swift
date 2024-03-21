@@ -141,39 +141,6 @@ struct SettingsView: View {
                 }
                 .offset(y: -30)
                 
-                
-//                Form {
-//                    Section(header: Text("Update Password")) {
-//                        SecureField("New password", text: $newPassword)
-//                            .cornerRadius(10.0)
-//                    }
-//                    .textCase(nil)
-//                }
-//                .padding([.top], 20)
-//                
-//                HStack{
-//                    Spacer()
-//                    Button(action: {
-//                        Task {
-//                            do {
-//                                try await viewModel.updatePassword(password: newPassword)
-//                                print("Password updated")
-//                            }
-//                        }
-//                    }) {
-//                        Text("Update password")
-//                            .frame(width: 160, height: 32)
-//                            .background(
-//                                RoundedRectangle(
-//                                    cornerRadius: 15,
-//                                    style: .circular
-//                                )
-//                                .stroke(Color.gray, lineWidth: 2)
-//                            )
-//                    }
-//                }
-//                .padding([.bottom], 20)
-                
                 // Logout Button
                 Button(action: {
                     Task {

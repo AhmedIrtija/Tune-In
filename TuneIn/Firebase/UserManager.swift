@@ -11,17 +11,6 @@ import FirebaseFirestoreSwift
 import GeoFire
 import MapKit
 
-enum Pronouns: String, Codable {
-    case na = "--"
-    case heHim = "He/Him"
-    case sheHer = "She/Her"
-    case theyThem = "They/Them"
-    
-    static var allCases: [Pronouns] {
-        return [.na, .heHim, .sheHer, .theyThem]
-    }
-}
-
 struct DBUser: Codable {
     let userId: String
     var name: String

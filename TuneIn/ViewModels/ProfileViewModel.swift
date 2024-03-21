@@ -43,20 +43,14 @@ final class ProfileViewModel: ObservableObject {
             // City
             if let city = placeMark.locality {
                 addressString += city + ", "
-                print("city \(city)")
-                
             }
             // State
             if let administrativeArea = placeMark.administrativeArea {
                 addressString += administrativeArea + ", "
-                print("administrativeArea \(administrativeArea)")
-                
             }
             // Country
             if let country = placeMark.country {
                 addressString += country
-                print("country \(country)")
-
             }
 
             // Remove trailing ", " if present
