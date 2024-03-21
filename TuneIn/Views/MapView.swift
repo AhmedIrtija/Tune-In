@@ -92,10 +92,10 @@ struct MapView: View {
                                     UserMapAnnotationView(
                                         user: user,
                                         onPlayButtonPressed: {
+                                            popUpTrack = user.currentTrack
                                             withAnimation {
                                                 showPopUp = true
                                             }
-                                            popUpTrack = user.currentTrack
                                         },
                                         onProfileImageTapped: {
                                             selectedUser = user
@@ -242,25 +242,25 @@ struct MapView: View {
                         // add a gif of music playing or some icon
                         Image(systemName: "speaker.wave.3")
                             .frame(width: 6.0, height: 6.0)
+                            .foregroundStyle(Color.textGray)
                     } // end vstack 1
                     .padding()
                     VStack(alignment: .leading, spacing: 2) {
                         if let currentTrack = popUpTrack {
                             Text(currentTrack.name)
                                 .foregroundStyle(Color.textGray)
-                                .font(.system(size: 18))
+                                .font(.system(size: 16, weight: .medium))
                             
-                            Text("From \"\(currentTrack.album)\" by \"\(currentTrack.artist)\"")
+                            Text("From \(currentTrack.album) by \(currentTrack.artist)")
                                 .foregroundStyle(Color.textGray)
-                                .font(.system(size: 18))
+                                .font(.system(size: 14, weight: .light))
                         }
 
                     }
                 }
                 .padding()
-                .background(Color.backgroundGray.cornerRadius(12))
+                .background(Color.black.cornerRadius(12))
                 .shadow(color: Color("9265F8").opacity(0.5), radius: 40, x: 0, y: 12)
-                .padding(.horizontal, 16)
             }
             customize: {
                 $0
