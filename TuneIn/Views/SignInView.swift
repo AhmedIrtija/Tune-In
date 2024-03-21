@@ -87,7 +87,9 @@ struct SignInView: View {
                         // sign in if account exists
                         do {
                             try await viewModel.signIn()
-                            rootViewType = .spotifyLoginView
+                            withAnimation {
+                                rootViewType = .spotifyLoginView
+                            }
                             return
                         } catch {
                             print(error)
@@ -115,6 +117,8 @@ struct SignInView: View {
         }
         .onAppear{ self.viewModel.setUserModel(userModel: userModel) }
         .onTapGesture { isTextFieldFocused = false }
+        .preferredColorScheme(.dark)
+        .transition(.push(from: .bottom))
     }
 }
 

@@ -147,7 +147,9 @@ struct SettingsView: View {
                         do {
                             try await userModel.deleteAuthenticationTokenFromStorage()
                             try viewModel.signOut()
-                            rootViewType = .launchView
+                            withAnimation {
+                                rootViewType = .launchView
+                            }
                         } catch {
                             print(error)
                         }

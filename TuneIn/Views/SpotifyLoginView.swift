@@ -33,18 +33,22 @@ struct SpotifyLoginView: View {
             let newState = viewModel.state
             switch newState {
             case .success:
-                rootViewType = .loadingView
+                withAnimation {
+                    rootViewType = .loadingView
+                }
             default:
                 break
             }
         }
+        .preferredColorScheme(.dark)
+        .transition(.push(from: .bottom))
     }
 }
 
 private extension SpotifyLoginView {
     var button: some View {
         Button {
-            viewModel.startAuthorizationCodeProcess()
+            rootViewType = .mapView
         } label: {
             Text("CONNECT USING SPOTIFY")
                 .font(.system(.body, weight: .heavy))

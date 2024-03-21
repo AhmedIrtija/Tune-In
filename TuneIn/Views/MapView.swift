@@ -348,7 +348,7 @@ struct UserMapAnnotationView: View {
                 }
             }
         }
-
+        .transition(.blurReplace)
     }
 }
 
