@@ -20,6 +20,8 @@ struct MapView: View {
     @StateObject private var locationManager = LocationManager()
     @StateObject var spotifyController = SpotifyController()
     
+    @State private var isInteractionDisabled: Bool = false
+    
     @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
     @State private var mapStyle: Int = 0
     
@@ -91,10 +93,20 @@ struct MapView: View {
                                 Annotation(user.name, coordinate: userCoordinates) {
                                     UserMapAnnotationView(
                                         user: user,
+                                        isInteractionDisabled: isInteractionDisabled,
                                         onPlayButtonPressed: {
+                                            // disable interaction
+                                            isInteractionDisabled = true
+                                            
+                                            // show popup
                                             popUpTrack = user.currentTrack
                                             withAnimation {
                                                 showPopUp = true
+                                            }
+                                            
+                                            // enable interaction after popup animation is finished
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                                isInteractionDisabled = false // Re-enable interaction
                                             }
                                         },
                                         onProfileImageTapped: {
@@ -224,43 +236,7 @@ struct MapView: View {
                 }
             }
             .popup(isPresented: $showPopUp) {
-                HStack(/*spacing: 0*/) {
-                    //image here and then vstack with song name and artist
-                    VStack{
-                 //   ForEach(usersAroundLocation.indices, id:\.self) { index in
-                        if let currenttrack = popUpTrack {
-                            AsyncImage(url: URL(string: currenttrack.albumUrl)) { image in
-                                image.resizable()
-                            } placeholder: {
-                                Image(systemName: "music.note.list")
-                                    .aspectRatio(contentMode: .fit)
-                            }
-                            .frame(width: 60, height: 60)
-                            .padding(.trailing, 20)
-                        }
-
-                        // add a gif of music playing or some icon
-                        Image(systemName: "speaker.wave.3")
-                            .frame(width: 6.0, height: 6.0)
-                            .foregroundStyle(Color.textGray)
-                    } // end vstack 1
-                    .padding()
-                    VStack(alignment: .leading, spacing: 2) {
-                        if let currentTrack = popUpTrack {
-                            Text(currentTrack.name)
-                                .foregroundStyle(Color.textGray)
-                                .font(.system(size: 16, weight: .medium))
-                            
-                            Text("From \(currentTrack.album) by \(currentTrack.artist)")
-                                .foregroundStyle(Color.textGray)
-                                .font(.system(size: 14, weight: .light))
-                        }
-
-                    }
-                }
-                .padding()
-                .background(Color.black.cornerRadius(12))
-                .shadow(color: Color("9265F8").opacity(0.5), radius: 40, x: 0, y: 12)
+                SongPopUpView(showPopUp: $showPopUp, popUpTrack: popUpTrack)
             }
             customize: {
                 $0
@@ -273,6 +249,77 @@ struct MapView: View {
     }
 }
 
+
+struct SongPopUpView: View {
+    @Binding var showPopUp: Bool
+    var popUpTrack: Track?
+    
+    var body: some View {
+        VStack {
+            HStack {
+                // album image
+                if let currentTrack = popUpTrack {
+                    AsyncImage(url: URL(string: currentTrack.albumUrl)) { image in
+                        image.resizable()
+                    } placeholder: {
+                        Image(systemName: "music.note.list")
+                            .aspectRatio(contentMode: .fit)
+                    }
+                    .frame(width: 60, height: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                    .padding(.horizontal, 10)
+                } else {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(Color.backgroundGray)
+                            .frame(width: 60, height: 60)
+                        
+                        Image(systemName: "music.note.list")
+                            .foregroundStyle(Color.textGray)
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 60, height: 60)
+                    }
+                    .padding(.horizontal, 10)
+                }
+                
+                // track info
+                VStack(alignment: .leading) {
+                    if let currentTrack = popUpTrack {
+                        Text(currentTrack.name)
+                            .foregroundStyle(Color.textGray)
+                            .font(.system(size: 16, weight: .medium))
+                        Text("by \(currentTrack.artist)")
+                            .foregroundStyle(Color.textGray)
+                            .font(.system(size: 14, weight: .light))
+                        Text("on \(currentTrack.album)")
+                            .foregroundStyle(Color.textGray)
+                            .font(.system(size: 14, weight: .light))
+                    } else {
+                        Text("No song available")
+                            .foregroundStyle(Color.textGray)
+                            .font(.system(size: 16, weight: .medium))
+                    }
+                }
+                
+                Spacer()
+                
+                // sound playing icon
+                if let _ = popUpTrack {
+                    Image(systemName: "speaker.wave.3")
+                        .frame(width: 6.0, height: 6.0)
+                        .foregroundStyle(Color.textGray)
+                        .padding(.trailing, 20)
+                }
+                
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color.black.cornerRadius(10))
+            .shadow(color: Color.backgroundGray.opacity(0.5), radius: 40, x: 0, y: 12)
+        }
+        .padding(.horizontal)
+    }
+}
 
 struct TitleBarView: View {
     @Binding var showProfileView: Bool
@@ -308,6 +355,7 @@ struct TitleBarView: View {
 
 struct UserMapAnnotationView: View {
     var user: AppUser
+    var isInteractionDisabled: Bool
     var onPlayButtonPressed: () -> Void
     var onProfileImageTapped: () -> Void
 
@@ -320,6 +368,7 @@ struct UserMapAnnotationView: View {
                 .frame(width: 25, height: 25)
                 .clipShape(Circle())
         }
+        .allowsHitTesting(!isInteractionDisabled)
         
         // user image
         Button(action: onProfileImageTapped) {
