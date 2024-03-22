@@ -44,7 +44,7 @@ Use Xcode 15.2
 
 If dependencies are not running correctly, install 
 PopUpView : https://github.com/exyte/PopupView.git
-use this bundle ID to build : (insert ID)
+use this bundle ID to build : edu.ucdavis.ecs189e.TuneIn.sam
 
 
 # Technical Stack
