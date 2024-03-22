@@ -105,6 +105,29 @@ struct MapView: View {
                                         user: user,
                                         isInteractionDisabled: isInteractionDisabled,
                                         onPlayButtonPressed: {
+                                            // if there's already an AVPlayer instance playing, stop it and reset.
+                                            stopMusic()
+                                            
+                                            if showPopUp {
+                                                withAnimation {
+                                                    // update track on popup
+                                                    popUpTrack = user.currentTrack
+                                                }
+                                               
+                                                // play new audio snippet
+                                                if let currentTrack = popUpTrack {
+                                                    guard let previewURL = URL(string: currentTrack.preview_url ?? "") else {
+                                                        print("Invalid preview URL")
+                                                        return
+                                                    }
+                                                    
+                                                    player = AVPlayer(url: previewURL)
+                                                    player?.play()
+    //                                                print("preview url \(previewURL)")
+                                                }
+                                                return
+                                            }
+                                            
                                             // disable interaction
                                             isInteractionDisabled = true
                                             
@@ -117,12 +140,6 @@ struct MapView: View {
                                             // enable interaction after popup animation is finished
                                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                                 isInteractionDisabled = false // Re-enable interaction
-                                            }
-                                            
-                                            // if there's already an AVPlayer instance playing, stop it and reset.
-                                            if let player = player, player.timeControlStatus != .paused {
-                                                player.pause()
-                                                player.replaceCurrentItem(with: nil)
                                             }
                                             
                                             // play new audio snippet
@@ -277,7 +294,7 @@ struct MapView: View {
                     .type(.floater())
                     .position(.top)
                     .animation(.spring())
-                    .closeOnTapOutside(true)
+                    .closeOnTapOutside(false)
             }
         }
     }
