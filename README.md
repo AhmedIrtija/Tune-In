@@ -11,23 +11,35 @@
 
 TuneIn is a platform that allows users to view what music people around them are listening to in real-time using data sourced from Spotify. The purpose of the app is to help satisfy user curiosity, foster a sense of community, and encourage further music discovery. 
 
-# How To Run
+# How To Run Without Spotify Premium
 ---
+
 To use Tune In, you need a Spotify premium account to see live changes on your phone. This can only be done on hardware not simulator.
 
-However, you can see other people’s music through the simulator. For this, you must bypass the connection view. 
+However you can see other people's music through the simulator. You can also create an account and change your profile etc. through the simulator. The only missing functionality here is sharing your music to others on the map.
+To do this, you must bypass the Spotify Authentication process.
 
-Go to the RootView and change the case to show the .MapView first. The Spotify premium account to use on your phone has these credentials. Please do not use your own as it must be registered as a developer test user.
-Use Xcode 15.2
+1. Go to SpotifyLoginView and replace 
+viewModel.startAuthorizationCodeProcess()
+with 
+rootViewType = .mapView
+
+This allows the user to make an account and go through the firebase authentication process, without hacing to authenticate through spotify.
+
+2. Change the simulator's location by going to Features > Location > Custom Location
+Latitude: 38.54154423305109, 
+Longitude: -121.75219109590482
 
 Use this one:
-User  :
-Password :
+User: tunein189@gmail.com
+Password: Time2TuneIn!
+
+3. Go to the RootView and change the case to show the .MapView first. The Spotify premium account to use on your phone has these credentials. Please do not use your own as it must be registered as a developer test user.
+Use Xcode 15.2
 
 If dependencies are not running correctly, install 
 PopUpView : https://github.com/exyte/PopupView.git
 use this bundle ID to build : (insert ID)
-
 
 
 # Technical Stack
@@ -37,7 +49,7 @@ use this bundle ID to build : (insert ID)
 | |  |
 | --- | --- |
 | Programming Language | Swift |
-| Frameworks/APIs | SwiftUI, SpotifyWebAPI, GoogleMapsAPI, Firebase|
+| Frameworks/APIs | SwiftUI, SpotifyWebAPI, Firebase|
 | Prototyping | Figma |
 
 # Features
@@ -54,7 +66,7 @@ use this bundle ID to build : (insert ID)
 4. You're Tuned In! 
 
 ## MapView
-1. From the map view, there are several buttons to adjust the visual layout. On the bottom left, includes a map icon to change the current visual map and radius selector. On the bottom right, click the arrow to center your current view, '3D' to change the dimension of the map between 2D to 3D, and the compass. 
+1. From the map view, there are several buttons in white to adjust the visual layout. On the bottom left, includes a map icon to change the current map style and radius selector. On the bottom right, click the arrow to center your current view, '3D' to change the dimension of the map between 2D to 3D, and the compass. 
 2. Click on surrounding users profile icons to view their profile. A pop-up will display from the bottom of the screen with the desired info. 
 2. Click the play button next to a user's profile 'to play a snippet of the selected user's track. This will also trigger a pop-up at the top of the user's screen displaying the track info and allowing users to play and pause the current media.
 3. Click the dancing icon on the left header to view you're current vibe!
