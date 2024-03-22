@@ -94,7 +94,7 @@ struct MapView: View {
     func fetchAudioFeaturesAndCalculateAverage() async {
         var totalVibeScore = 0.0
         var count = 0
-
+        
         for user in viewModel.usersAroundLocation {
             do {
                 if let vibeScore = try await spotifyController.fetchAudioFeatures() {
@@ -105,9 +105,11 @@ struct MapView: View {
                 print("Error fetching audio features: \(error)")
             }
         }
-
+        
         if count > 0 {
             averageVibeScore = totalVibeScore / Double(count)
+        }
+    }
 
     func playMusic(with track: Track?) {
         // play new audio snippet
