@@ -27,38 +27,52 @@ struct ListView: View {
                     VStack {
                         ForEach(usersAroundLocation.filter { $0.currentTrack != nil }, id: \.userId) { user in
                             if let track = user.currentTrack {
-                                HStack {
-                                    AsyncImage(url: URL(string: track.albumUrl)) { image in
-                                        image.resizable()
-                                    } placeholder: {
-                                        Image(systemName: "music.note.list")
-                                            .aspectRatio(contentMode: .fit)
-                                    }
-                                    .frame(width: 80, height: 80)
-                                    .clipShape(Circle())
-                                    .padding(.trailing, 10)
-
-                                    VStack(alignment: .leading) {
-                                        Text(user.name )
-                                            .font(.system(size: 14, weight: .medium))
+                                VStack {
+                                    HStack {
+                                        Text(user.name)
+                                            .font(Font.custom("Damion", size: 24))
                                             .foregroundStyle(Color.white)
-                                            .padding(.bottom, 2)
-                                        Text("\(track.name) ⋅ \(track.artist)")
-                                            .font(.system(size: 12, weight: .light))
-                                            .foregroundStyle(Color.textGray)
-                                        Text("\(track.album)")
-                                            .font(.system(size: 12, weight: .light))
-                                            .foregroundStyle(Color.textGray)
-                                        
+    //                                            .background(RoundedRectangle(cornerRadius: 4).fill(Color.black))
+                                            .padding(.leading, 20)
+                                        Spacer()
                                     }
                                     
-                                    Spacer()
+                                    HStack {
+                                        AsyncImage(url: URL(string: track.albumUrl)) { image in
+                                            image.resizable()
+                                        } placeholder: {
+                                            Image(systemName: "music.note.list")
+                                                .aspectRatio(contentMode: .fit)
+                                        }
+                                        .frame(width: 72, height: 72)
+                                        .clipShape(Circle())
+                                        .padding(.trailing, 10)
+
+                                        VStack(alignment: .leading) {
+                                            Text("\(track.name)")
+                                                .font(.system(size: 14, weight: .medium))
+                                                .foregroundStyle(Color.textGray)
+                                                .padding(.bottom, 2)
+                                            Text("by \(track.artist)")
+                                                .font(.system(size: 12, weight: .light))
+                                                .foregroundStyle(Color.textGray)
+                                            Text("on \(track.album)")
+                                                .font(.system(size: 12, weight: .light))
+                                                .foregroundStyle(Color.textGray)
+                                            
+                                        }
+                                        
+                                        Spacer()
+                                        
+                                    }
+                                    .padding(20)
+                                    .frame(maxWidth: .infinity)
+                                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.backgroundGray))
+                                    .shadow(radius: 5)
+                                    .offset(y: -30)
                                 }
-                                .padding(20)
-                                .frame(maxWidth: .infinity)
-                                .background(RoundedRectangle(cornerRadius: 10).fill(Color.backgroundGray))
-                                .shadow(radius: 5)
-                                .padding(.vertical, 5)
+                                .padding(.bottom, -30)
+                                
                             }
                         }
                     }
