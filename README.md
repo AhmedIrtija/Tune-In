@@ -19,6 +19,14 @@ TuneIn is a platform that allows users to view what music people around them are
 - ios-auth` library: [Download here](https://github.com/spotify/ios-auth)
 - `PopupView` library: [Download here](https://github.com/exyte/PopupView)
 
+Your directory structure should now look like this:
+```
+/ProjectDirectory
+    /Tune-In
+    /ios-auth
+    /PopupView
+```
+
 # How To Run Without Spotify Premium
 ---
 
