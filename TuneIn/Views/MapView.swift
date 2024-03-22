@@ -20,6 +20,8 @@ struct MapView: View {
     @StateObject private var locationManager = LocationManager()
     @StateObject var spotifyController = SpotifyController()
     
+    @State private var isInteractionDisabled: Bool = false
+    
     @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
     @State private var mapStyle: Int = 0
     
@@ -91,10 +93,20 @@ struct MapView: View {
                                 Annotation(user.name, coordinate: userCoordinates) {
                                     UserMapAnnotationView(
                                         user: user,
+                                        isInteractionDisabled: isInteractionDisabled,
                                         onPlayButtonPressed: {
+                                            // disable interaction
+                                            isInteractionDisabled = true
+                                            
+                                            // show popup
                                             popUpTrack = user.currentTrack
                                             withAnimation {
                                                 showPopUp = true
+                                            }
+                                            
+                                            // enable interaction after popup animation is finished
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                                isInteractionDisabled = false // Re-enable interaction
                                             }
                                         },
                                         onProfileImageTapped: {
@@ -343,6 +355,7 @@ struct TitleBarView: View {
 
 struct UserMapAnnotationView: View {
     var user: AppUser
+    var isInteractionDisabled: Bool
     var onPlayButtonPressed: () -> Void
     var onProfileImageTapped: () -> Void
 
@@ -355,6 +368,7 @@ struct UserMapAnnotationView: View {
                 .frame(width: 25, height: 25)
                 .clipShape(Circle())
         }
+        .allowsHitTesting(!isInteractionDisabled)
         
         // user image
         Button(action: onProfileImageTapped) {
