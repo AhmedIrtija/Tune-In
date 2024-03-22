@@ -21,6 +21,7 @@ struct DBUser: Codable {
     var location: GeoPoint?
     var geohash: String?        // database only
     let date_created: Date?     // database only
+    var valence: String?
     
     init(user: AppUser) {
         self.userId = user.userId
@@ -31,6 +32,7 @@ struct DBUser: Codable {
         self.currentTrack = user.currentTrack
         self.location = user.location
         self.date_created = Date()
+        self.valence = user.valence
     }
     
     init(
@@ -42,7 +44,8 @@ struct DBUser: Codable {
         currentTrack: Track? = nil,
         location: GeoPoint? = nil,
         geohash: String? = nil,
-        date_created: Date? = nil
+        date_created: Date? = nil,
+        valence: String? = nil
     ) {
         self.userId = userId
         self.name = name
@@ -53,6 +56,7 @@ struct DBUser: Codable {
         self.location = location
         self.geohash = geohash
         self.date_created = date_created
+        self.valence = valence
     }
     
     mutating func updateName(newName: String) {
@@ -90,6 +94,7 @@ struct DBUser: Codable {
         case location = "location"
         case geohash = "geohash"
         case date_created = "date_created"
+        case valence = "valence"
     }
     
     init(from decoder: Decoder) throws {
@@ -103,6 +108,7 @@ struct DBUser: Codable {
         self.location = try container.decodeIfPresent(GeoPoint.self, forKey: .location)
         self.geohash = try container.decodeIfPresent(String.self, forKey: .geohash)
         self.date_created = try container.decodeIfPresent(Date.self, forKey: .date_created)
+        self.valence = try container.decodeIfPresent(String.self, forKey: .valence)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -116,6 +122,7 @@ struct DBUser: Codable {
         try container.encodeIfPresent(self.location, forKey: .location)
         try container.encodeIfPresent(self.geohash, forKey: .geohash)
         try container.encodeIfPresent(self.date_created, forKey: .date_created)
+        try container.encodeIfPresent(self.valence, forKey: .valence)
     }
 }
 
@@ -164,6 +171,13 @@ final class UserManager {
     func updateImage(userId: String, newImageUrl: String) async throws {
         let data: [String: Any] = [
             DBUser.CodingKeys.imageUrl.rawValue: newImageUrl
+        ]
+        try await userDocument(userId: userId).updateData(data)
+    }
+    
+    func updateValence(userId: String, valence: String) async throws {
+        let data: [String: Any] = [
+            DBUser.CodingKeys.valence.rawValue: valence
         ]
         try await userDocument(userId: userId).updateData(data)
     }

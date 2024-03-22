@@ -17,6 +17,7 @@ struct AppUser: Codable, Equatable {
     let imageUrl: String?
     let currentTrack: Track?
     let location: GeoPoint?
+    let valence: String?
     
     init(userId: String) {
         self.userId = userId
@@ -26,6 +27,7 @@ struct AppUser: Codable, Equatable {
         self.imageUrl = nil
         self.currentTrack = nil
         self.location = nil
+        self.valence = nil
     }
     
     init(dbUser: DBUser) {
@@ -36,6 +38,7 @@ struct AppUser: Codable, Equatable {
         self.imageUrl = dbUser.imageUrl
         self.currentTrack = dbUser.currentTrack
         self.location = dbUser.location
+        self.valence = dbUser.valence
     }
     
     static func ==(lhs: AppUser, rhs: AppUser) -> Bool {
@@ -151,6 +154,15 @@ class UserModel: ObservableObject {
     func setCurrentTrack(track: Track) async throws {
         guard let authToken = self.authToken else { return }
         try await UserManager.shared.updateTrack(userId: authToken, newTrack: track)
+        let newDbUser = try await UserManager.shared.getUser(userId: authToken)
+        DispatchQueue.main.async {
+            self.currentUser = AppUser(dbUser: newDbUser)
+        }
+    }
+    
+    func setValence(valence: String) async throws {
+        guard let authToken = self.authToken else { return }
+        try await UserManager.shared.updateValence(userId: authToken, valence: valence)
         let newDbUser = try await UserManager.shared.getUser(userId: authToken)
         DispatchQueue.main.async {
             self.currentUser = AppUser(dbUser: newDbUser)

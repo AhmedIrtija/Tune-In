@@ -15,6 +15,8 @@ struct LoadingView: View {
     @State var openView = false
     @State private var progress: CGFloat = 0.0
     @State var track: Track? = nil
+    @ObservedObject var spotifyController = SpotifyController()
+    @State private var averageVibeScore: Double = 0.0
 
     let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
 
@@ -81,6 +83,9 @@ struct LoadingView: View {
                                 if let fetchedTrack = try await viewModel.fetchCurrentPlayingTrack() {
                                     track = fetchedTrack
                                     try await userModel.setCurrentTrack(track: fetchedTrack)
+                                    let valence = try await viewModel.fetchAudioFeatures()
+                                    try await userModel.setValence(valence: String(valence ?? ""))
+                                    
                                 }
                             } catch {
                                 print("Failed to fetch current track: \(error)")
@@ -93,5 +98,6 @@ struct LoadingView: View {
         .preferredColorScheme(.dark)
         .transition(.blurReplace)
     }
+    
 }
 

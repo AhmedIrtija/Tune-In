@@ -135,13 +135,6 @@ extension SpotifyController: SessionManagerDelegate {
                 throw CustomError.failedToCreateURLRequest
         }
         
-//        let task = URLSession.shared.dataTask(with: urlRequest) { [weak self] data, response, error in
-//            guard let data = data, error == nil else {
-//                DispatchQueue.main.async {
-//                    self?.state = .failure("Network request failed")
-//                }
-//                return
-//            }
         let (data, _) = try await URLSession.shared.data(for: urlRequest)
             
         let decoder = JSONDecoder()
@@ -165,6 +158,53 @@ extension SpotifyController: SessionManagerDelegate {
                throw CustomError.noCurrentlyPlayingTrackFound
            }
        }
+    func fetchAudioFeatures() async throws -> String? {
+        guard let track = try await fetchCurrentPlayingTrack() else {
+            throw CustomError.noCurrentlyPlayingTrackFound
+        }
+
+        guard let url = URL(string: "https://api.spotify.com/v1/audio-features/\(track.id)") else {
+            throw CustomError.failedToCreateURLRequest
+        }
+        
+        accessToken = UserDefaults.standard.string(forKey: "accessToken")
+
+        var request = URLRequest(url: url)
+        request.addValue("Bearer " + (accessToken ?? ""), forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+            
+        let (data, _) = try await URLSession.shared.data(for: request)
+
+        let decoder = JSONDecoder()
+        let audioFeaturesResponse = try decoder.decode(AudioFeaturesResponse.self, from: data)
+        
+        var vibe = audioFeaturesResponse.danceability * audioFeaturesResponse.valence
+        
+        vibe = sqrt(vibe)
+        print("Vibe - \(vibe)")
+        
+        return String(vibe)
+    }
+}
+
+struct AudioFeaturesResponse: Codable {
+    let danceability: Double
+    let energy: Double
+    let key: Int
+    let loudness: Double
+    let mode: Int
+    let speechiness: Double
+    let acousticness: Double
+    let instrumentalness: Double
+    let liveness: Double
+    let valence: Double
+    let tempo: Double
+    let id: String
+    let uri: String
+    let track_href: String
+    let analysis_url: String
+    let duration_ms: Int
+    let time_signature: Int
 }
 
 enum CustomError: Error {
