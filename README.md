@@ -11,6 +11,11 @@
 
 TuneIn is a platform that allows users to view what music people around them are listening to in real-time using data sourced from Spotify. The purpose of the app is to help satisfy user curiosity, foster a sense of community, and encourage further music discovery. 
 
+# Installation
+1. Clone this repository and place it inside a directory.
+2. Download ios-auth and place it inside the same directory: https://github.com/spotify/ios-auth
+3. Download PopupView package and place it inside the same directory: https://github.com/exyte/PopupView
+
 # How To Run Without Spotify Premium
 ---
 
