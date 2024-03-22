@@ -44,6 +44,8 @@ struct MapView: View {
     
     @State private var player: AVPlayer?
     @State private var isPlaying = false
+    @State private var isPaused = false
+    
     
     let moveDistanceThreshold: CLLocationDistance = 10.0     // ten meters
     let distances: [Double] = [1.0, 2.0, 3.0, 4.0, 5.0]     // in miles
@@ -72,10 +74,32 @@ struct MapView: View {
         }
     }
     
+    func playMusic(with track: Track?) {
+        // play new audio snippet
+        if let currentTrack = track {
+            guard let previewURL = URL(string: currentTrack.preview_url ?? "") else {
+                print("Invalid preview URL")
+                return
+            }
+            
+            player = AVPlayer(url: previewURL)
+            player?.play()
+            isPlaying = true
+        }
+    }
+    
+    func pauseMusic() {
+        if let player = player, player.timeControlStatus != .playing {
+            player.pause()
+            isPlaying = false
+        }
+    }
+    
     func stopMusic() {
         if let player = player, player.timeControlStatus != .paused {
             player.pause()
             player.replaceCurrentItem(with: nil)
+            isPlaying = false
         }
     }
     
@@ -111,51 +135,34 @@ struct MapView: View {
                                             // if there's already an AVPlayer instance playing, stop it and reset.
                                             stopMusic()
                                             
+                                            // check if popup is already displayed
                                             if showPopUp {
+                                                // update track on popup
                                                 withAnimation {
-                                                    // update track on popup
                                                     popUpTrack = user.currentTrack
                                                 }
-                                               
-                                                // play new audio snippet
-                                                if let currentTrack = popUpTrack {
-                                                    guard let previewURL = URL(string: currentTrack.preview_url ?? "") else {
-                                                        print("Invalid preview URL")
-                                                        return
-                                                    }
-                                                    
-                                                    player = AVPlayer(url: previewURL)
-                                                    player?.play()
-    //                                                print("preview url \(previewURL)")
-                                                }
-                                                return
-                                            }
-                                            
-                                            // disable interaction
-                                            isInteractionDisabled = true
-                                            
-                                            // show popup
-                                            popUpTrack = user.currentTrack
-                                            withAnimation {
-                                                showPopUp = true
-                                            }
-                                            
-                                            // enable interaction after popup animation is finished
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                                isInteractionDisabled = false // Re-enable interaction
-                                            }
-                                            
-                                            // play new audio snippet
-                                            if let currentTrack = popUpTrack {
-                                                guard let previewURL = URL(string: currentTrack.preview_url ?? "") else {
-                                                    print("Invalid preview URL")
-                                                    return
+                                                // play new music
+                                                playMusic(with: popUpTrack)
+
+                                            } else {
+                                                // disable interaction
+                                                isInteractionDisabled = true
+                                                
+                                                // show popup
+                                                popUpTrack = user.currentTrack
+                                                withAnimation {
+                                                    showPopUp = true
                                                 }
                                                 
-                                                player = AVPlayer(url: previewURL)
-                                                player?.play()
-//                                                print("preview url \(previewURL)")
+                                                // enable interaction after popup animation is finished
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                                    isInteractionDisabled = false // Re-enable interaction
+                                                }
+                                                
+                                                // play new music
+                                                playMusic(with: popUpTrack)
                                             }
+
                                         },
                                         onProfileImageTapped: {
                                             selectedUser = user
@@ -290,7 +297,16 @@ struct MapView: View {
                 }
             }
             .popup(isPresented: $showPopUp) {
-                SongPopUpView(showPopUp: $showPopUp, popUpTrack: popUpTrack)
+                SongPopUpView(showPopUp: $showPopUp, popUpTrack: popUpTrack, isPlaying: isPlaying) {
+                    if isPlaying {
+                        player?.pause()
+                        isPaused = true
+                    } else {
+                        player?.play()
+                        isPaused = false
+                    }
+                    isPlaying.toggle()
+                }
             }
             customize: {
                 $0
@@ -301,8 +317,24 @@ struct MapView: View {
             }
         }
         .onReceive(pub) { _ in
-            showPopUp = false
+            if !isPaused {
+                showPopUp = false
+            }
         }
+    }
+}
+
+struct PlayPauseButtonView: View {
+    let isPlaying: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                .font(.system(size: 24))
+                .foregroundStyle(Color.textGray)
+        }
+        .padding(.trailing, 20)
     }
 }
 
@@ -310,6 +342,8 @@ struct MapView: View {
 struct SongPopUpView: View {
     @Binding var showPopUp: Bool
     var popUpTrack: Track?
+    var isPlaying: Bool
+    var togglePlayPause: () -> Void
     
     var body: some View {
         VStack {
@@ -344,13 +378,14 @@ struct SongPopUpView: View {
                     if let currentTrack = popUpTrack {
                         Text(currentTrack.name)
                             .foregroundStyle(Color.textGray)
-                            .font(.system(size: 16, weight: .medium))
+                            .font(.system(size: 14, weight: .medium))
+                            .padding(.bottom, 2)
                         Text("by \(currentTrack.artist)")
                             .foregroundStyle(Color.textGray)
-                            .font(.system(size: 14, weight: .light))
+                            .font(.system(size: 12, weight: .light))
                         Text("on \(currentTrack.album)")
                             .foregroundStyle(Color.textGray)
-                            .font(.system(size: 14, weight: .light))
+                            .font(.system(size: 12, weight: .light))
                     } else {
                         Text("No song available")
                             .foregroundStyle(Color.textGray)
@@ -360,14 +395,10 @@ struct SongPopUpView: View {
                 
                 Spacer()
                 
-                // sound playing icon
+                // play or pause button
                 if let _ = popUpTrack {
-                    Image(systemName: "speaker.wave.3")
-                        .frame(width: 6.0, height: 6.0)
-                        .foregroundStyle(Color.textGray)
-                        .padding(.trailing, 20)
+                    PlayPauseButtonView(isPlaying: isPlaying, action: togglePlayPause)
                 }
-                
             }
             .padding()
             .frame(maxWidth: .infinity)
