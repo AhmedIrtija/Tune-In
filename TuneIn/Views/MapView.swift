@@ -170,7 +170,7 @@ struct MapView: View {
                         .frame(alignment: .center)
                 }
                 .transition(.scale)
-                .zIndex(1)
+                .zIndex(2)
             }
 
 
@@ -194,6 +194,7 @@ struct MapView: View {
                                 let userCoordinates = CLLocationCoordinate2D(latitude: userLocation.latitude, longitude: userLocation.longitude)
                                 Annotation(user.name, coordinate: userCoordinates) {
                                     UserMapAnnotationView(
+                                        activeUser: $selectedUser,
                                         user: user,
                                         isInteractionDisabled: isInteractionDisabled,
                                         onPlayButtonPressed: {
@@ -507,14 +508,12 @@ struct TitleBarView: View {
                             await calculateMoodAction()
                         }
                     }) {
-                        Text("Vibe Check")
-                            .font(.custom("Avenir", size: 14))
-                            .foregroundColor(.white)
-                            .padding(.vertical, 8)
-                            .padding(.horizontal, 12)
-                            .background(Color.customGreen)
-                            .cornerRadius(15)
+                        Image("VibeIcon")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 40, height: 40)
                     }
+                    .padding(.leading, 20)
                     .shadow(radius: 3)
                 
                     
@@ -531,50 +530,64 @@ struct TitleBarView: View {
 
 
 struct UserMapAnnotationView: View {
+    @Binding var activeUser: AppUser?
     var user: AppUser
     var isInteractionDisabled: Bool
     var onPlayButtonPressed: () -> Void
     var onProfileImageTapped: () -> Void
 
     var body: some View {
-        // popup button
-        Button(action: onPlayButtonPressed) {
-            Image("playbutton")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 25, height: 25)
-                .clipShape(Circle())
-        }
-        .allowsHitTesting(!isInteractionDisabled)
-        
-        // user image
-        Button(action: onProfileImageTapped) {
-            ZStack {
-                Circle()
-                    .fill(Color.backgroundGray)
-                    .frame(width: 58, height: 58)
-                Circle()
-                    .fill(Color.customGreen)
-                    .frame(width: 52, height: 52)
-                Circle()
-                    .fill(Color.backgroundGray)
-                    .frame(width: 50, height: 50)
-                AsyncImage(url: URL(string: user.imageUrl ?? "")) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 48, height: 48)
-                        .clipShape(Circle())
-                } placeholder: {
-                    Image("DefaultImage")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 48, height: 48)
-                        .clipShape(Circle())
+        ZStack {
+            // user image
+            Button(action: onProfileImageTapped) {
+                ZStack {
+                    Circle()
+                        .fill(Color.backgroundGray)
+                        .frame(width: 58, height: 58)
+                    Circle()
+                        .fill(Color.customGreen)
+                        .frame(width: 52, height: 52)
+                    Circle()
+                        .fill(Color.backgroundGray)
+                        .frame(width: 50, height: 50)
+                    AsyncImage(url: URL(string: user.imageUrl ?? "")) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 48, height: 48)
+                            .clipShape(Circle())
+                    } placeholder: {
+                        Image("DefaultImage")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 48, height: 48)
+                            .clipShape(Circle())
+                    }
                 }
             }
+            .zIndex(0)  // below the play button
+            .transition(.blurReplace)
+            
+            // popup button above the profile image
+            Button(action: onPlayButtonPressed) {
+                ZStack {
+                    Circle()
+                        .fill(Color.backgroundGray)
+                        .frame(width: 32, height: 32)
+                    Image(systemName: "play.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 12, height: 12)
+                        .foregroundStyle(Color.customGreen)
+                }
+            }
+            .offset(x: 24, y: -24)
+            .zIndex(1)  // above the profile image
+            .allowsHitTesting(!isInteractionDisabled)
         }
-        .transition(.blurReplace)
+        
+        
+        
     }
 }
 
@@ -590,7 +603,7 @@ struct ProfileButtonView: View {
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 32.0, height: 32.0)
+                    .frame(width: 40.0, height: 40.0)
                     .foregroundStyle(Color.textGray)
                     .background(Color.backgroundGray)
                     .clipShape(Circle())
