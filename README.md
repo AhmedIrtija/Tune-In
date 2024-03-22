@@ -12,9 +12,12 @@
 TuneIn is a platform that allows users to view what music people around them are listening to in real-time using data sourced from Spotify. The purpose of the app is to help satisfy user curiosity, foster a sense of community, and encourage further music discovery. 
 
 # Installation
-1. Clone this repository and place it inside a directory.
-2. Download ios-auth and place it inside the same directory: https://github.com/spotify/ios-auth
-3. Download PopupView package and place it inside the same directory: https://github.com/exyte/PopupView
+---
+1. Create a new directory on your system where you want to store the project and its dependencies.
+2. Download the following and place them in the created directory:
+- This project
+- ios-auth` library: [Download here](https://github.com/spotify/ios-auth)
+- `PopupView` library: [Download here](https://github.com/exyte/PopupView)
 
 # How To Run Without Spotify Premium
 ---
