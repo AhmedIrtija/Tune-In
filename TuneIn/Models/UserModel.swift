@@ -60,7 +60,7 @@ struct Track: Codable, Identifiable, Hashable {
     let artist: String
     let album: String
     let albumUrl: String
-  //  let preview_url: String
+    let preview_url: String?
 }
 
 class UserModel: ObservableObject {

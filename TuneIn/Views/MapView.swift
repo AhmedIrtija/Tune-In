@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 import PopupView
 import AVKit
+import Combine
 
 struct MapView: View {
     @EnvironmentObject var userModel: UserModel
@@ -19,6 +20,8 @@ struct MapView: View {
     @StateObject private var viewModel = MapViewModel()
     @StateObject private var locationManager = LocationManager()
     @StateObject var spotifyController = SpotifyController()
+    
+    let pub = NotificationCenter.default.publisher(for: .AVPlayerItemDidPlayToEndTime)
     
     @State private var isInteractionDisabled: Bool = false
     
@@ -38,6 +41,11 @@ struct MapView: View {
     @State var track: Track? = nil
     @State var trackFilled = false
     @State var popUpTrack : Track?
+    
+    @State private var player: AVPlayer?
+    @State private var isPlaying = false
+    @State private var isPaused = false
+    
     
     let moveDistanceThreshold: CLLocationDistance = 10.0     // ten meters
     let distances: [Double] = [1.0, 2.0, 3.0, 4.0, 5.0]     // in miles
@@ -63,6 +71,35 @@ struct MapView: View {
             } catch {
                 print("Failed to fetch current track: \(error)")
             }
+        }
+    }
+    
+    func playMusic(with track: Track?) {
+        // play new audio snippet
+        if let currentTrack = track {
+            guard let previewURL = URL(string: currentTrack.preview_url ?? "") else {
+                print("Invalid preview URL")
+                return
+            }
+            
+            player = AVPlayer(url: previewURL)
+            player?.play()
+            isPlaying = true
+        }
+    }
+    
+    func pauseMusic() {
+        if let player = player, player.timeControlStatus != .playing {
+            player.pause()
+            isPlaying = false
+        }
+    }
+    
+    func stopMusic() {
+        if let player = player, player.timeControlStatus != .paused {
+            player.pause()
+            player.replaceCurrentItem(with: nil)
+            isPlaying = false
         }
     }
     
@@ -95,19 +132,37 @@ struct MapView: View {
                                         user: user,
                                         isInteractionDisabled: isInteractionDisabled,
                                         onPlayButtonPressed: {
-                                            // disable interaction
-                                            isInteractionDisabled = true
+                                            // if there's already an AVPlayer instance playing, stop it and reset.
+                                            stopMusic()
                                             
-                                            // show popup
-                                            popUpTrack = user.currentTrack
-                                            withAnimation {
-                                                showPopUp = true
+                                            // check if popup is already displayed
+                                            if showPopUp {
+                                                // update track on popup
+                                                withAnimation {
+                                                    popUpTrack = user.currentTrack
+                                                }
+                                                // play new music
+                                                playMusic(with: popUpTrack)
+
+                                            } else {
+                                                // disable interaction
+                                                isInteractionDisabled = true
+                                                
+                                                // show popup
+                                                popUpTrack = user.currentTrack
+                                                withAnimation {
+                                                    showPopUp = true
+                                                }
+                                                
+                                                // enable interaction after popup animation is finished
+                                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                                    isInteractionDisabled = false // Re-enable interaction
+                                                }
+                                                
+                                                // play new music
+                                                playMusic(with: popUpTrack)
                                             }
-                                            
-                                            // enable interaction after popup animation is finished
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                                isInteractionDisabled = false // Re-enable interaction
-                                            }
+
                                         },
                                         onProfileImageTapped: {
                                             selectedUser = user
@@ -213,39 +268,73 @@ struct MapView: View {
                 }
             }
             .onChange(of: selectedUser) {
-                showProfileViewSheet = true
+                if let _ = selectedUser {
+                    showProfileViewSheet = true
+                }
             }
             .onChange(of: showPopUp) {
                 if showPopUp {
                     withAnimation {
                         showTitleBar = false
                     }
+                    
                 } else {
                     withAnimation {
                         showTitleBar = true
                     }
+                    stopMusic()
                 }
             }
             .sheet(isPresented: $showListView) {
                 ListView(usersAroundLocation: viewModel.usersAroundLocation)
             }
-            .sheet(isPresented: $showProfileViewSheet) {
+            .sheet(isPresented: $showProfileViewSheet, onDismiss: {
+                selectedUser = nil
+            }) {
                 if let user = selectedUser {
                     ProfileView(rootViewType: $rootViewType, user: user, isSheet: true)
                         .presentationDetents([.medium])
                 }
             }
             .popup(isPresented: $showPopUp) {
-                SongPopUpView(showPopUp: $showPopUp, popUpTrack: popUpTrack)
+                SongPopUpView(showPopUp: $showPopUp, popUpTrack: popUpTrack, isPlaying: isPlaying) {
+                    if isPlaying {
+                        player?.pause()
+                        isPaused = true
+                    } else {
+                        player?.play()
+                        isPaused = false
+                    }
+                    isPlaying.toggle()
+                }
             }
             customize: {
                 $0
                     .type(.floater())
                     .position(.top)
                     .animation(.spring())
-                    .closeOnTapOutside(true)
+                    .closeOnTapOutside(false)
             }
         }
+        .onReceive(pub) { _ in
+            if !isPaused {
+                showPopUp = false
+            }
+        }
+    }
+}
+
+struct PlayPauseButtonView: View {
+    let isPlaying: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                .font(.system(size: 24))
+                .foregroundStyle(Color.textGray)
+        }
+        .padding(.trailing, 20)
     }
 }
 
@@ -253,6 +342,8 @@ struct MapView: View {
 struct SongPopUpView: View {
     @Binding var showPopUp: Bool
     var popUpTrack: Track?
+    var isPlaying: Bool
+    var togglePlayPause: () -> Void
     
     var body: some View {
         VStack {
@@ -287,13 +378,14 @@ struct SongPopUpView: View {
                     if let currentTrack = popUpTrack {
                         Text(currentTrack.name)
                             .foregroundStyle(Color.textGray)
-                            .font(.system(size: 16, weight: .medium))
+                            .font(.system(size: 14, weight: .medium))
+                            .padding(.bottom, 2)
                         Text("by \(currentTrack.artist)")
                             .foregroundStyle(Color.textGray)
-                            .font(.system(size: 14, weight: .light))
+                            .font(.system(size: 12, weight: .light))
                         Text("on \(currentTrack.album)")
                             .foregroundStyle(Color.textGray)
-                            .font(.system(size: 14, weight: .light))
+                            .font(.system(size: 12, weight: .light))
                     } else {
                         Text("No song available")
                             .foregroundStyle(Color.textGray)
@@ -303,14 +395,10 @@ struct SongPopUpView: View {
                 
                 Spacer()
                 
-                // sound playing icon
+                // play or pause button
                 if let _ = popUpTrack {
-                    Image(systemName: "speaker.wave.3")
-                        .frame(width: 6.0, height: 6.0)
-                        .foregroundStyle(Color.textGray)
-                        .padding(.trailing, 20)
+                    PlayPauseButtonView(isPlaying: isPlaying, action: togglePlayPause)
                 }
-                
             }
             .padding()
             .frame(maxWidth: .infinity)

@@ -40,13 +40,17 @@ struct ListView: View {
 
                                     VStack(alignment: .leading) {
                                         Text(user.name )
-                                            .font(.system(size: 14, weight: .medium))
+                                            .font(.system(size: 16, weight: .heavy))
                                             .foregroundStyle(Color.white)
                                             .padding(.bottom, 2)
-                                        Text("\(track.name) ⋅ \(track.artist)")
+                                        Text("\(track.name)")
+                                            .font(.system(size: 14, weight: .medium))
+                                            .foregroundStyle(Color.textGray)
+                                            .padding(.bottom, 1)
+                                        Text("by \(track.artist)")
                                             .font(.system(size: 12, weight: .light))
                                             .foregroundStyle(Color.textGray)
-                                        Text("\(track.album)")
+                                        Text("on \(track.album)")
                                             .font(.system(size: 12, weight: .light))
                                             .foregroundStyle(Color.textGray)
                                         
