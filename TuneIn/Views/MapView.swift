@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 import PopupView
 import AVKit
+import Combine
 
 struct MapView: View {
     @EnvironmentObject var userModel: UserModel
@@ -19,6 +20,8 @@ struct MapView: View {
     @StateObject private var viewModel = MapViewModel()
     @StateObject private var locationManager = LocationManager()
     @StateObject var spotifyController = SpotifyController()
+    
+    let pub = NotificationCenter.default.publisher(for: .AVPlayerItemDidPlayToEndTime)
     
     @State private var isInteractionDisabled: Bool = false
     
@@ -296,6 +299,9 @@ struct MapView: View {
                     .animation(.spring())
                     .closeOnTapOutside(false)
             }
+        }
+        .onReceive(pub) { _ in
+            showPopUp = false
         }
     }
 }
