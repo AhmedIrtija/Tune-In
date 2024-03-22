@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ListView: View {
+    @ObservedObject var spotifyController = SpotifyController()
     var usersAroundLocation: [AppUser]
     @Environment(\.dismiss) var dismiss
 
@@ -86,6 +87,8 @@ struct ListView: View {
             }
         }
     }
+    
+    
 }
 
 //#Preview {

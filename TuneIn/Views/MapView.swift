@@ -9,7 +9,9 @@ import SwiftUI
 import MapKit
 import PopupView
 import AVKit
+import ConfettiSwiftUI
 import Combine
+
 
 struct MapView: View {
     @EnvironmentObject var userModel: UserModel
@@ -42,11 +44,16 @@ struct MapView: View {
     @State var trackFilled = false
     @State var popUpTrack : Track?
     
+    @State private var averageVibeScore: Double = 0.0
+    @State private var showMoodOverlay: Bool = false
+    @State private var moodDescription: String = ""
+    @State private var counter: Int = 0
+    @State private var mood: String = ""
+
     @State private var player: AVPlayer?
     @State private var isPlaying = false
     @State private var isPaused = false
-    
-    
+  
     let moveDistanceThreshold: CLLocationDistance = 10.0     // ten meters
     let distances: [Double] = [1.0, 2.0, 3.0, 4.0, 5.0]     // in miles
     
@@ -59,14 +66,24 @@ struct MapView: View {
         }
     }
     
+    private func calculateMood() async {
+        await fetchAudioFeaturesAndCalculateAverage()
+        mood = describeMood(for: averageVibeScore)
+        moodDescription = "Vibe around you is \(mood)"
+        showMoodOverlay = true
+        counter += 1  // This will trigger the confetti cannon
+    }
+    
     func getCurrentTrack() {
         Task {
             do {
                 if let fetchedTrack = try await spotifyController.fetchCurrentPlayingTrack() {
                     track = fetchedTrack
-                    print (track?.name ?? "No track name")
+//                    print (track?.name ?? "No track name")
                     trackFilled = (true && showPopUp)
                     try await userModel.setCurrentTrack(track: fetchedTrack)
+//                    let vibe = try await spotifyController.fetchAudioFeatures()
+//                    try await userModel.setValence(valence: vibe ?? "")
                 }
             } catch {
                 print("Failed to fetch current track: \(error)")
@@ -74,6 +91,24 @@ struct MapView: View {
         }
     }
     
+    func fetchAudioFeaturesAndCalculateAverage() async {
+        var totalVibeScore = 0.0
+        var count = 0
+
+        for user in viewModel.usersAroundLocation {
+            do {
+                if let vibeScore = try await spotifyController.fetchAudioFeatures() {
+                    totalVibeScore += Double(vibeScore) ?? 0.0
+                    count += 1
+                }
+            } catch {
+                print("Error fetching audio features: \(error)")
+            }
+        }
+
+        if count > 0 {
+            averageVibeScore = totalVibeScore / Double(count)
+
     func playMusic(with track: Track?) {
         // play new audio snippet
         if let currentTrack = track {
@@ -100,6 +135,7 @@ struct MapView: View {
             player.pause()
             player.replaceCurrentItem(with: nil)
             isPlaying = false
+
         }
     }
     
@@ -109,6 +145,33 @@ struct MapView: View {
         ZStack {
             Color.black
                 .ignoresSafeArea()
+            
+            if showMoodOverlay {
+                ZStack {
+                    Color.black.opacity(0.5)
+                        .edgesIgnoringSafeArea(.all)
+                        .onTapGesture {
+                            counter += 1
+                            withAnimation {
+                                showMoodOverlay = false
+                            }
+                        }
+
+                    Text(moodDescription)
+                        .font(.custom("Damion", size: 45))
+                        .foregroundColor(Color.green)
+                        .padding()
+                        .background(Color.black.opacity(0.8))
+                        .cornerRadius(20)
+                        .shadow(radius: 10)
+                        .padding()
+                        .frame(alignment: .center)
+                }
+                .transition(.scale)
+                .zIndex(1)
+            }
+
+
             
             VStack {
                 ZStack {
@@ -175,7 +238,7 @@ struct MapView: View {
                     .mapControlVisibility(.hidden)
                     .overlay(alignment: .topTrailing) {
                         if let currentUser = userModel.currentUser {
-                            TitleBarView(showProfileView: $showProfileView, showTitleBar: $showTitleBar, imageUrl: currentUser.imageUrl ?? "")
+                            TitleBarView(showProfileView: $showProfileView, showTitleBar: $showTitleBar, imageUrl: currentUser.imageUrl ?? "", calculateMoodAction: calculateMood)
                                 .navigationDestination(isPresented: $showProfileView) {
                                     ProfileView(rootViewType: $rootViewType, user: currentUser, isSheet: false)
                                 }
@@ -223,6 +286,9 @@ struct MapView: View {
                     let newRegion = viewModel.regionForUserLocation(userLocation: userLocation)
                     self.position = .region(newRegion)
                 }
+                Task {
+                    await fetchAudioFeaturesAndCalculateAverage()
+                }
             }
             .onReceive(locationManager.$userLocation) { userLocation in
                 // listen to users around location and get current track
@@ -230,6 +296,7 @@ struct MapView: View {
                     Task {
                         try await viewModel.listenToUsersAroundLocation(location: location)
                         getCurrentTrack()
+                        await fetchAudioFeaturesAndCalculateAverage()
                     }
                 }
                 
@@ -264,9 +331,11 @@ struct MapView: View {
                 if let location = locationManager.userLocation {
                     Task {
                         try await viewModel.listenToUsersAroundLocation(location: location)
+                        await fetchAudioFeaturesAndCalculateAverage()
                     }
                 }
             }
+            .confettiCannon(counter: $counter, num: 100, confettiSize: 20, openingAngle: Angle(degrees: 0), closingAngle: Angle(degrees: 360), radius: 200)
             .onChange(of: selectedUser) {
                 if let _ = selectedUser {
                     showProfileViewSheet = true
@@ -414,6 +483,8 @@ struct TitleBarView: View {
     @Binding var showTitleBar: Bool
     let imageUrl: String
     
+    let calculateMoodAction: () async -> Void
+
     var body: some View {
         if showTitleBar {
             ZStack {
@@ -429,6 +500,22 @@ struct TitleBarView: View {
                 
                 // profile button
                 HStack {
+                    Button(action: {
+                        Task {
+                            await calculateMoodAction()
+                        }
+                    }) {
+                        Text("Vibe Check")
+                            .font(.custom("Avenir", size: 14))
+                            .foregroundColor(.white)
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 12)
+                            .background(Color.customGreen)
+                            .cornerRadius(15)
+                    }
+                    .shadow(radius: 3)
+                
+                    
                     Spacer()
                     ProfileButtonView(showProfileView: $showProfileView, imageUrl: imageUrl)
                         .padding(.trailing, 20)
@@ -609,6 +696,35 @@ struct MapCustomControlsView: View {
         }
     }
 }
+
+struct MoodDescriptor {
+    let range: ClosedRange<Double>
+    let name: String
+}
+
+let moodDescriptors: [MoodDescriptor] = [
+    MoodDescriptor(range: 0.0...0.1, name: "Deeply Mellow"),
+    MoodDescriptor(range: 0.1...0.2, name: "Softly Serene"),
+    MoodDescriptor(range: 0.2...0.3, name: "Muted Melancholy"),
+    MoodDescriptor(range: 0.3...0.4, name: "Easy-Going Elegance"),
+    MoodDescriptor(range: 0.4...0.5, name: "Moderate Moodiness"),
+    MoodDescriptor(range: 0.5...0.6, name: "Balanced Harmony"),
+    MoodDescriptor(range: 0.6...0.7, name: "Groovy Glow"),
+    MoodDescriptor(range: 0.7...0.8, name: "Vibrant Vibes"),
+    MoodDescriptor(range: 0.8...0.9, name: "Euphoric Energy"),
+    MoodDescriptor(range: 0.9...1.0, name: "Peak Positivity")
+]
+
+
+func describeMood(for value: Double) -> String {
+    for descriptor in moodDescriptors {
+        if descriptor.range.contains(value) {
+            return descriptor.name
+        }
+    }
+    return "Undefined"
+}
+
 
 
 
