@@ -70,7 +70,9 @@ struct MapView: View {
         await fetchAudioFeaturesAndCalculateAverage()
         mood = describeMood(for: averageVibeScore)
         moodDescription = "Vibe around you is \(mood)"
-        showMoodOverlay = true
+        withAnimation {
+            showMoodOverlay = true
+        }
         counter += 1  // This will trigger the confetti cannon
     }
     
@@ -169,7 +171,7 @@ struct MapView: View {
                         .padding()
                         .frame(alignment: .center)
                 }
-                .transition(.scale)
+                .transition(.opacity)
                 .zIndex(2)
             }
 
