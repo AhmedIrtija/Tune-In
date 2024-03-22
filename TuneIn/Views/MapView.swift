@@ -241,7 +241,9 @@ struct MapView: View {
                 }
             }
             .onChange(of: selectedUser) {
-                showProfileViewSheet = true
+                if let _ = selectedUser {
+                    showProfileViewSheet = true
+                }
             }
             .onChange(of: showPopUp) {
                 if showPopUp {
@@ -259,7 +261,9 @@ struct MapView: View {
             .sheet(isPresented: $showListView) {
                 ListView(usersAroundLocation: viewModel.usersAroundLocation)
             }
-            .sheet(isPresented: $showProfileViewSheet) {
+            .sheet(isPresented: $showProfileViewSheet, onDismiss: {
+                selectedUser = nil
+            }) {
                 if let user = selectedUser {
                     ProfileView(rootViewType: $rootViewType, user: user, isSheet: true)
                         .presentationDetents([.medium])
