@@ -156,8 +156,8 @@ extension SpotifyController: SessionManagerDelegate {
                    name: trackItem.name,
                    artist: artistsNames,
                    album: trackItem.album.name,
-                   albumUrl: firstAlbumImageUrl //,
-                //   preview_url: trackItem.preview_url
+                   albumUrl: firstAlbumImageUrl,
+                   preview_url: trackItem.preview_url
                )
                
                return track
@@ -192,7 +192,7 @@ struct SpotifyTrackItem: Codable {
     let name: String
     let artists: [SpotifyArtist]
     let album: SpotifyAlbum
-    //let preview_url: String
+    let preview_url: String
 
 }
 

@@ -39,6 +39,9 @@ struct MapView: View {
     @State var trackFilled = false
     @State var popUpTrack : Track?
     
+    @State private var player: AVPlayer?
+    @State private var isPlaying = false
+    
     let moveDistanceThreshold: CLLocationDistance = 10.0     // ten meters
     let distances: [Double] = [1.0, 2.0, 3.0, 4.0, 5.0]     // in miles
     
@@ -107,6 +110,24 @@ struct MapView: View {
                                             // enable interaction after popup animation is finished
                                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                                 isInteractionDisabled = false // Re-enable interaction
+                                            }
+                                            
+                                            // if there's already an AVPlayer instance playing, stop it and reset.
+                                            if let player = player, player.timeControlStatus != .paused {
+                                                player.pause()
+                                                player.replaceCurrentItem(with: nil)
+                                            }
+                                            
+                                            // play new audio snippet
+                                            if let currentTrack = popUpTrack {
+                                                guard let previewURL = URL(string: currentTrack.preview_url) else {
+                                                    print("Invalid preview URL")
+                                                    return
+                                                }
+                                                
+                                                player = AVPlayer(url: previewURL)
+                                                player?.play()
+//                                                print("preview url \(previewURL)")
                                             }
                                         },
                                         onProfileImageTapped: {
