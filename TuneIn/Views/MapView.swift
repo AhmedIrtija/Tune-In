@@ -69,6 +69,13 @@ struct MapView: View {
         }
     }
     
+    func stopMusic() {
+        if let player = player, player.timeControlStatus != .paused {
+            player.pause()
+            player.replaceCurrentItem(with: nil)
+        }
+    }
+    
     @Namespace var mapScope
     
     var body: some View {
@@ -120,7 +127,7 @@ struct MapView: View {
                                             
                                             // play new audio snippet
                                             if let currentTrack = popUpTrack {
-                                                guard let previewURL = URL(string: currentTrack.preview_url) else {
+                                                guard let previewURL = URL(string: currentTrack.preview_url ?? "") else {
                                                     print("Invalid preview URL")
                                                     return
                                                 }
@@ -241,10 +248,12 @@ struct MapView: View {
                     withAnimation {
                         showTitleBar = false
                     }
+                    
                 } else {
                     withAnimation {
                         showTitleBar = true
                     }
+                    stopMusic()
                 }
             }
             .sheet(isPresented: $showListView) {
