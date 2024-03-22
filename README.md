@@ -11,6 +11,25 @@
 
 TuneIn is a platform that allows users to view what music people around them are listening to in real-time using data sourced from Spotify. The purpose of the app is to help satisfy user curiosity, foster a sense of community, and encourage further music discovery. 
 
+# How To Run
+---
+To use Tune In, you need a Spotify premium account to see live changes on your phone. This can only be done on hardware not simulator.
+
+However, you can see other people’s music through the simulator. For this, you must bypass the connection view. 
+
+Go to the RootView and change the case to show the .MapView first. The Spotify premium account to use on your phone has these credentials. Please do not use your own as it must be registered as a developer test user.
+Use Xcode 15.2
+
+Use this one:
+User  :
+Password :
+
+If dependencies are not running correctly, install 
+PopUpView : https://github.com/exyte/PopupView.git
+use this bundle ID to build : (insert ID)
+
+
+
 # Technical Stack
 ---
 ## Frameworks
